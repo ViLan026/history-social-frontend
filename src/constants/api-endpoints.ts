@@ -11,11 +11,10 @@ export const API_ENDPOINTS = {
     profile: (id: string) => `/users/${id}`,
     follow: (id: string) => `/users/${id}/follow`,
   },
-  posts: {
-    create: '/posts',
-    get: (id: string) => `/posts/${id}`,
-    update: (id: string) => `/posts/${id}`,
-    delete: (id: string) => `/posts/${id}`,
-    search: '/posts/search',
+  POSTS: {
+    BASE: '/posts',
+    GET_BY_ID: (id: string) => `/posts/${id}`,
+    GET_BY_AUTHOR: (authorId: string) => `/posts/author/${authorId}`,
+    SEARCH: '/posts/search',
   },
 };

@@ -1,4 +1,3 @@
-// src/features/user/useUser.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userService } from './user.service';
 import { GetUsersParams } from '@/types/user';

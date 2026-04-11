@@ -1,4 +1,3 @@
-// src/features/user/user.service.ts
 import axiosInstance from '@/lib/axios';
 import { ApiResponse, PageResponse } from '@/types/api';
 import {
