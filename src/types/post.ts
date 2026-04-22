@@ -1,9 +1,5 @@
 // src/types/post.ts
 
-// ----------------------------------------------------------------------
-// Enums (Được suy luận từ cấu trúc backend)
-// ----------------------------------------------------------------------
-
 export enum PostStatus {
   DRAFT = 'DRAFT',
   PUBLISHED = 'PUBLISHED',
@@ -18,11 +14,11 @@ export enum MediaType {
   DOCUMENT = 'DOCUMENT'
 }
 
-// Requests (Dữ liệu gửi lên Backend)
+
 export interface PostSourceRequest {
   title: string;
   url?: string;
-  author?: string;
+  authorName?: string;
   publishedYear?: number;
 }
 
@@ -66,17 +62,9 @@ export interface PostMediaResponse {
   displayOrder: number;
 }
 
-export interface PostResponse {
-  id: string; // UUID
-  title: string;
-  content: string;
-  authorId: string; // UUID
-  status: PostStatus;
-  viewCount: number;
+export interface PostResponse extends PostSummaryResponse {
   mediaList: PostMediaResponse[];
   sources: PostSourceResponse[]; // Set<PostSourceResponse>
-  tags: TagResponse[]; // Set<TagResponse>
-  createdAt: string; // LocalDateTime thường được parse thành ISO string (YYYY-MM-DDTHH:mm:ss)
   updatedAt: string;
 }
 
@@ -85,15 +73,9 @@ export interface PostSummaryResponse {
   title: string;
   authorId: string; // UUID
   status: PostStatus;
+  content: string;
   viewCount: number;
   thumbnailUrl?: string; // URL ảnh đại diện (media đầu tiên)
   tags: TagResponse[]; // Set<TagResponse>
   createdAt: string; // LocalDateTime
-}
-
-// Params (Hỗ trợ phân trang / Tìm kiếm)
-export interface PaginationParams {
-  page?: number;
-  size?: number;
-  sort?: string;
 }

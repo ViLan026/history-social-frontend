@@ -1,168 +1,199 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { useParams } from "next/navigation";
-import { Heart, MessageSquare, Bookmark } from "lucide-react";
-import { postService } from "@/features/post/post.service";
-import { PostResponse, MediaType } from "@/types/post";
+import React from 'react';
+import { PostCard } from '@/components/ui/PostCard';
+import { CreatePost } from '@/components/feed/CreatePost';
+import { usePosts } from '@/features/post/usePost';
+import { usePostStore } from '@/store/post.store';
 
-export default function PostDetailPage() {
-  const params = useParams();
-  const postId = params.id as string;
-
-  const [post, setPost] = useState<PostResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const res = await postService.getPostById(postId);
-        setPost(res.data);
-      } catch (err: any) {
-        setError("Không thể tải bài viết. Vui lòng thử lại sau.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (postId) fetchPost();
-  }, [postId]);
-
-  if (loading) {
-    return <div className="flex justify-center items-center min-h-screen text-white">Đang tải...</div>;
-  }
-
-  if (error || !post) {
-    return <div className="text-center text-red-400 mt-10">{error || "Bài viết không tồn tại."}</div>;
-  }
-
-  // Render lưới Media dựa trên số lượng
-  const renderMedia = () => {
-    if (!post.mediaList || post.mediaList.length === 0) return null;
-
-    // Sắp xếp media theo displayOrder
-    const sortedMedia = [...post.mediaList].sort((a, b) => a.displayOrder - b.displayOrder);
-
-    return (
-      <div className={`grid gap-2 mb-4 ${sortedMedia.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-        {sortedMedia.map((media, index) => {
-          // Nếu có 3 media, cho cái đầu tiên full width
-          const isFirstOfThree = sortedMedia.length >= 3 && index === 0;
-          
-          return (
-            <div key={media.id} className={`relative w-full overflow-hidden rounded-xl bg-slate-800/50 ${isFirstOfThree ? 'col-span-2 aspect-video' : 'aspect-square'}`}>
-              {media.mediaType === MediaType.VIDEO ? (
-                <video 
-                  src={media.mediaUrl} 
-                  controls 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <img
-                  src={media.mediaUrl}
-                  alt={`Media ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
+export default function HomePage() {
+  // Get pagination state from Zustand
+  const { 
+    currentPage, 
+    pageSize, 
+    isCreatePostModalOpen,
+    setPage, 
+    nextPage, 
+    previousPage,
+    openCreatePostModal,
+    closeCreatePostModal,
+  } = usePostStore();
+  
+  // Fetch posts using React Query
+  const { data, isLoading, isError, error } = usePosts({
+    page: currentPage,
+    size: pageSize,
+    sort: 'createdAt,desc',
+  });
+  
+  const posts = data?.content ?? [];
+  const totalPages = data?.totalPages || 0;
+  const hasNextPage = data ? !data.last : false;
+  const hasPreviousPage = currentPage > 0;
+  
   return (
-    <div className="min-h-screen bg-[#527493] flex justify-center p-4 md:p-8">
-      {/* Container của bài viết - Mô phỏng UI Glassmorphism như trong ảnh */}
-      <div className="bg-[#486b8b] border border-white/10 shadow-2xl rounded-2xl p-5 md:p-6 max-w-2xl w-full h-fit text-slate-100">
-        
-        {/* 1. Header: Avatar & Info */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-300 shrink-0">
-            {/* Tạm dùng ảnh placeholder vì PostResponse chưa có avatar URL */}
-            <img 
-              src={`https://ui-avatars.com/api/?name=Author&background=random`} 
-              alt="Avatar" 
-              className="w-full h-full object-cover"
-            />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900">
+              History Social Feed
+            </h1>
+            <button
+              onClick={openCreatePostModal}
+              className="px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+            >
+              + Create Post
+            </button>
           </div>
-          <div>
-            <h3 className="font-semibold text-lg leading-tight">
-              {/* Tạm mock tên vì authorId là UUID, cần call API User để lấy tên thật */}
-              Lê Minh Anh 
-            </h3>
-            <div className="text-sm text-slate-300/80">
-              {/* Format thời gian thực tế dựa trên post.createdAt ở đây */}
-              5 giờ trước • Lưu trữ viên
+        </div>
+      </header>
+      
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Create Post Modal */}
+        {isCreatePostModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900">Create New Post</h2>
+                <button
+                  onClick={closeCreatePostModal}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <CreatePost />
             </div>
           </div>
-        </div>
-
-        {/* 2. Nội dung Text */}
-        <div className="mb-4">
-          {post.title && <h2 className="text-xl font-bold mb-2">{post.title}</h2>}
-          <p className="text-[15px] leading-relaxed whitespace-pre-wrap">
-            {post.content}
-          </p>
-        </div>
-
-        {/* 3. Media (Ảnh / Video) */}
-        {renderMedia()}
-
-        {/* 4. Nguồn trích dẫn (Sources) */}
-        {post.sources && post.sources.length > 0 && (
-          <div className="mb-4 text-sm text-slate-300/90 flex flex-wrap items-center gap-1">
-            <span className="font-medium text-slate-400">Nguồn trích dẫn:</span>
-            {post.sources.map((source, idx) => (
-              <a 
-                key={source.id} 
-                href={source.url} 
-                target="_blank" 
-                rel="noreferrer"
-                className="text-blue-300 hover:underline"
-              >
-                {source.url || source.title}{idx < post.sources.length - 1 ? ', ' : ''}
-              </a>
-            ))}
+        )}
+        
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         )}
-
-        {/* 5. Tags (Đặt ngay dưới source, trên Action bar) */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4 mt-2">
-            {post.tags.map(tag => (
-              <span 
-                key={tag.id} 
-                className="px-3 py-1 bg-white/10 hover:bg-white/20 transition-colors rounded-full text-xs font-medium cursor-pointer"
-              >
-                #{tag.name}
-              </span>
-            ))}
+        
+        {/* Error State */}
+        {isError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <p className="text-red-600 font-medium">Failed to load posts</p>
+            <p className="text-red-500 text-sm mt-2">
+              {error instanceof Error ? error.message : 'An error occurred'}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Retry
+            </button>
           </div>
         )}
+        
+        {/* Posts Grid */}
+        {!isLoading && !isError && (
+          <>
+            {posts.length === 0 ? (
+              <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <h3 className="mt-4 text-lg font-medium text-gray-900">No posts yet</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Get started by creating your first post.
+                </p>
+                <button
+                  onClick={openCreatePostModal}
+                  className="mt-6 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Create First Post
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {posts.map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </div>
+            )}
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-2">
+                <button
+                  onClick={previousPage}
+                  disabled={!hasPreviousPage}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Previous
+                </button>
+                
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    // Show current page and 2 pages before/after
+                    let pageNum;
+                    // if (totalPages <= 5) {
+                    //   pageNum = i;
+                    // } else if (currentPage < 2) {
+                    //   pageNum = i;
+                    // } else if (currentPage > totalPages - 3) {
+                    //   pageNum = totalPages - 5 + i;
+                    // } else {
+                    //   pageNum = currentPage - 2 + i;
+                    // }
 
-        <hr className="border-white/10 my-4" />
-
-        {/* 6. Action Bar */}
-        <div className="flex items-center justify-between text-slate-300">
-          <div className="flex items-center gap-6">
-            <button className="flex items-center gap-2 hover:text-white transition-colors">
-              <Heart className="w-5 h-5" />
-              <span className="text-sm font-medium">3.5k</span>
-            </button>
-            <button className="flex items-center gap-2 hover:text-white transition-colors">
-              <MessageSquare className="w-5 h-5" />
-              <span className="text-sm font-medium">210</span>
-            </button>
-          </div>
-          <button className="hover:text-white transition-colors">
-            <Bookmark className="w-5 h-5" />
-          </button>
-        </div>
-
-      </div>
+                    pageNum = Math.max(0, totalPages - 5) + i;
+                    
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setPage(pageNum)}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                          currentPage === pageNum
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {pageNum + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                <button
+                  onClick={nextPage}
+                  disabled={!hasNextPage}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+            
+            {/* Pagination Info */}
+            {data && (
+              <div className="mt-4 text-center text-sm text-gray-600">
+                Showing page {currentPage + 1} of {totalPages} ({data.totalElements} total posts)
+              </div>
+            )}
+          </>
+        )}
+      </main>
     </div>
   );
 }

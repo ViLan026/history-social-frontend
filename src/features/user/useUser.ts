@@ -1,86 +1,76 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userService } from './user.service';
-import { GetUsersParams } from '@/types/user';
+import { GetUsersParams, UserUpdateRequest, ChangePasswordRequest } from '@/types/user';
 
-// Keys để React Query quản lý cache
-export const userKeys = {
+export const USER_QUERY_KEYS = {
   all: ['users'] as const,
-  lists: () => [...userKeys.all, 'list'] as const,
-  list: (params: GetUsersParams) => [...userKeys.lists(), params] as const,
-  details: () => [...userKeys.all, 'detail'] as const,
-  detail: (id: string) => [...userKeys.details(), id] as const,
+  lists: () => [...USER_QUERY_KEYS.all, 'list'] as const,
+  list: (params: GetUsersParams) => [...USER_QUERY_KEYS.lists(), params] as const,
+  details: () => [...USER_QUERY_KEYS.all, 'detail'] as const,
+  detail: (id: string) => [...USER_QUERY_KEYS.details(), id] as const,
 };
 
-// --- QUERIES (Lấy dữ liệu) ---
-
-export const useGetUsers = (params: GetUsersParams) => {
+//  Hook lấy danh sách User
+export const useUsers = (params: GetUsersParams) => {
   return useQuery({
-    queryKey: userKeys.list(params),
+    queryKey: USER_QUERY_KEYS.list(params),
     queryFn: () => userService.getAllUsers(params),
-    placeholderData: (previousData) => previousData, // Giữ data cũ khi đang chuyển trang (tránh giật UI)
   });
 };
 
-export const useGetUserById = (id: string) => {
+//  Hook lấy chi tiết User
+export const useUser = (id: string) => {
   return useQuery({
-    queryKey: userKeys.detail(id),
+    queryKey: USER_QUERY_KEYS.detail(id),
     queryFn: () => userService.getUserById(id),
-    enabled: !!id, // Chỉ gọi API khi id tồn tại
+    enabled: !!id,
   });
 };
 
-// --- MUTATIONS (Thêm/Sửa/Xóa dữ liệu) ---
-
-export const useCreateUser = () => {
+//  Hook cập nhật thông tin User
+export const useUpdateUser = () => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: userService.createUser,
-    onSuccess: () => {
-      // Báo cho React Query biết danh sách user đã thay đổi để gọi lại API
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-    },
-  });
-};
 
-export const useUpdateUser = (id: string) => {
-  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: Parameters<typeof userService.updateUser>[1]) => 
+    mutationFn: ({ id, data }: { id: string; data: UserUpdateRequest }) => 
       userService.updateUser(id, data),
-    onSuccess: (updatedUser) => {
-      // Cập nhật lại cache chi tiết của user này
-      queryClient.setQueryData(userKeys.detail(id), updatedUser);
-      // Xóa cache danh sách để load lại data mới nhất
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.detail(variables.id) });
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.lists() });
     },
   });
 };
 
-export const useChangePassword = (id: string) => {
+//  Hook đổi mật khẩu
+export const useChangePassword = () => {
   return useMutation({
-    mutationFn: (data: Parameters<typeof userService.changePassword>[1]) =>
+    mutationFn: ({ id, data }: { id: string; data: ChangePasswordRequest }) => 
       userService.changePassword(id, data),
   });
 };
 
-export const useLockUser = (id: string) => {
+//  Hook khóa User (Dành cho Admin)
+export const useLockUser = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: () => userService.lockUser(id),
-    onSuccess: (updatedUser) => {
-      queryClient.setQueryData(userKeys.detail(id), updatedUser);
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    mutationFn: (id: string) => userService.lockUser(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.detail(id) });
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.lists() });
     },
   });
 };
 
-export const useUnlockUser = (id: string) => {
+//  Hook mở khóa User (Dành cho Admin)
+export const useUnlockUser = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: () => userService.unlockUser(id),
-    onSuccess: (updatedUser) => {
-      queryClient.setQueryData(userKeys.detail(id), updatedUser);
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    mutationFn: (id: string) => userService.unlockUser(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.detail(id) });
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.lists() });
     },
   });
 };

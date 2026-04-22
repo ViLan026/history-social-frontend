@@ -2,39 +2,69 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-const ThemeContext = createContext<any>(null);
+// --- TypeScript types rõ ràng ---
+type Theme = "light" | "dark";
 
-export const ThemeProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [theme, setTheme] = useState("light");
+interface ThemeContextType {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+const ThemeContext = createContext<ThemeContextType | null>(null);
+
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  // Mặc định "dark" vì đây là mạng xã hội lịch sử — tone tối phù hợp
+  const [theme, setTheme] = useState<Theme>("dark");
+  // Chặn render cho đến khi client đọc xong localStorage (tránh flash)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     try {
-      const saved = localStorage.getItem("theme");
-      if (saved) setTheme(saved);
-    } catch (error) {
-      console.error(error);
+      const saved = localStorage.getItem("theme") as Theme | null;
+      const resolved: Theme = saved === "light" || saved === "dark" ? saved : "dark";
+
+      setTheme(resolved);
+      //  Gán vào <html> — Tailwind dark mode (class strategy) mới hoạt động
+      applyThemeToHtml(resolved);
+    } catch (err) {
+      console.error("[ThemeProvider] Lỗi đọc localStorage:", err);
     }
   }, []);
 
   const toggleTheme = () => {
     try {
-      const next = theme === "light" ? "dark" : "light";
+      const next: Theme = theme === "light" ? "dark" : "light";
       setTheme(next);
+      applyThemeToHtml(next);
       localStorage.setItem("theme", next);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error("[ThemeProvider] Lỗi ghi localStorage:", err);
     }
   };
 
+  // Trả children thẳng — không wrap thêm div thừa
+  // mounted=false: render children nhưng chưa có theme class (tránh hydration mismatch)
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <div className={theme}>{children}</div>
+      {/* suppressHydrationWarning cho children để tránh cảnh báo hydration */}
+      <div suppressHydrationWarning>
+        {mounted ? children : <>{children}</>}
+      </div>
     </ThemeContext.Provider>
   );
 };
 
-export const useTheme = () => useContext(ThemeContext);
+//  Helper: toggle class trên <html> — đúng cách Tailwind yêu cầu
+function applyThemeToHtml(theme: Theme) {
+  const root = document.documentElement;
+  root.classList.remove("light", "dark");
+  root.classList.add(theme);
+}
+
+//  Custom hook với error boundary
+export const useTheme = (): ThemeContextType => {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useTheme phải được dùng bên trong <ThemeProvider>");
+  return ctx;
+};

@@ -1,15 +1,13 @@
-import axiosInstance from '@/lib/axios';
+import {axiosInstance} from '@/lib/axios';
 import { ApiResponse } from '@/types/api';
 import {
   UserCreationRequest,
-  UserResponse,
   AuthenticationRequest,
   AuthenticationResponse,
-  LogoutRequest,
-  IntrospectRequest,
   IntrospectResponse,
-  RefreshRequest,
 } from '@/types/auth';
+
+import { UserResponse } from '@/types/user';
 
 export const authService = {
   // Đăng ký
@@ -25,20 +23,17 @@ export const authService = {
   },
 
   // Đăng xuất
-  logout: async (data: LogoutRequest): Promise<void> => {
-    const response = await axiosInstance.post<ApiResponse<void>>('/auth/logout', data);
-    return response.data.data; // data có thể là null theo backend của bạn
-  },
+  logout: async (): Promise<void> => {await axiosInstance.post<ApiResponse<void>>('/auth/logout');},
 
-  // Kiểm tra token hợp lệ
-  introspect: async (data: IntrospectRequest): Promise<IntrospectResponse> => {
-    const response = await axiosInstance.post<ApiResponse<IntrospectResponse>>('/auth/introspect', data);
+  // Kiểm tra trạng thái đăng nhập / token
+  introspect: async (): Promise<IntrospectResponse> => {
+    const response = await axiosInstance.post<ApiResponse<IntrospectResponse>>('/auth/introspect');
     return response.data.data;
   },
 
   // Refresh token
-  refresh: async (data: RefreshRequest): Promise<AuthenticationResponse> => {
-    const response = await axiosInstance.post<ApiResponse<AuthenticationResponse>>('/auth/refresh', data);
+  refresh: async (): Promise<AuthenticationResponse> => {
+    const response = await axiosInstance.post<ApiResponse<AuthenticationResponse>>('/auth/refresh');
     return response.data.data;
   },
 };

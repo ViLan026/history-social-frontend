@@ -1,22 +1,32 @@
 import { useMutation } from '@tanstack/react-query';
 import { authService } from './auth.service';
-import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth.store';
 
 export const useLogin = () => {
   const router = useRouter();
-  const { setTokens } = useAuthStore(); // Lưu ý: Mình sẽ cần update store một chút nhé
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   return useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      // Vì backend trả về accessToken và refreshToken
-      // Chúng ta sẽ lưu token vào Zustand store trước
-      setTokens(data.accessToken, data.refreshToken);
+      console.log("Dữ liệu login trả về:", data); // Kiểm tra xem data.authenticated có thực sự là true không
       
-      // Chuyển hướng về trang chủ
-      router.push('/');
+      if (data.authenticated) {
+        setAuth(true); // Cập nhật store
+        console.log("Đã setAuth(true), chuẩn bị redirect...");
+        
+        
+        router.push('/'); // Dùng push hoặc replace
+        // window.location.href = '/';
+        // router.refresh();
+      } else {
+        console.error("Backend trả về thành công nhưng authenticated = false");
+      }
     },
+    onError: (error) => {
+      console.error("Lỗi đăng nhập:", error);
+    }
   });
 };
 
@@ -26,21 +36,23 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: authService.register,
     onSuccess: () => {
-      // Đăng ký xong thì chuyển qua trang login bắt đăng nhập
       router.push('/login');
     },
   });
 };
 
+
 export const useLogout = () => {
   const router = useRouter();
-  const { logout, refreshToken } = useAuthStore();
+  // Lấy hàm logout từ store ra ĐỂ SỬ DỤNG
+  const logoutStore = useAuthStore((state) => state.logout); 
 
   return useMutation({
-    mutationFn: () => authService.logout({ refreshToken: refreshToken || '' }),
+    mutationFn: authService.logout,
     onSuccess: () => {
-      logout(); // Xoá data trong store
-      router.push('/login');
+      logoutStore(); // Gọi hàm xóa state trong store
+      router.replace('/login');
+      router.refresh();
     },
   });
 };

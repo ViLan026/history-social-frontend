@@ -6,24 +6,6 @@ export interface RoleResponse {
   createdAt: string;
 }
 
-export interface ProfileResponse {
-  userId: string;
-  displayName: string | null;
-  username: string;
-  avatarUrl: string | null;
-  bio: string | null;
-}
-
-export interface UserResponse {
-  id: string; 
-  email: string;
-  status: string; 
-  roles: RoleResponse[];
-  profile: ProfileResponse;
-  createdAt: string; 
-  updatedAt: string; 
-}
-
 export interface UserCreationRequest {
   email: string;
   password?: string;
@@ -36,23 +18,16 @@ export interface AuthenticationRequest {
 
 export interface AuthenticationResponse {
   authenticated: boolean;
-  refreshToken: string;
-  accessToken: string;
 }
 
-export interface LogoutRequest {
-  refreshToken: string;
-}
+export interface LogoutRequest {}
 
-export interface IntrospectRequest {
-  token: string;
-}
+export interface IntrospectRequest {}
 
 export interface IntrospectResponse {
   valid: boolean;
+  message?: string;
 }
 
-export interface RefreshRequest {
-  refreshToken: string;
-}
+export interface RefreshRequest {}
 

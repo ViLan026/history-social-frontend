@@ -6,15 +6,53 @@ export const API_ENDPOINTS = {
     logout: '/auth/logout',
     refresh: '/auth/refresh',
   },
-  users: {
-    me: '/users/me',
-    profile: (id: string) => `/users/${id}`,
-    follow: (id: string) => `/users/${id}/follow`,
-  },
+
+  USERS: {
+      BASE: '/users',
+      GET_BY_ID: (id: string) => `/users/${id}`,
+      UPDATE: (id: string) => `/users/${id}`,
+      CHANGE_PASSWORD: (id: string) => `/users/${id}/password`,
+      LOCK: (id: string) => `/users/${id}/lock`,
+      UNLOCK: (id: string) => `/users/${id}/unlock`,
+      // Endpoint dưới đây của bạn đang nằm trong auth.users
+      ME: '/users/me', 
+      PROFILE: (id: string) => `/users/${id}`,
+      FOLLOW: (id: string) => `/users/${id}/follow`,
+    },
+    
+    ROLES: {
+      BASE: '/roles',
+      GET_BY_ID: (id: string) => `/roles/${id}`,
+      UPDATE: (id: string) => `/roles/${id}`,
+    },
+
   POSTS: {
     BASE: '/posts',
     GET_BY_ID: (id: string) => `/posts/${id}`,
     GET_BY_AUTHOR: (authorId: string) => `/posts/author/${authorId}`,
     SEARCH: '/posts/search',
   },
+
+  BOOKMARKS: {
+    BASE: '/bookmarks',
+    TOGGLE: (postId: string) => `/bookmarks/${postId}`,
+    CHECK: (postId: string) => `/bookmarks/check/${postId}`,
+    COUNT: '/bookmarks/count',
+  },
+
+  COMMENTS: {
+    BASE: '/comments',
+    GET_BY_POST: (postId: string) => `/comments/posts/${postId}`,
+    DELETE: (commentId: string) => `/comments/${commentId}`,
+  },
+
+  REACTIONS: {
+      BASE: '/reactions',
+      GET_STATS: (postId: string) => `/reactions/posts/${postId}/stats`,
+      GET_DETAILS: (postId: string) => `/reactions/posts/${postId}`,
+    },
+
+
+
+
 };

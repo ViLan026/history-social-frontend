@@ -1,11 +1,27 @@
 // src/types/user.ts
 import { PageResponse } from './api';
 
-// Định nghĩa chung (nếu chưa có)
+
+export type AccountStatus = 'ACTIVE' | 'INACTIVE' | string;
+
+export interface RoleCreationRequest {
+  name: string;
+  description?: string;
+}
+
+export interface RoleUpdateRequest {
+  description?: string;
+}
+
 export interface RoleResponse {
   name: string;
   description: string;
-  createdAt: string;
+  createdAt: string; // ISO String
+}
+
+export interface Role {
+  name: string;
+  description?: string;
 }
 
 export interface ProfileResponse {
@@ -60,4 +76,10 @@ export interface GetUsersParams {
   page?: number;
   size?: number;
   keyword?: string;
+}
+
+export interface UserReactionResponse {
+  id: string;
+  displayName: string;
+  avatarUrl: string;
 }
