@@ -93,7 +93,7 @@ export default function RightSidebar() {
         </Link>
       </div>
 
-      {/* Tags phổ biến */}
+      {/* Tags phổ biến
       <div className="bg-gradient-to-br from-[#1a2332] to-[#0d1720] rounded-2xl p-6 shadow-[8px_8px_24px_rgba(0,0,0,0.4),-4px_-4px_16px_rgba(255,255,255,0.02)]">
         <h2 className="text-white font-semibold text-lg mb-4">Tags phổ biến</h2>
         <div className="flex flex-wrap gap-2">
@@ -107,7 +107,7 @@ export default function RightSidebar() {
             </Link>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

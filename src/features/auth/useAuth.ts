@@ -10,14 +10,13 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      console.log("Dữ liệu login trả về:", data); // Kiểm tra xem data.authenticated có thực sự là true không
       
       if (data.authenticated) {
         setAuth(true); // Cập nhật store
         console.log("Đã setAuth(true), chuẩn bị redirect...");
         
         
-        router.push('/'); // Dùng push hoặc replace
+        router.push('/'); // push hoặc replace
         // window.location.href = '/';
         // router.refresh();
       } else {

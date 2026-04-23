@@ -37,6 +37,28 @@ export function formatRelativeTime(date: Date | string | number): string {
   }
 }
 
+
+export function formatRelativeTimeVi(date: Date | string | number): string {
+  try {
+    const target = new Date(date);
+    const now = new Date();
+    const diff = (now.getTime() - target.getTime()) / 1000; // seconds
+ 
+    if (isNaN(diff)) return "";
+ 
+    if (diff < 45) return "vừa xong";
+    if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
+    if (diff < 2592000) return `${Math.floor(diff / 86400)} ngày trước`; // < 30 days
+    if (diff < 31536000) return `${Math.floor(diff / 2592000)} tháng trước`;
+ 
+    return formatDate(target, "vi-VN");
+  } catch {
+    return "";
+  }
+}
+ 
+
 /**
  * Format ngày giờ đầy đủ (Intl)
  */
