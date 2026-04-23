@@ -7,6 +7,7 @@ export interface AvatarProps
   extends React.ImgHTMLAttributes<HTMLImageElement> {
   size?: "sm" | "md" | "lg";
   fallback?: string;
+  variant?: "default" | "neumorphic";
 }
 
 const sizeClasses = {
@@ -15,8 +16,24 @@ const sizeClasses = {
   lg: "h-14 w-14 text-base",
 };
 
+const variantClasses = {
+  default: "rounded-full bg-gray-200 text-gray-600",
+  neumorphic: "rounded-full bg-[#4f6f91] text-[#a0cafa] neu",
+};
+
 export const Avatar = React.forwardRef<HTMLImageElement, AvatarProps>(
-  ({ className, size = "md", src, alt, fallback, ...props }, ref) => {
+  (
+    {
+      className,
+      size = "md",
+      src,
+      alt,
+      fallback,
+      variant = "default",
+      ...props
+    },
+    ref
+  ) => {
     const [error, setError] = React.useState(false);
 
     const showFallback = !src || error;
@@ -24,8 +41,9 @@ export const Avatar = React.forwardRef<HTMLImageElement, AvatarProps>(
     return showFallback ? (
       <div
         className={cn(
-          "flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-medium",
+          "flex items-center justify-center font-medium",
           sizeClasses[size],
+          variantClasses[variant],
           className
         )}
       >
@@ -40,6 +58,7 @@ export const Avatar = React.forwardRef<HTMLImageElement, AvatarProps>(
         className={cn(
           "rounded-full object-cover",
           sizeClasses[size],
+          variant === "neumorphic" && "neu",
           className
         )}
         {...props}

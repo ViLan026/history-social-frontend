@@ -3,6 +3,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -74,10 +76,8 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
-@import 'tailwindcss';
-@import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
+
 
 /* Các biến màu sắc CSS của bạn được giữ nguyên ở đây... */
 :root {
