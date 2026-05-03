@@ -1,22 +1,141 @@
-// import EraFilter from './Erafilter';
+// components/sidebar/LeftSidebar.tsx
+
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+
+const NAV_ITEMS = [
+  {
+    label: "Trang chủ",
+    href: "/",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
+  },
+  {
+    label: "Xu hướng",
+    href: "/trending",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+        <polyline points="17 6 23 6 23 12" />
+      </svg>
+    ),
+  },
+  {
+    label: "Sách",
+    href: "/book-reviews",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Đang theo dõi",
+    href: "/following",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+  },
+  {
+    label: "Đã lưu",
+    href: "/bookmarks",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+  },
+] as const;
+
+
+interface NavItemProps {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  isActive: boolean;
+}
+
+function NavItem({ href, icon, label, isActive }: NavItemProps) {
+  return (
+    <li>
+      <Link
+        href={href}
+        aria-current={isActive ? "page" : undefined}
+        className={`
+          group flex items-center gap-3
+          px-3 py-2.5 rounded-lg
+          text-sm font-medium
+          transition-colors duration-150
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+          ${isActive
+            ? "bg-sidebar-active text-primary"
+            : "text-foreground-muted hover:bg-sidebar-hover hover:text-foreground"
+          }
+        `}
+      >
+        {/* Icon */}
+        <span
+          className={`
+            shrink-0 transition-colors duration-150
+            ${isActive ? "text-primary" : "text-foreground-faint group-hover:text-foreground-muted"}
+          `}
+        >
+          {icon}
+        </span>
+
+        {/* Label */}
+        <span>{label}</span>
+
+        {/* Active indicator */}
+        {isActive && (
+          <span
+            className="ml-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0"
+            aria-hidden="true"
+          />
+        )}
+      </Link>
+    </li>
+  );
+}
+
 
 export default function LeftSidebar() {
+  const pathname = usePathname();
+
   return (
-    <div className="sticky top-20 space-y-6">
-      <div className="bg-gradient-to-br from-[#1a2332] to-[#0d1720] rounded-2xl p-6 shadow-[8px_8px_24px_rgba(0,0,0,0.4),-4px_-4px_16px_rgba(255,255,255,0.02)]">
-        <h2 className="text-white font-semibold text-lg mb-4">Menu</h2>
-        <nav className="space-y-2">
-          {['Trang chủ', 'Trendings', 'reviews books', 'Theo dõi', 'Đã lưu'].map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="block px-4 py-3 rounded-xl text-gray-300 hover:bg-[#0d1720] hover:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.4)] transition-all duration-200"
-            >
-              {item}
-            </a>
-          ))}
-        </nav>
-      </div>
-    </div>
+    <nav
+      className="h-full px-3 py-4 flex flex-col gap-6"
+      style={{ backgroundColor: "var(--sidebar-bg)" }}
+      aria-label="Navigation chính"
+    >
+      <ul className="flex flex-col gap-0.5" role="list">
+        {NAV_ITEMS.map((item) => (
+          <NavItem
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            isActive={
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href)
+            }
+          />
+        ))}
+      </ul>
+    </nav>
   );
 }

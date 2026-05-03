@@ -117,7 +117,7 @@ export const CreatePost: React.FC = () => {
       {/* ── Nút mở modal ── */}
       <button
         onClick={() => setIsOpen(true)}
-        className="neu rounded-xl px-5 py-3 font-semibold text-white hover:brightness-110 active:scale-95 transition-all"
+        className="neu rounded-xl px-5 py-3 font-semibold text-white bg-gradient-to-br from-[#a0cafa] to-[#6b8ab8] dark:from-[#4f6f91] dark:to-[#2c4a6b] hover:brightness-110 active:scale-95 transition-all"
       >
         + Thêm bài viết
       </button>
@@ -133,21 +133,14 @@ export const CreatePost: React.FC = () => {
           }}
         >
           <div
-            className="w-full max-w-4xl rounded-3xl bg-[#4f6f91] p-6 md:p-8 lg:p-10 text-white
-                        max-h-[90vh] overflow-y-auto
-                        animate-[fadeScaleIn_0.2s_ease-out]"
-            style={{
-              scrollbarWidth: 'thin',
-              scrollbarColor: 'rgba(255,255,255,0.2) transparent',
-            }}
+            className="w-full max-w-4xl rounded-3xl p-6 md:p-8 lg:p-10 max-h-[90vh] overflow-y-auto animate-[fadeScaleIn_0.2s_ease-out] bg-[#d4e3f0] text-[#4f6f91] dark:bg-[#1a2332] dark:text-white shadow-2xl"
           >
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold">Tạo bài viết mới</h2>
               <button
                 type="button"
                 onClick={handleClose}
-                className="neu rounded-full w-9 h-9 flex items-center justify-center
-                           text-white hover:brightness-110 active:scale-95 transition-all text-lg"
+                className="neu rounded-full w-9 h-9 flex items-center justify-center text-[#4f6f91] hover:text-[#6b8ab8] dark:text-white dark:hover:text-[#a0cafa] active:scale-95 transition-all text-lg"
                 aria-label="Đóng"
               >
                 ✕
@@ -162,11 +155,11 @@ export const CreatePost: React.FC = () => {
                 </label>
                 <input
                   {...register('title', { required: 'Tiêu đề là bắt buộc' })}
-                  className="neu-inset w-full rounded-xl border-0 bg-[#4f6f91] px-4 py-3 text-white placeholder-gray-300 focus:outline-none"
+                  className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                   placeholder="Nhập tiêu đề bài viết"
                 />
                 {errors.title && (
-                  <p className="mt-2 text-sm text-red-200">
+                  <p className="mt-2 text-sm text-red-500 dark:text-red-400">
                     {errors.title.message}
                   </p>
                 )}
@@ -180,11 +173,11 @@ export const CreatePost: React.FC = () => {
                 <textarea
                   {...register('content', { required: 'Nội dung là bắt buộc' })}
                   rows={8}
-                  className="neu-inset w-full rounded-xl border-0 bg-[#4f6f91] px-4 py-3 text-white placeholder-gray-300 focus:outline-none resize-none"
+                  className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none resize-none dark:text-white dark:placeholder-gray-500"
                   placeholder="Viết nội dung bài viết..."
                 />
                 {errors.content && (
-                  <p className="mt-2 text-sm text-red-200">
+                  <p className="mt-2 text-sm text-red-500 dark:text-red-400">
                     {errors.content.message}
                   </p>
                 )}
@@ -197,7 +190,7 @@ export const CreatePost: React.FC = () => {
                 </label>
                 <select
                   {...register('status')}
-                  className="neu-inset w-full rounded-xl border-0 bg-[#4f6f91] px-4 py-3 text-white focus:outline-none"
+                  className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] focus:outline-none dark:text-white [&>option]:bg-[#d4e3f0] dark:[&>option]:bg-[#1a2332]"
                 >
                   <option value={PostStatus.PUBLISHED}>Công khai</option>
                   <option value={PostStatus.DRAFT}>Nháp</option>
@@ -211,7 +204,7 @@ export const CreatePost: React.FC = () => {
                 </label>
                 <input
                   {...register('tagNames')}
-                  className="neu-inset w-full rounded-xl border-0 bg-[#4f6f91] px-4 py-3 text-white placeholder-gray-300 focus:outline-none"
+                  className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                   placeholder="ví dụ: chiến tranh, việt nam, cổ đại"
                 />
               </div>
@@ -225,7 +218,7 @@ export const CreatePost: React.FC = () => {
                     onClick={() =>
                       append({ title: '', url: '', authorName: '', publishedYear: undefined })
                     }
-                    className="neu rounded-xl px-4 py-2 text-sm hover:brightness-110"
+                    className="neu rounded-xl px-4 py-2 text-sm text-[#4f6f91] hover:text-[#6b8ab8] hover:brightness-110 dark:text-white dark:hover:text-[#a0cafa]"
                   >
                     + Thêm nguồn
                   </button>
@@ -239,7 +232,7 @@ export const CreatePost: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => remove(index)}
-                          className="text-red-200 hover:text-white"
+                          className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                         >
                           Xóa
                         </button>
@@ -248,23 +241,23 @@ export const CreatePost: React.FC = () => {
                         <input
                           {...register(`sources.${index}.title`)}
                           placeholder="Tên nguồn"
-                          className="neu w-full rounded-xl border-0 bg-[#4f6f91] px-3 py-2 text-white placeholder-gray-300"
+                          className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                         />
                         <input
                           {...register(`sources.${index}.authorName`)}
                           placeholder="Tác giả"
-                          className="neu w-full rounded-xl border-0 bg-[#4f6f91] px-3 py-2 text-white placeholder-gray-300"
+                          className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                         />
                         <input
                           {...register(`sources.${index}.url`)}
                           placeholder="Link"
-                          className="neu w-full rounded-xl border-0 bg-[#4f6f91] px-3 py-2 text-white placeholder-gray-300"
+                          className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                         />
                         <input
                           {...register(`sources.${index}.publishedYear`, { valueAsNumber: true })}
                           type="number"
                           placeholder="Năm xuất bản"
-                          className="neu w-full rounded-xl border-0 bg-[#4f6f91] px-3 py-2 text-white placeholder-gray-300"
+                          className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                         />
                       </div>
                     </div>
@@ -288,15 +281,10 @@ export const CreatePost: React.FC = () => {
                   />
                   <label
                     htmlFor="upload-file"
-                    className="neu inline-block cursor-pointer rounded-xl px-4 py-2 hover:brightness-110"
+                    className="neu inline-block cursor-pointer rounded-xl px-4 py-2 text-[#4f6f91] hover:brightness-110 dark:text-white"
                   >
                     Chọn ảnh
                   </label>
-                  {/* <p className="mt-3 text-sm text-gray-200">
-                    {files.length > 0
-                      ? `${files.length} ảnh đã chọn`
-                      : 'Chưa chọn ảnh'}
-                  </p> */}
                 </div>
 
                 {previews.length > 0 && (
@@ -311,7 +299,7 @@ export const CreatePost: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => removeFile(index)}
-                          className="neu absolute right-2 top-2 rounded-full px-2 py-1 text-xs"
+                          className="neu absolute right-2 top-2 rounded-full px-2 py-1 text-xs text-[#4f6f91] dark:text-white"
                         >
                           ✕
                         </button>
@@ -323,7 +311,7 @@ export const CreatePost: React.FC = () => {
 
               {/* Error */}
               {createPostMutation.isError && (
-                <div className="neu-inset rounded-xl p-3 text-sm text-red-200">
+                <div className="neu-inset rounded-xl p-3 text-sm text-red-500 dark:text-red-400">
                   Không thể tạo bài viết. Vui lòng thử lại.
                 </div>
               )}
@@ -333,14 +321,14 @@ export const CreatePost: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="neu rounded-xl px-5 py-3 hover:brightness-110"
+                  className="neu rounded-xl px-5 py-3 text-[#4f6f91] hover:brightness-110 dark:text-white"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || createPostMutation.isPending}
-                  className="neu rounded-xl px-6 py-3 font-medium hover:brightness-110 disabled:opacity-60"
+                  className="neu rounded-xl px-6 py-3 font-medium text-white bg-gradient-to-br from-[#a0cafa] to-[#6b8ab8] hover:brightness-110 disabled:opacity-60 dark:from-[#4f6f91] dark:to-[#2c4a6b]"
                 >
                   {createPostMutation.isPending ? 'Đang tạo...' : 'Đăng bài'}
                 </button>
@@ -350,7 +338,7 @@ export const CreatePost: React.FC = () => {
         </div>
       )}
 
-      {/* Animation keyframe (nếu dùng Tailwind JIT thì thêm vào global CSS) */}
+      {/* Animation keyframe */}
       <style>{`
         @keyframes fadeScaleIn {
           from { opacity: 0; transform: scale(0.95) translateY(8px); }

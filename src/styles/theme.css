@@ -1,0 +1,191 @@
+/* ============================================================
+   theme.css
+   Semantic token system — Historical Social Media
+   Strategy: CSS vars → Tailwind → components
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   DARK THEME (default)
+   Palette: Deep slate-blue base + amber-gold accent
+   Eye-strain rationale: oklch cho perceptually uniform contrast
+   ---------------------------------------------------------- */
+:root,
+[data-theme="dark"],
+.dark {
+  /* --- Surfaces (layering từ thấp → cao) --- */
+  --background:       oklch(0.10 0.018 255);   /* page bg — rất tối */
+  --surface:          oklch(0.14 0.018 258);   /* card, panel default */
+  --surface-raised:   oklch(0.17 0.018 258);   /* hover card, dropdown */
+  --surface-overlay:  oklch(0.20 0.020 260);   /* modal, tooltip bg */
+
+  /* --- Foreground / Text --- */
+  --foreground:       oklch(0.92 0.015 265);   /* body text — không pure white */
+  --foreground-muted: oklch(0.65 0.020 265);   /* secondary text, meta */
+  --foreground-faint: oklch(0.45 0.015 265);   /* placeholder, disabled */
+
+  /* --- Border --- */
+  --border:           oklch(0.28 0.020 258);   /* border mặc định */
+  --border-muted:     oklch(0.20 0.015 258);   /* divider nhạt hơn */
+  --border-focus:     oklch(0.62 0.12 68);     /* focus ring — amber */
+
+  /* --- Primary: Amber-Gold (học thuật, cổ điển) --- */
+  --primary:          oklch(0.74 0.13 68);     /* main CTA, link */
+  --primary-hover:    oklch(0.80 0.14 68);
+  --primary-active:   oklch(0.68 0.12 68);
+  --primary-subtle:   oklch(0.18 0.040 68);    /* primary bg nhạt */
+  --primary-fg:       oklch(0.12 0.020 255);   /* text trên primary bg */
+
+  /* --- Secondary: Muted Teal (modern accent) --- */
+  --secondary:        oklch(0.62 0.10 195);
+  --secondary-hover:  oklch(0.68 0.11 195);
+  --secondary-active: oklch(0.56 0.09 195);
+  --secondary-subtle: oklch(0.16 0.030 200);
+  --secondary-fg:     oklch(0.96 0.010 255);
+
+  /* --- Semantic States --- */
+  --success:          oklch(0.65 0.11 155);
+  --success-subtle:   oklch(0.15 0.035 155);
+  --success-fg:       oklch(0.92 0.015 155);
+
+  --warning:          oklch(0.70 0.12 85);
+  --warning-subtle:   oklch(0.16 0.040 85);
+  --warning-fg:       oklch(0.12 0.020 255);
+
+  --destructive:      oklch(0.60 0.14 22);
+  --destructive-hover:oklch(0.66 0.15 22);
+  --destructive-subtle:oklch(0.15 0.040 22);
+  --destructive-fg:   oklch(0.96 0.010 255);
+
+  --info:             oklch(0.62 0.10 235);
+  --info-subtle:      oklch(0.15 0.030 240);
+  --info-fg:          oklch(0.92 0.015 265);
+
+  /* --- Ring (focus) --- */
+  --ring:             oklch(0.74 0.13 68);     /* match primary */
+  --ring-offset:      oklch(0.10 0.018 255);   /* match background */
+
+  /* --- Scrollbar --- */
+  --scrollbar-track:  oklch(0.12 0.015 258);
+  --scrollbar-thumb:  oklch(0.28 0.020 258);
+  --scrollbar-thumb-hover: oklch(0.38 0.025 258);
+
+  /* --- Sidebar specific --- */
+  --sidebar-bg:       oklch(0.12 0.020 257);
+  --sidebar-border:   oklch(0.22 0.018 258);
+  --sidebar-item-hover: oklch(0.17 0.022 258);
+  --sidebar-item-active: oklch(0.20 0.040 68); /* amber tint khi active */
+
+  /* --- Feed --- */
+  --feed-bg:          oklch(0.10 0.018 255);   /* = background */
+  --card-bg:          oklch(0.14 0.018 258);   /* = surface */
+  --card-border:      oklch(0.22 0.018 258);
+
+  /* --- Highlight / Selection --- */
+  --highlight:        oklch(0.74 0.13 68 / 0.15);
+  --selection-bg:     oklch(0.74 0.13 68 / 0.25);
+  --selection-fg:     oklch(0.92 0.015 265);
+}
+
+/* ----------------------------------------------------------
+   LIGHT THEME
+   Palette: Warm parchment + amber accent
+   ---------------------------------------------------------- */
+[data-theme="light"],
+.light {
+  /* --- Surfaces --- */
+  --background:       oklch(0.97 0.006 75);    /* ấm như giấy parchment */
+  --surface:          oklch(1.00 0.000 0);     /* white card */
+  --surface-raised:   oklch(0.96 0.008 75);    /* hover state */
+  --surface-overlay:  oklch(1.00 0.000 0);     /* modal */
+
+  /* --- Foreground / Text --- */
+  --foreground:       oklch(0.18 0.020 255);
+  --foreground-muted: oklch(0.45 0.018 255);
+  --foreground-faint: oklch(0.65 0.012 255);
+
+  /* --- Border --- */
+  --border:           oklch(0.82 0.012 75);
+  --border-muted:     oklch(0.90 0.008 75);
+  --border-focus:     oklch(0.58 0.14 68);
+
+  /* --- Primary: Amber-Gold (deeper cho light) --- */
+  --primary:          oklch(0.55 0.14 68);
+  --primary-hover:    oklch(0.50 0.13 68);
+  --primary-active:   oklch(0.48 0.12 68);
+  --primary-subtle:   oklch(0.94 0.030 75);
+  --primary-fg:       oklch(0.97 0.006 75);
+
+  /* --- Secondary: Teal --- */
+  --secondary:        oklch(0.42 0.12 195);
+  --secondary-hover:  oklch(0.38 0.11 195);
+  --secondary-active: oklch(0.36 0.10 195);
+  --secondary-subtle: oklch(0.93 0.020 195);
+  --secondary-fg:     oklch(0.97 0.006 75);
+
+  /* --- Semantic States --- */
+  --success:          oklch(0.42 0.14 155);
+  --success-subtle:   oklch(0.94 0.020 155);
+  --success-fg:       oklch(0.97 0.006 75);
+
+  --warning:          oklch(0.48 0.14 85);
+  --warning-subtle:   oklch(0.96 0.025 85);
+  --warning-fg:       oklch(0.18 0.020 255);
+
+  --destructive:      oklch(0.48 0.18 22);
+  --destructive-hover:oklch(0.44 0.17 22);
+  --destructive-subtle:oklch(0.95 0.025 22);
+  --destructive-fg:   oklch(0.97 0.006 75);
+
+  --info:             oklch(0.42 0.12 235);
+  --info-subtle:      oklch(0.94 0.020 240);
+  --info-fg:          oklch(0.97 0.006 75);
+
+  /* --- Ring --- */
+  --ring:             oklch(0.55 0.14 68);
+  --ring-offset:      oklch(0.97 0.006 75);
+
+  /* --- Scrollbar --- */
+  --scrollbar-track:  oklch(0.92 0.008 75);
+  --scrollbar-thumb:  oklch(0.78 0.015 75);
+  --scrollbar-thumb-hover: oklch(0.65 0.018 75);
+
+  /* --- Sidebar --- */
+  --sidebar-bg:       oklch(0.95 0.008 75);
+  --sidebar-border:   oklch(0.86 0.010 75);
+  --sidebar-item-hover: oklch(0.91 0.012 75);
+  --sidebar-item-active: oklch(0.90 0.040 75);
+
+  /* --- Feed / Card --- */
+  --feed-bg:          oklch(0.97 0.006 75);
+  --card-bg:          oklch(1.00 0.000 0);
+  --card-border:      oklch(0.88 0.010 75);
+
+  /* --- Highlight / Selection --- */
+  --highlight:        oklch(0.55 0.14 68 / 0.12);
+  --selection-bg:     oklch(0.55 0.14 68 / 0.20);
+  --selection-fg:     oklch(0.18 0.020 255);
+}
+
+/* ----------------------------------------------------------
+   TRANSITION — smooth theme switch
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.15s ease;
+}
+
+/* Tắt transition trên elements không cần thiết */
+img,
+video,
+canvas,
+svg {
+  transition: none;
+}
+
+
+
+

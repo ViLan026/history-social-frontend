@@ -1,19 +1,74 @@
-'use client';
+// app/(main)/layout.tsx
+// ============================================================
+// Protected layout — chỉ cho authenticated users
+// Auth guard chạy client-side vì dùng Zustand persist
+// Styling: 100% semantic tokens, zero hardcoded colors
+// ============================================================
 
-import { ReactNode, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/auth.store';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+"use client";
+
+import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth.store";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+
+// ─── Loading Screen ───────────────────────────────────────────────────────────
+
+function LoadingScreen() {
+  return (
+    <div
+      className="
+        min-h-dvh flex items-center justify-center
+        bg-background
+      "
+      role="status"
+      aria-label="Đang tải"
+    >
+      <div
+        className="
+          flex flex-col items-center gap-4
+          px-8 py-6 rounded-xl
+          bg-surface border border-border-muted
+        "
+      >
+        {/* Spinner */}
+        <span
+          className="
+            block w-6 h-6 rounded-full
+            border-2 border-border
+            border-t-primary
+            animate-spin
+          "
+          aria-hidden="true"
+        />
+
+        <p
+          className="
+            text-sm font-heading tracking-wide
+            text-foreground-muted
+          "
+        >
+          Đang xác thực...
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   const [isHydrated, setIsHydrated] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
+  // Chờ Zustand persist hydrate xong trước khi check auth
   useEffect(() => {
     const setHydrated = () => setIsHydrated(true);
+
     if (useAuthStore.persist.hasHydrated()) {
       setHydrated();
     } else {
@@ -22,33 +77,36 @@ export default function MainLayout({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Redirect nếu chưa đăng nhập
   useEffect(() => {
     if (!isHydrated) return;
+
     if (!isAuthenticated) {
-      router.replace('/login');
+      router.replace("/login");
     } else {
       setIsChecking(false);
     }
-  }, [isAuthenticated, router, isHydrated]);
+  }, [isAuthenticated, isHydrated, router]);
 
   if (!isHydrated || isChecking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#4f6f91] text-white">
-        <div className="neu px-8 py-5 rounded-2xl">
-          <p className="text-lg font-semibold animate-pulse tracking-wide font-headline">
-            Đang tải dữ liệu...
-          </p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#4f6f91] text-white transition-all duration-300">
+    <div className="min-h-dvh flex flex-col bg-background text-foreground">
       <Header />
-      <main className="pt-24 pb-12 px-8 max-w-screen-2xl mx-auto w-full flex-grow">
+
+      <main
+        className="
+          flex-1
+          pt-14
+          mx-auto w-full
+        "
+        id="main-content"
+      >
         {children}
       </main>
+
       <Footer />
     </div>
   );
