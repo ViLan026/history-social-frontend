@@ -6,10 +6,7 @@ import { Literata, Crimson_Pro } from "next/font/google";
 import Providers from "@/providers/Providers";
 import "@/styles/globals.css";
 
-// ============================================================
 // Fonts
-// ============================================================
-
 const literata = Literata({
     subsets: ["latin", "vietnamese"],
     variable: "--font-body",
@@ -26,9 +23,6 @@ const crimsonPro = Crimson_Pro({
     style: ["normal", "italic"]
 });
 
-// ============================================================
-// Metadata
-// ============================================================
 
 export const metadata: Metadata = {
     title: {
@@ -39,9 +33,6 @@ export const metadata: Metadata = {
     description: "Nền tảng thảo luận và chia sẻ kiến thức lịch sử."
 };
 
-// ============================================================
-// Root Layout
-// ============================================================
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -51,16 +42,8 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
     return (
         <html lang="vi" suppressHydrationWarning>
             <body
-                className={`
-          ${literata.variable}
-          ${crimsonPro.variable}
-
-          min-h-dvh
-          bg-background
-          text-foreground
-          antialiased
-        `}
-            >
+                className={`${literata.variable} ${crimsonPro.variable}  
+                min-h-dvh bg-background text-foreground antialiased`}>
                 <Providers>{children}</Providers>
             </body>
         </html>

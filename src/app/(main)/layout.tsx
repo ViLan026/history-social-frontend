@@ -93,17 +93,10 @@ export default function MainLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col bg-background text-foreground">
+    <div className="min-h-dvh flex flex-col">
       <Header />
 
-      <main
-        className="
-          flex-1
-          pt-14
-          mx-auto w-full
-        "
-        id="main-content"
-      >
+      <main className="flex-1 pt-14 mx-auto w-full" id="main-content">
         {children}
       </main>
 

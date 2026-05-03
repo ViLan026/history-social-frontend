@@ -1,15 +1,8 @@
 // components/sidebar/TodayInHistory.tsx
-// ============================================================
-// "Ngày này năm xưa" widget
-// Styling: 100% semantic tokens, zero hardcoded colors
-// ============================================================
-
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface HistoricalEvent {
   year: number;
@@ -17,8 +10,6 @@ interface HistoricalEvent {
   description: string;
   href?: string;
 }
-
-// ─── Data (thay bằng API call sau) ───────────────────────────────────────────
 
 const HISTORICAL_EVENTS: HistoricalEvent[] = [
   {
@@ -38,18 +29,11 @@ const HISTORICAL_EVENTS: HistoricalEvent[] = [
   },
 ];
 
-// ─── Event Card ───────────────────────────────────────────────────────────────
-
 function EventCard({ event }: { event: HistoricalEvent }) {
   const inner = (
     <div className="flex items-start gap-3">
-      {/* Year badge */}
       <div
-        className="
-          w-12 h-12 rounded-lg shrink-0
-          flex items-center justify-center
-          bg-primary-subtle border border-primary/20
-        "
+        className="w-12 h-12 rounded-lg shrink-0 flex items-center justify-center bg-primary-subtle border border-primary/20"
         aria-hidden="true"
       >
         <span className="text-xs font-heading font-bold text-primary leading-tight text-center">
@@ -57,7 +41,6 @@ function EventCard({ event }: { event: HistoricalEvent }) {
         </span>
       </div>
 
-      {/* Text */}
       <div className="flex-1 min-w-0">
         <h3 className="text-sm font-heading font-semibold text-foreground mb-0.5 leading-snug">
           {event.title}
@@ -88,8 +71,6 @@ function EventCard({ event }: { event: HistoricalEvent }) {
   return <div className={sharedClass}>{inner}</div>;
 }
 
-// ─── TodayInHistory ───────────────────────────────────────────────────────────
-
 export default function TodayInHistory() {
   const [currentDate, setCurrentDate] = useState<string>("");
 
@@ -104,10 +85,9 @@ export default function TodayInHistory() {
 
   return (
     <section
-      className="rounded-xl bg-card border border-card-border p-4"
+      className="rounded-xl bg-card border border-border-muted p-4 shadow-sm"
       aria-labelledby="today-history-heading"
     >
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2
           id="today-history-heading"
@@ -115,16 +95,14 @@ export default function TodayInHistory() {
         >
           Ngày này năm xưa
         </h2>
-
         {currentDate && (
-          <span className="text-xs text-foreground-faint tabular-nums">
+          <span className="text-xs text-foreground-muted tabular-nums">
             {currentDate}
           </span>
         )}
       </div>
 
-      {/* Events */}
-      <ul className="flex flex-col gap-2" role="list">
+      <ul className="flex flex-col gap-2 px-0" role="list">
         {HISTORICAL_EVENTS.map((event) => (
           <li key={`${event.year}-${event.title}`}>
             <EventCard event={event} />
@@ -132,7 +110,6 @@ export default function TodayInHistory() {
         ))}
       </ul>
 
-      {/* CTA */}
       <Link
         href="/timeline"
         className="

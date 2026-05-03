@@ -11,32 +11,41 @@ import Link from "next/link";
 import { useUsers } from "@/features/user/useUser";
 import { useUserStore } from "@/store/user.store";
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface UserRowProps {
+  id: string;
+  displayName?: string | null;
+  email: string;
+  avatarUrl?: string | null;
+  onFollow: (id: string) => void;
+}
+
+// ─── Components ───────────────────────────────────────────────────────────────
 
 function UserSkeleton() {
   return (
-    <div className="flex items-center gap-3 animate-pulse" aria-hidden="true">
-      <div className="w-9 h-9 rounded-full bg-surface-raised shrink-0" />
-      <div className="flex-1 space-y-1.5">
-        <div className="h-3 rounded bg-surface-raised w-3/4" />
-        <div className="h-2.5 rounded bg-surface-raised w-1/2" />
+    <div className="flex items-center gap-3 animate-pulse">
+      {/* Avatar skeleton */}
+      <div className="w-9 h-9 rounded-full bg-[var(--border-muted)] shrink-0" />
+      {/* Info skeleton */}
+      <div className="flex-1 space-y-2">
+        <div className="h-3.5 bg-[var(--border-muted)] rounded w-2/3" />
+        <div className="h-3 bg-[var(--border-muted)] rounded w-1/2" />
       </div>
-      <div className="h-7 w-16 rounded-lg bg-surface-raised shrink-0" />
+      {/* Button skeleton */}
+      <div className="w-16 h-7 rounded-lg bg-[var(--border-muted)] shrink-0" />
     </div>
   );
 }
 
-// ─── User Row ─────────────────────────────────────────────────────────────────
-
-interface UserRowProps {
-  id: string;
-  displayName?: string;
-  email: string;
-  avatarUrl?: string;
-  onFollow: (id: string) => void;
-}
-
-function UserRow({ id, displayName, email, avatarUrl, onFollow }: UserRowProps) {
+function UserRow({
+  id,
+  displayName,
+  email,
+  avatarUrl,
+  onFollow,
+}: UserRowProps) {
   const name = displayName || email.split("@")[0];
   const initial = name[0].toUpperCase();
 
@@ -83,11 +92,13 @@ function UserRow({ id, displayName, email, avatarUrl, onFollow }: UserRowProps) 
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className="
-            text-sm font-medium leading-tight text-foreground
-            group-hover:text-primary
-            truncate transition-colors duration-150
-          ">
+          <p
+            className="
+              text-sm font-medium leading-tight text-foreground
+              group-hover:text-primary
+              truncate transition-colors duration-150
+            "
+          >
             {name}
           </p>
           <p className="text-xs text-foreground-faint truncate mt-0.5">
@@ -118,11 +129,18 @@ function UserRow({ id, displayName, email, avatarUrl, onFollow }: UserRowProps) 
 // ─── SuggestedUsers ───────────────────────────────────────────────────────────
 
 export default function SuggestedUsers() {
-  const { data, isLoading } = useUsers({ page: 0, size: 6, keyword: "" });
+  // Lấy gợi ý người dùng (không lấy current user)
+  const { data, isLoading } = useUsers({
+    page: 0,
+    size: 5,
+    keyword: "",
+  });
+
   const { currentUser } = useUserStore();
 
+  // Lọc bỏ chính user đang đăng nhập
   const suggestedUsers =
-    data?.content?.filter((u) => u.id !== currentUser?.id).slice(0, 5) ?? [];
+    data?.content?.filter((user) => user.id !== currentUser?.id) || [];
 
   // TODO: implement follow mutation
   const handleFollow = (userId: string) => {
@@ -131,7 +149,7 @@ export default function SuggestedUsers() {
 
   return (
     <section
-      className="rounded-xl bg-card border border-card-border p-4"
+      className="rounded-xl bg-card border border-card-border p-4 shadow-sm"
       aria-labelledby="suggested-users-heading"
     >
       {/* Header */}
@@ -155,7 +173,7 @@ export default function SuggestedUsers() {
         {isLoading ? (
           Array.from({ length: 3 }).map((_, i) => <UserSkeleton key={i} />)
         ) : suggestedUsers.length > 0 ? (
-          suggestedUsers.map((user) => (
+          suggestedUsers.slice(0, 5).map((user) => (
             <UserRow
               key={user.id}
               id={user.id}
@@ -177,7 +195,8 @@ export default function SuggestedUsers() {
         <Link
           href="/explore"
           className="
-            block text-center text-xs font-medium mt-4
+            block text-center text-xs font-medium mt-4 pt-4
+            border-t border-card-border
             text-primary hover:text-primary-hover
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
             rounded-sm transition-colors duration-150

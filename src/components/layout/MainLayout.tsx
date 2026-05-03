@@ -1,6 +1,7 @@
+// components/layout/MainLayout.tsx
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import SidebarDrawer from "./SidebarDrawer";
 
 interface MainLayoutProps {
@@ -9,145 +10,145 @@ interface MainLayoutProps {
   children: React.ReactNode; // Feed
 }
 
-
 export default function MainLayout({
   leftSidebar,
   rightSidebar,
   children,
 }: MainLayoutProps) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
+  const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
 
-  // Đóng drawer khi resize lên desktop
+  // Responsive đóng drawer tự động
   useEffect(() => {
     const onResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsDrawerOpen(false);
-      }
+      if (window.innerWidth >= 1024) setIsLeftDrawerOpen(false); // lg
+      if (window.innerWidth >= 1280) setIsRightDrawerOpen(false); // xl
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Đóng drawer khi nhấn Escape
+  // Lock body scroll
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsDrawerOpen(false);
-    };
-    if (isDrawerOpen) {
-      document.addEventListener("keydown", onKeyDown);
-    }
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [isDrawerOpen]);
-
-  // Lock body scroll khi drawer mở
-  useEffect(() => {
-    if (isDrawerOpen) {
+    if (isLeftDrawerOpen || isRightDrawerOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isDrawerOpen]);
-
-  const openDrawer = useCallback(() => setIsDrawerOpen(true), []);
-  const closeDrawer = useCallback(() => setIsDrawerOpen(false), []);
+    return () => { document.body.style.overflow = ""; };
+  }, [isLeftDrawerOpen, isRightDrawerOpen]);
 
   return (
     <>
-      <div className="min-h-dvh" style={{ background: "var(--background)" }}>
-        <div
-          className="mx-auto w-full max-w-[1400px] px-0 lg:px-4 xl:px-6
-          "
-        >
-          <div
-            className="grid grid-cols-1 lg:grid-cols-[240px_1fr] xl:grid-cols-[280px_1fr_300px] gap-0 items-start
-            "
-          >
+      <div className="min-h-dvh bg-background">
+        <div className="mx-auto w-full max-w-[1280px] px-0 md:px-4 lg:px-6">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-6 ">
+            
+            {/* 1. LEFT SIDEBAR */}
             <aside
-              className="hidden lg:block lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:no-scrollbar border-r "
-              style={{ borderColor: "var(--sidebar-border)" }}
+              className="hidden lg:block lg:col-span-3 sticky top-[60px] h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar py-4"
               aria-label="Left sidebar"
             >
               {leftSidebar}
             </aside>
+
+            {/* 2. MAIN FEED */}
             <main
-              className="w-full min-w-0 mx-auto"
+              className="col-span-1 lg:col-span-9 xl:col-span-6 w-full min-h-dvh border-x border-[var(--border-muted)] py-2"
               aria-label="Main feed"
             >
-              {/* Feed width container — centered trong main column */}
-              <div
-                className="mx-auto w-full max-w-[680px] xl:max-w-[680px] min-h-dvh border-x "
-                style={{ borderColor: "var(--border-muted)" }}
-              >
-                {/* Hamburger button — chỉ hiện mobile/tablet */}
+              {/* VÙNG ĐÃ FIX: Chỉ ẩn hẳn Header này khi lên màn hình xl (đủ 3 cột) */}
+              <div className="xl:hidden flex items-center border-b border-[var(--border-muted)] px-2 bg-surface min-h-[3.5rem]">
+                
+                {/* Nút Left Menu: Chỉ hiện dưới màn lg (<1024px) */}
                 <div className="lg:hidden">
-                  <MobileMenuButton onClick={openDrawer} />
+                  <MobileMenuButton onClick={() => setIsLeftDrawerOpen(true)} label="Menu" />
                 </div>
 
-                {/* Feed content */}
-                {children}
-                <div className="lg:hidden">
-                  <MobileMenuButton onClick={openDrawer} />
+                {/* Nút Right Menu: Dùng ml-auto để luôn bám sang góc phải */}
+                <div className="ml-auto">
+                  {rightSidebar && (
+                    <MobileMenuButton onClick={() => setIsRightDrawerOpen(true)} label="Khám phá" isRight />
+                  )}
                 </div>
+                
+              </div>
+
+              {/* Khu vực chứa bài viết */}
+              <div className="p-0 sm:p-4">
+                {children}
               </div>
             </main>
+
+            {/* 3. RIGHT SIDEBAR */}
             {rightSidebar && (
               <aside
-                className="hidden xl:block xl:sticky xl:top-4 xl:max-h-[calc(100dvh-2rem)] xl:overflow-y-auto xl:no-scrollbar xl:pb-4"
+                className="hidden xl:block xl:col-span-3 py-4 "
                 aria-label="Right sidebar"
               >
                 {rightSidebar}
               </aside>
             )}
+
           </div>
         </div>
       </div>
 
-      <SidebarDrawer isOpen={isDrawerOpen} onClose={closeDrawer}>
+      {/* Drawer Trái */}
+      <SidebarDrawer
+        isOpen={isLeftDrawerOpen}
+        onClose={() => setIsLeftDrawerOpen(false)}
+        side="left"
+        title="Menu chính"
+      >
         {leftSidebar}
       </SidebarDrawer>
+
+      {/* Drawer Phải */}
+      {rightSidebar && (
+        <SidebarDrawer
+          isOpen={isRightDrawerOpen}
+          onClose={() => setIsRightDrawerOpen(false)}
+          side="right"
+          title="Khám phá"
+        >
+          {rightSidebar}
+        </SidebarDrawer>
+      )}
     </>
   );
 }
 
+// Giữ nguyên MobileMenuButton
 interface MobileMenuButtonProps {
   onClick: () => void;
+  label: string;
+  isRight?: boolean;
 }
 
-function MobileMenuButton({ onClick }: MobileMenuButtonProps) {
+function MobileMenuButton({ onClick, label, isRight }: MobileMenuButtonProps) {
   return (
-    <div
-      className="flex items-center px-4 py-3 border-b"
-      style={{ borderColor: "var(--border-muted)" }}
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 p-3 text-sm font-medium transition-colors text-[var(--foreground-muted)] hover:text-foreground hover:bg-[var(--surface-raised)] rounded-lg ${isRight ? 'flex-row-reverse' : ''}`}
     >
-      <button
-        onClick={onClick}
-        className="flex items-center gap-2 p-2 -ml-2 rounded-lg text-sm font-medium transition-colors duration-150"
-        style={{ color: "var(--foreground-muted)" }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor =
-            "var(--surface-raised)";
-          (e.currentTarget as HTMLElement).style.color = "var(--foreground)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "";
-          (e.currentTarget as HTMLElement).style.color =
-            "var(--foreground-muted)";
-        }}
-        aria-label="Mở menu"
-        aria-expanded="false"
-      >
-        {/* Hamburger icon */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-        >
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-        <span className="sm:hidden">Menu</span>
-      </button>
-    </div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        {isRight ? (
+          <>
+            <line x1="21" y1="6" x2="3" y2="6" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+            <line x1="21" y1="18" x2="7" y2="18" />
+          </>
+        ) : (
+          <>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </>
+        )}
+      </svg>
+      <span className="hidden sm:inline">{label}</span>
+    </button>
   );
 }

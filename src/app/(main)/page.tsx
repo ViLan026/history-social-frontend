@@ -1,3 +1,4 @@
+// app/(main)/page.tsx
 import LeftSidebar from "@/components/sidebar/LeftSidebar";
 import Feed from "@/components/social/Feed";
 import RightSidebar from "@/components/sidebar/RightSidebar";

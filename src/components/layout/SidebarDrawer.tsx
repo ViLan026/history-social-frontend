@@ -1,12 +1,4 @@
 // components/layout/SidebarDrawer.tsx
-// ============================================================
-// Mobile/Tablet Sidebar Drawer
-// 
-// Dùng cho mobile + tablet (<1024px)
-// Pattern: Overlay + Sheet từ trái slide vào
-// Không dùng lib ngoài — tự build đơn giản
-// ============================================================
-
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -15,16 +7,19 @@ interface SidebarDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  side?: "left" | "right"; 
+  title?: string;
 }
 
 export default function SidebarDrawer({
   isOpen,
   onClose,
   children,
+  side = "left",
+  title = "Menu",
 }: SidebarDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  // Focus trap — accessibility
   useEffect(() => {
     if (isOpen && drawerRef.current) {
       drawerRef.current.focus();
@@ -33,18 +28,22 @@ export default function SidebarDrawer({
 
   if (!isOpen) return null;
 
+  const isLeft = side === "left";
+  const positionClasses = isLeft ? "left-0" : "right-0";
+  const animationClasses = isLeft ? "animate-slide-left" : "animate-slide-right";
+  const borderClasses = isLeft
+    ? "border-r border-[var(--sidebar-border)]"
+    : "border-l border-[var(--sidebar-border)]";
+
+
+  // Menu trái ẩn ở lg (1024px), Menu phải ẩn ở xl (1280px)
+  const hiddenClass = isLeft ? "lg:hidden" : "xl:hidden";
+
   return (
-    /*
-      Portal-like: render fixed, z-50 để overlay lên toàn bộ layout
-      Không cần ReactDOM.createPortal vì Next.js App Router handle tốt
-    */
-    <div
-      className="fixed inset-0 z-50 lg:hidden"
-      aria-modal="true"
-      role="dialog"
-      aria-label="Navigation menu"
-    >
-      {/* Backdrop — click để đóng */}
+   
+    <div className={`fixed inset-0 z-50 ${hiddenClass}`} aria-modal="true" role="dialog">
+      
+      {/* Backdrop */}
       <div
         className="absolute inset-0 animate-fade-in"
         style={{ backgroundColor: "oklch(0 0 0 / 0.6)" }}
@@ -56,24 +55,16 @@ export default function SidebarDrawer({
       <div
         ref={drawerRef}
         tabIndex={-1}
-        className="
-          absolute
-          left-0
-          top-0
-          bottom-0
-          w-[280px]
-          max-w-[85vw]
-          overflow-y-auto
-          animate-slide-left
-          focus:outline-none
-          shadow-2xl
-        "
-        style={{
-          backgroundColor: "var(--sidebar-bg)",
-          borderRight: "1px solid var(--sidebar-border)",
-        }}
+        className={`
+          absolute top-0 bottom-0
+          w-[280px] max-w-[85vw]
+          overflow-y-auto focus:outline-none shadow-2xl  px-4
+          ${positionClasses}
+          ${animationClasses}
+          ${borderClasses}
+        `}
+        style={{ backgroundColor: "var(--sidebar-bg)" }}
       >
-        {/* Header drawer với nút đóng */}
         <div
           className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b"
           style={{
@@ -85,48 +76,20 @@ export default function SidebarDrawer({
             className="text-sm font-semibold tracking-wide"
             style={{ color: "var(--foreground-muted)" }}
           >
-            Menu
+            {title}
           </span>
-
           <button
             onClick={onClose}
-            className="
-              p-1.5
-              rounded-md
-              transition-colors duration-150
-            "
+            className="p-1.5 rounded-md transition-colors duration-150 hover:bg-[var(--surface-raised)] hover:text-[var(--foreground)]"
             style={{ color: "var(--foreground-muted)" }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor =
-                "var(--surface-raised)";
-              (e.currentTarget as HTMLElement).style.color =
-                "var(--foreground)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "";
-              (e.currentTarget as HTMLElement).style.color =
-                "var(--foreground-muted)";
-            }}
             aria-label="Đóng menu"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
-
-        {/* Sidebar content */}
         <div className="py-2">{children}</div>
       </div>
     </div>

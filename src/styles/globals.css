@@ -34,7 +34,7 @@
     color: var(--foreground);
     /* Stack: sans-serif nhưng humanist — dễ đọc lâu */
     font-family:
-      "Literata",           /* Google Fonts serif — lý tưởng cho long-read */
+      var(--font-body),          /* Google Fonts serif — lý tưởng cho long-read */
       "Georgia",
       "Times New Roman",
       serif;
@@ -48,7 +48,7 @@
   /* --- Headings --- */
   h1, h2, h3, h4, h5, h6 {
     font-family:
-      "Crimson Pro",        /* Elegant serif cho headings */
+      var(--font-heading),        /* Elegant serif cho headings */
       "Georgia",
       serif;
     font-weight: 600;
