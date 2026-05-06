@@ -33,7 +33,7 @@ function EventCard({ event }: { event: HistoricalEvent }) {
   const inner = (
     <div className="flex items-start gap-3">
       <div
-        className="w-12 h-12 rounded-lg shrink-0 flex items-center justify-center bg-primary-subtle border border-primary/20"
+        className="w-12 h-12 rounded-lg shrink-0 flex items-center justify-center bg-primary-subtle "
         aria-hidden="true"
       >
         <span className="text-xs font-heading font-bold text-primary leading-tight text-center">
@@ -85,7 +85,7 @@ export default function TodayInHistory() {
 
   return (
     <section
-      className="rounded-xl bg-card border border-border-muted p-4 shadow-sm"
+      className="rounded-xl bg-card  p-4 shadow-sm"
       aria-labelledby="today-history-heading"
     >
       <div className="flex items-center justify-between mb-4">

@@ -5,9 +5,9 @@ import {
   AuthenticationRequest,
   AuthenticationResponse,
   IntrospectResponse,
-} from '@/types/auth';
+} from '@/features/auth/auth.types';
 
-import { UserResponse } from '@/types/user';
+import { UserResponse } from '@/features/user/user.types';
 
 export const authService = {
   // Đăng ký

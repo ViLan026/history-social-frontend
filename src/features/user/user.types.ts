@@ -1,5 +1,5 @@
 // src/types/user.ts
-import { PageResponse } from './api';
+import { PageResponse } from '../../types/api';
 
 
 export type AccountStatus = 'ACTIVE' | 'INACTIVE' | string;

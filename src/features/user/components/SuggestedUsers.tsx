@@ -9,7 +9,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useUsers } from "@/features/user/useUser";
-import { useUserStore } from "@/store/user.store";
+import { useUserStore } from "@/features/user/user.store";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -149,7 +149,7 @@ export default function SuggestedUsers() {
 
   return (
     <section
-      className="rounded-xl bg-card border border-card-border p-4 shadow-sm"
+      className="rounded-xl bg-card   p-4 shadow-sm"
       aria-labelledby="suggested-users-heading"
     >
       {/* Header */}
@@ -193,13 +193,14 @@ export default function SuggestedUsers() {
       {/* CTA */}
       {!isLoading && suggestedUsers.length > 0 && (
         <Link
-          href="/explore"
+          href="/follow"
           className="
-            block text-center text-xs font-medium mt-4 pt-4
-            border-t border-card-border
-            text-primary hover:text-primary-hover
+            block text-center text-xs font-medium mt-4 px-4 py-2 rounded-lg
+            text-primary border border-primary/30
+          hover:bg-primary-subtle hover:border-primary/60
+             hover:text-primary-hover
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-            rounded-sm transition-colors duration-150
+             transition-colors duration-150
           "
         >
           Xem thêm gợi ý →

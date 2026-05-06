@@ -1,7 +1,7 @@
 import {axiosInstance} from '@/lib/axios';
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
-import { CommentRequest, CommentResponse } from '@/types/comment';
+import { CommentRequest, CommentResponse } from '@/features/comment/comment.types';
 
 export const commentService = {
   // Tạo bình luận mới

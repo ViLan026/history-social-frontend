@@ -7,7 +7,7 @@ import {
   PostUpdateRequest, 
   PostResponse, 
   PostSummaryResponse 
-} from '@/types/post';
+} from '@/features/post/post.types';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
 
 export const postService = {

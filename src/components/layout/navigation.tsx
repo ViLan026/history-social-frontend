@@ -70,7 +70,7 @@ interface NavItemProps {
 
 function NavItem({ href, icon, label, isActive }: NavItemProps) {
   return (
-    <li>
+    <li className="">
       <Link
         href={href}
         aria-current={isActive ? "page" : undefined}
@@ -118,10 +118,10 @@ export default function LeftSidebar() {
   return (
     <nav
       className="h-full px-3 py-4 flex flex-col gap-6"
-      style={{ backgroundColor: "var(--sidebar-bg)" }}
+      // style={{ backgroundColor: "var(--sidebar-bg)" }}
       aria-label="Navigation chính"
     >
-      <ul className="flex flex-col gap-0.5" role="list">
+      <ul className="neu-raised flex flex-col gap-0.5 py-4" role="list">
         {NAV_ITEMS.map((item) => (
           <NavItem
             key={item.href}

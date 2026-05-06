@@ -1,6 +1,6 @@
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PaginationParams } from '@/types/api';
-import { PostCreationRequest, PostUpdateRequest, PostSummaryResponse } from '@/types/post';
+import { PostCreationRequest, PostUpdateRequest, PostSummaryResponse } from '@/features/post/post.types';
 import { postService } from './post.service';
 import { toast } from 'sonner';
 

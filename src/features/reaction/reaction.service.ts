@@ -7,7 +7,7 @@ import {
   ReactionDetailResponse,
   ReactionType,
   GetReactionDetailsParams
-} from '@/types/reaction';
+} from '@/features/reaction/reaction.types';
 
 export const reactionService = {
   // Bật, tắt, thay đổi reaction

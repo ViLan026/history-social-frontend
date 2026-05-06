@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { UserResponse, ProfileResponse, UserSummaryResponse } from '@/types/user';
+import { UserResponse, ProfileResponse, UserSummaryResponse } from '@/features/user/user.types';
 
 interface UserStore {
   // Current logged-in user (thường đồng bộ với auth store)

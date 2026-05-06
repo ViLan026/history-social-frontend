@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useInfiniteFeed } from "@/features/post/usePost";
-import PostCard from "@/components/post/PostCard";
+import PostCard from "@/features/post/components/PostCard";
 
 export default function PostList() {
     const {

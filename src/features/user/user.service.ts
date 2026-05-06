@@ -7,7 +7,7 @@ import {
   UserUpdateRequest,
   ChangePasswordRequest,
   GetUsersParams
-} from '@/types/user';
+} from '@/features/user/user.types';
 
 export const userService = {
   // Lấy danh sách users (Controller trả về thẳng PageResponse, KHÔNG bọc trong ApiResponse)
@@ -25,10 +25,16 @@ export const userService = {
     );
     return response.data.data;
   },
+  getMe: async (id: string): Promise<UserResponse> => {
+    const response = await axiosInstance.get<ApiResponse<UserResponse>>(
+      API_ENDPOINTS.USERS.GET_BY_ID(id)
+    );
+    return response.data.data;
+  },
 
   updateUser: async (id: string, data: UserUpdateRequest): Promise<UserResponse> => {
     const response = await axiosInstance.put<ApiResponse<UserResponse>>(
-      API_ENDPOINTS.USERS.UPDATE(id), 
+      API_ENDPOINTS.USERS.ME,
       data
     );
     return response.data.data;

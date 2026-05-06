@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { PostCard } from "@/components/post/PostCard";
-import { CreatePost } from "@/components/post/CreatePost";
+import { PostCard } from "@/features/post/components/PostCard";
+import { CreatePost } from "@/features/post/components/CreatePost";
 import { usePosts } from "@/features/post/usePost";
-import { usePostStore } from "@/store/post.store";
+import { usePostStore } from "@/features/post/post.store";
 
 export default function HomePage() {
     // Get pagination state from Zustand

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { authService } from './auth.service';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/auth.store';
+import { useAuthStore } from '@/features/auth/auth.store';
 
 export const useLogin = () => {
   const router = useRouter();
@@ -11,7 +11,7 @@ export const useLogin = () => {
     mutationFn: authService.login,
     onSuccess: (data) => {
       
-      if (data.authenticated) {
+      if (data?.authenticated) {
         setAuth(true); // Cập nhật store
         console.log("Đã setAuth(true), chuẩn bị redirect...");
         
@@ -21,6 +21,7 @@ export const useLogin = () => {
         // router.refresh();
       } else {
         console.error("Backend trả về thành công nhưng authenticated = false");
+        console.error("Đăng nhập thất bại. Dữ liệu thực tế là:", data);
       }
     },
     onError: (error) => {
@@ -55,3 +56,22 @@ export const useLogout = () => {
     },
   });
 };
+
+
+// export const useRefresh = () => {
+//   const setAuth = useAuthStore((state) => state.setAuth);
+//   const logoutStore = useAuthStore((state) => state.logout);
+
+//   return useMutation({
+//     mutationFn: authService.refresh,
+//     onSuccess: (data) => {
+//       if (data?.authenticated) {
+//         setAuth(true);
+//       }
+//     },
+//     onError: (error) => {
+//       console.error("Refresh token expired or invalid:", error);
+//       logoutStore(); // Nếu refresh cũng lỗi (hết hạn 7 ngày) thì logout luôn
+//     },
+//   });
+// };

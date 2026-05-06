@@ -63,7 +63,7 @@ export const usePostStore = create<PostStore>((set) => ({
   
   resetFilters: () =>
     set({
-      currentPage: 1,
+      currentPage: 0,
       keyword: '',
     }),
   

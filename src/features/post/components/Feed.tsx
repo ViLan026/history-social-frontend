@@ -1,5 +1,5 @@
-import CreatePost from "../post/CreatePost";
-import PostList from "../post/PostList";
+import CreatePost from "./CreatePost";
+import PostList from "./PostList";
 
 export default function Feed() {
     return (

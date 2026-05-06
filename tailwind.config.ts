@@ -20,10 +20,7 @@ const config: Config = {
 
   theme: {
     extend: {
-      // ======================================================
-      // Colors — map CSS variables vào Tailwind
-      // Dùng cú pháp: bg-background, text-foreground, etc.
-      // ======================================================
+
       colors: {
         background:    "var(--background)",
         foreground:    "var(--foreground)",

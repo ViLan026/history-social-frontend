@@ -6,7 +6,7 @@ import {
   BookmarkResponse,
   BookmarkStatusResponse,
   BookmarkToggleResponse,
-} from '@/types/bookmark';
+} from '@/features/bookmark/bookmark.types';
 
 export const bookmarkService = {
   // Bật/tắt lưu bài viết (Toggle bookmark)

@@ -74,14 +74,7 @@ const SOCIAL_LINKS = [
 /** Tiêu đề section trong footer */
 function FooterHeading({ children }: { children: React.ReactNode }) {
     return (
-        <h3
-            className="
-        font-heading font-semibold
-        text-sm tracking-widest uppercase
-        text-foreground-muted
-        mb-4
-      "
-        >
+        <h3 className="font-heading font-semibold text-sm tracking-widest uppercase text-foreground-muted mb-4">
             {children}
         </h3>
     );
@@ -102,14 +95,7 @@ function FooterLink({
             {...(isExternal
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-            className="
-        text-sm text-foreground-muted
-        hover:text-foreground
-        underline-offset-4 hover:underline
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-        transition-colors duration-150
-        rounded-sm
-      "
+            className=" text-sm text-foreground-muted hover:text-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors duration-150 rounded-sm"
         >
             {children}
         </Link>
@@ -133,15 +119,7 @@ function SocialButton({
             rel="noopener noreferrer"
             aria-label={`Theo dõi Historia trên ${label}`}
             title={label}
-            className="
-        flex items-center justify-center
-        w-8 h-8 rounded-md
-        text-foreground-faint
-        bg-surface border border-border-muted
-        hover:text-foreground hover:border-border hover:bg-surface-raised
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-        transition-all duration-150
-      "
+            className="flex items-center justify-center w-8 h-8 rounded-md text-foreground-faint bg-surface border border-border-muted hover:text-foreground hover:border-border hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-150"
         >
             {icon}
         </a>
@@ -167,14 +145,7 @@ export default function Footer() {
                         {/* Wordmark */}
                         <Link
                             href="/"
-                            className="
-                inline-flex items-center gap-2 mb-4
-                font-heading font-semibold text-base tracking-[0.1em] uppercase
-                text-foreground
-                hover:text-primary
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-                rounded-sm transition-colors duration-150
-              "
+                            className="inline-flex items-center gap-2 mb-4 font-heading font-semibold text-base tracking-[0.1em] uppercase text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm transition-colors duration-150"
                         >
                             <span
                                 className="text-primary opacity-70"
@@ -245,12 +216,7 @@ export default function Footer() {
                 </div>
 
                 {/* ── Bottom bar ── */}
-                <div
-                    className="
-            flex flex-col sm:flex-row items-center justify-between gap-3
-            py-5 border-t border-border-muted
-          "
-                >
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 border-t border-border-muted">
                     <p className="text-xs text-foreground-faint">
                         © {currentYear} Historia. Nội dung thuộc quyền sở hữu
                         của tác giả.

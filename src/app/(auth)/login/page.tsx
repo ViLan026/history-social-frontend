@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#4f6f91] p-4">
-      <div className="neu w-full max-w-md space-y-8 rounded-2xl bg-[#4f6f91] p-8">
+      <div className="neu-raised w-full max-w-md space-y-8 rounded-2xl bg-[#4f6f91] p-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white text-balance">
             Đăng nhập

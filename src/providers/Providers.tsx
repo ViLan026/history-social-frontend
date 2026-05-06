@@ -11,9 +11,7 @@ import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools"; // uncomment để dev
 
-// ============================================================
 // QueryClient config — tối ưu cho social media feed
-// ============================================================
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -35,7 +33,7 @@ function makeQueryClient() {
   });
 }
 
-// Singleton pattern — tránh tạo QueryClient mới mỗi render
+// Singleton pattern — tránh tạo QuẽryClient mới mỗi render
 // Ref: TanStack docs recommended pattern cho Next.js
 let browserQueryClient: QueryClient | undefined = undefined;
 

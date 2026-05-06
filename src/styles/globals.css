@@ -277,6 +277,87 @@
   .animate-pulse      { animation: pulse 1.8s ease-in-out infinite; }
 }
 
+
+/* ============================================================
+   NEUMORPHISM CLASSES — Based on oklch theme system
+   Strategy: Use CSS vars for semantic theme colors
+   ============================================================ */
+
+/* --- NEU Soft Raised (elevated, subtle) --- */
+.neu-raised {
+  box-shadow: 
+    6px 6px 12px rgba(0, 0, 0, 0.2),
+    -6px -6px 12px rgba(255, 255, 255, 0.05);
+}
+
+/* --- NEU Soft Inset (pressed, depressed) --- */
+.neu-inset {
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.15),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.03);
+}
+
+/* --- NEU Strong (bold elevation, high contrast) --- */
+.neu-strong {
+  box-shadow: 
+    8px 8px 16px rgba(0, 0, 0, 0.3),
+    -8px -8px 16px rgba(255, 255, 255, 0.08);
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .neu-raised,
+.dark .neu-raised {
+  box-shadow: 
+    6px 6px 12px oklch(0.06 0.015 255 / 0.4),
+    -6px -6px 12px oklch(0.25 0.025 258 / 0.2);
+}
+
+[data-theme="dark"] .neu-inset,
+.dark .neu-inset {
+  box-shadow: 
+    inset 4px 4px 8px oklch(0.06 0.015 255 / 0.3),
+    inset -4px -4px 8px oklch(0.30 0.030 258 / 0.15);
+}
+
+[data-theme="dark"] .neu-strong,
+.dark .neu-strong {
+  box-shadow: 
+    8px 8px 16px oklch(0.05 0.010 255 / 0.5),
+    -8px -8px 16px oklch(0.32 0.035 258 / 0.25);
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .neu-raised,
+.light .neu-raised {
+  box-shadow: 
+    6px 6px 12px oklch(83.304% 0.0178 256.377 / 0.08),
+    -6px -6px 12px oklch(59.095% 0.01102 17.135 / 0.6);
+}
+
+[data-theme="light"] .neu-inset,
+.light .neu-inset {
+  box-shadow: 
+    inset 4px 4px 8px oklch(0.18 0.020 255 / 0.06),
+    inset -4px -4px 8px oklch(1.00 0.000 0 / 0.4);
+}
+
+[data-theme="light"] .neu-strong,
+.light .neu-strong {
+  box-shadow: 
+    8px 8px 16px oklch(0.18 0.020 255 / 0.12),
+    -8px -8px 16px oklch(1.00 0.000 0 / 0.8);
+}
+
+/* Optional: smooth transition when switching states */
+.neu-raised,
+.neu-inset,
+.neu-strong {
+  transition: box-shadow 0.2s ease;
+}
+
+
+
+
 /* ----------------------------------------------------------
    UTILITY CLASSES — Nhỏ gọn, practical
    ---------------------------------------------------------- */

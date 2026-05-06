@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { reactionService } from './reaction.service';
-import { ReactionRequest, GetReactionDetailsParams } from '@/types/reaction';
+import { ReactionRequest, GetReactionDetailsParams } from '@/features/reaction/reaction.types';
 
 // Quản lý Query Keys tập trung
 export const REACTION_QUERY_KEYS = {

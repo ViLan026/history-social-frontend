@@ -55,10 +55,10 @@ export default function MainLayout({
 
             {/* 2. MAIN FEED */}
             <main
-              className="col-span-1 lg:col-span-9 xl:col-span-6 w-full min-h-dvh border-x border-[var(--border-muted)] py-2"
+              className="col-span-1 lg:col-span-9 xl:col-span-6 w-full min-h-dvh  py-2 "
               aria-label="Main feed"
             >
-              {/* VÙNG ĐÃ FIX: Chỉ ẩn hẳn Header này khi lên màn hình xl (đủ 3 cột) */}
+              {/*  Chỉ ẩn hẳn Header này khi lên màn hình xl (đủ 3 cột) */}
               <div className="xl:hidden flex items-center border-b border-[var(--border-muted)] px-2 bg-surface min-h-[3.5rem]">
                 
                 {/* Nút Left Menu: Chỉ hiện dưới màn lg (<1024px) */}
@@ -76,7 +76,8 @@ export default function MainLayout({
               </div>
 
               {/* Khu vực chứa bài viết */}
-              <div className="p-0 sm:p-4">
+              <div className="p-0 sm:p-4   border-x border-[var(--border-muted)]        
+">
                 {children}
               </div>
             </main>

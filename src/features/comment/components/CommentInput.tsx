@@ -1,42 +1,31 @@
-// src/components/comment/CommentInput.tsx
+// components/comment/CommentInput.tsx
+
 "use client";
 
-import React, {
-  memo,
-  useRef,
-  useEffect,
-  useCallback,
-  useState,
-} from "react";
+import React, { memo, useRef, useEffect, useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// ─── Props ───────────────────────────────────────────────────────────────────
 
 interface CommentInputProps {
-  /** Callback khi user nhấn Enter (không Shift) hoặc bấm nút gửi */
+  /** Callback khi Enter hoặc bấm nút gửi */
   onSubmit: (content: string) => void;
-  /** Disable input khi đang submit */
+  /** Disable khi đang submit */
   isSubmitting?: boolean;
-  /** Auto-focus khi component mount (dùng khi mở comment section) */
+  /** Auto-focus khi section mở */
   autoFocus?: boolean;
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
 
 export const CommentInput = memo<CommentInputProps>(
   ({ onSubmit, isSubmitting = false, autoFocus = false }) => {
     const [value, setValue] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    // Auto-focus khi prop thay đổi thành true
+    // Auto-focus sau khi section animation xong
     useEffect(() => {
-      if (autoFocus) {
-        // Delay nhỏ để animation section mở xong mới focus
-        const timer = setTimeout(() => {
-          textareaRef.current?.focus();
-        }, 150);
-        return () => clearTimeout(timer);
-      }
+      if (!autoFocus) return;
+      const timer = setTimeout(() => textareaRef.current?.focus(), 150);
+      return () => clearTimeout(timer);
     }, [autoFocus]);
 
     // Auto-resize textarea
@@ -52,15 +41,11 @@ export const CommentInput = memo<CommentInputProps>(
       if (!trimmed || isSubmitting) return;
       onSubmit(trimmed);
       setValue("");
-      // Reset height sau khi clear
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
-      }
+      if (textareaRef.current) textareaRef.current.style.height = "auto";
     }, [value, isSubmitting, onSubmit]);
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        // Enter gửi / Shift+Enter xuống dòng
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           handleSubmit();
@@ -73,12 +58,14 @@ export const CommentInput = memo<CommentInputProps>(
 
     return (
       <div className="flex items-end gap-2">
-        {/* Textarea wrapper với neu-inset */}
+        {/* Textarea */}
         <div
-          className={cn(
-            "flex-1 overflow-hidden rounded-2xl transition-all duration-200",
-            "shadow-[inset_4px_4px_8px_#3f5f80,inset_-4px_-4px_8px_#5f89b5]"
-          )}
+          className="
+            flex-1 overflow-hidden rounded-xl
+            bg-surface border border-border
+            focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-ring/30
+            transition-all duration-150
+          "
         >
           <textarea
             ref={textareaRef}
@@ -88,39 +75,51 @@ export const CommentInput = memo<CommentInputProps>(
             disabled={isSubmitting}
             placeholder="Viết bình luận... (Enter để gửi, Shift+Enter xuống dòng)"
             rows={1}
-            className={cn(
-              "w-full resize-none bg-transparent px-4 py-2.5",
-              "text-sm leading-relaxed text-white",
-              "placeholder:text-white/40 outline-none",
-              "disabled:cursor-not-allowed disabled:opacity-50",
-              "scrollbar-thin overflow-y-auto"
-            )}
+            aria-label="Nội dung bình luận"
+            className="
+              w-full resize-none bg-transparent
+              px-3.5 py-2.5
+              text-sm leading-relaxed text-foreground
+              placeholder:text-foreground-faint
+              outline-none
+              disabled:cursor-not-allowed disabled:opacity-50
+              no-scrollbar overflow-y-auto
+            "
             style={{ minHeight: "40px", maxHeight: "120px" }}
           />
         </div>
 
-        {/* Nút gửi */}
+        {/* Submit button */}
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
           aria-label="Gửi bình luận"
           className={cn(
-            "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl",
-            "transition-all duration-200",
-            "shadow-[4px_4px_8px_#3f5f80,-4px_-4px_8px_#5f89b5]",
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+            "border transition-all duration-150",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             canSubmit
-              ? "text-white hover:brightness-110 active:shadow-[inset_3px_3px_6px_#3f5f80,inset_-3px_-3px_6px_#5f89b5]"
-              : "cursor-not-allowed text-white/30"
+              ? "bg-primary text-primary-fg border-primary/30 hover:bg-primary-hover"
+              : "bg-surface text-foreground-faint border-border cursor-not-allowed"
           )}
         >
           {isSubmitting ? (
-            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            // Spinner
+            <span
+              className="
+                inline-block h-4 w-4 rounded-full animate-spin
+                border-2 border-primary-fg/30 border-t-primary-fg
+              "
+              aria-hidden="true"
+            />
           ) : (
+            // Send icon
             <svg
               className="h-4 w-4 translate-x-0.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"

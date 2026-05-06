@@ -1,22 +1,20 @@
-// src/lib/axios.ts
 import axios from 'axios';
-// import { useAuthStore } from '@/stores/useAuthStore'; // Chỉnh lại store chỉ lưu thông tin user
+import { useAuthStore } from '@/features/auth/auth.store'; 
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'X-Tunnel-Skip-AntiPhishing-Page': 'true',
   },
-  withCredentials: true, 
+  withCredentials: true,
 });
 
-// Trình duyệt tự lo việc nhét access_token vào request.
-
-// --- RESPONSE INTERCEPTOR ---
+// Biến kiểm soát trạng thái refresh
 let isRefreshing = false;
 let failedQueue: any[] = [];
 
-const processQueue = (error: any) => {
+const processQueue = (error: any = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -28,21 +26,20 @@ const processQueue = (error: any) => {
 };
 
 axiosInstance.interceptors.response.use(
-  (response) => response, // Trả về data nếu request thành công
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Nếu lỗi 401 (access_token hết hạn hoặc không hợp lệ)
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      
+    // Kiểm tra lỗi 401 và đảm bảo không phải là request vào chính API login/refresh để tránh lặp vô tận
+    const isAuthRequest = originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/refresh');
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
+      // chặn nếu có nhiều api cùng trả về 401, chỉ xử lý refresh một lần
       if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then(() => {
-            // Khi queue chạy lại, trình duyệt tự động dùng access_token cookie mới
-            return axiosInstance(originalRequest);
-          })
+          .then(() => axiosInstance(originalRequest))
           .catch((err) => Promise.reject(err));
       }
 
@@ -50,33 +47,20 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Gọi API refresh. 
-        // Trình duyệt sẽ tự động gửi refresh_token cookie lên.
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-          {},
-          { withCredentials: true } 
-        );
+        await axios.post(`${axiosInstance.defaults.baseURL}/auth/refresh`, {}, { withCredentials: true });
 
-        // NẾU THÀNH CÔNG: Backend của bạn (theo code trên) đã tự động set lại 
-        // 2 cookie access_token và refresh_token mới xuống trình duyệt rồi!
-        
         processQueue(null);
-
-        // Chạy lại request ban đầu (trình duyệt sẽ tự động lấy cookie mới gửi đi)
         return axiosInstance(originalRequest);
-
       } catch (refreshError) {
-        // Nếu refresh token cũng hết hạn -> Yêu cầu đăng nhập lại
         processQueue(refreshError);
         
-        // Gọi API logout để clear cookie ở server (nếu cần)
-        // Cập nhật Zustand: set isAuthenticated = false
-        
-        if (typeof window !== 'undefined') {
-           window.location.href = '/login';
-        }
+        // Xóa sạch state trong Zustand
+        useAuthStore.getState().logout();
 
+        //  Chuyển hướng về login
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

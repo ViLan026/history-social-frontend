@@ -1,7 +1,7 @@
 import {axiosInstance} from '@/lib/axios';
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { ApiResponse } from '@/types/api';
-import { RoleResponse, RoleCreationRequest, RoleUpdateRequest } from '@/types/user';
+import { RoleResponse, RoleCreationRequest, RoleUpdateRequest } from '@/features/user/user.types';
 
 export const roleService = {
   getAllRoles: async (): Promise<RoleResponse[]> => {
