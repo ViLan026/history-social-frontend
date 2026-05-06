@@ -302,8 +302,8 @@ export const CreatePost: React.FC = () => {
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center p-4"
                     style={{
-                        backgroundColor: "oklch(0 0 0 / 0.55)",
-                        backdropFilter: "blur(6px)"
+                        backgroundColor: "background",
+                        // backdropFilter: "blur(6px)"
                     }}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) handleClose();

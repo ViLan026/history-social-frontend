@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { UserResponse } from '@/features/user/user.types';
+import { persist } from 'zustand/middleware';
+import { useUserStore } from '../user/user.store';
 
 interface AuthState {
   // State
@@ -21,14 +21,15 @@ export const useAuthStore = create<AuthState>()(
 
       // Gọi sau khi lấy được thông tin User (ví dụ qua API /users/me)
 
-      logout: () =>
-        set({
-          isAuthenticated: false,
-        }),
+      logout: () =>{
+        useUserStore.getState().clearUser(); // clear user 
+        set({ isAuthenticated: false });
+      },
+
     }),
     {
       name: 'auth-storage', 
-      storage: createJSONStorage(() => sessionStorage),
+      // storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

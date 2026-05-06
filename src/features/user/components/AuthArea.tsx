@@ -4,10 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { useAuthStore } from "@/features/auth/auth.store";
+import { useCurrentUser } from "@/features/user/useUser";
 
 export default function AuthArea() {
-    // Lấy dữ liệu trực tiếp từ store (Giả sử store của bạn có hàm logout)
-    const { isAuthenticated, user, logout } = useAuthStore();
+    // Lấy dữ liệu trực tiếp từ store 
+    const { isAuthenticated, logout } = useAuthStore();
+
+    // gọi API lấy user
+    const { data: currentUser } = useCurrentUser();
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -45,8 +49,8 @@ export default function AuthArea() {
     }
 
     // 2. Trạng thái đã đăng nhập
-    const displayName = user?.profile?.displayName ?? user?.email ?? "User";
-    const avatarUrl = user?.profile?.avatarUrl;
+    const displayName = currentUser?.profile?.displayName ?? currentUser?.email ?? "User";
+    const avatarUrl = currentUser?.profile?.avatarUrl;
     const initial = displayName.charAt(0).toUpperCase();
 
     return (
@@ -82,9 +86,9 @@ export default function AuthArea() {
                         <p className="text-sm font-semibold text-foreground truncate">
                             {displayName}
                         </p>
-                        {user?.email && (
+                        {currentUser?.email && (
                             <p className="text-xs text-foreground-muted truncate mt-0.5">
-                                {user.email}
+                                {currentUser.email}
                             </p>
                         )}
                     </div>

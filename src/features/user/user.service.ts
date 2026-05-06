@@ -25,16 +25,17 @@ export const userService = {
     );
     return response.data.data;
   },
-  getMe: async (id: string): Promise<UserResponse> => {
+
+  getMe: async (): Promise<UserResponse> => {
     const response = await axiosInstance.get<ApiResponse<UserResponse>>(
-      API_ENDPOINTS.USERS.GET_BY_ID(id)
+      API_ENDPOINTS.USERS.ME
     );
     return response.data.data;
   },
 
   updateUser: async (id: string, data: UserUpdateRequest): Promise<UserResponse> => {
     const response = await axiosInstance.put<ApiResponse<UserResponse>>(
-      API_ENDPOINTS.USERS.ME,
+      API_ENDPOINTS.USERS.UPDATE(id),
       data
     );
     return response.data.data;

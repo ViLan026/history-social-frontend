@@ -1,26 +1,29 @@
-import React, { forwardRef } from "react";
-import clsx from "clsx";
+// ================= FILE: src/components/ui/Input.tsx =================
+import React, { forwardRef, type InputHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, className, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, error, ...props }, ref) => {
     return (
       <div className="w-full">
-        {label && (
-          <label className="block mb-2 text-sm text-white">{label}</label>
-        )}
         <input
           ref={ref}
-          className={clsx(
-            "w-full px-4 py-3 rounded-full bg-primary text-white outline-none",
-            "shadow-neuInset",
+          className={cn(
+            "w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground",
+            "placeholder:text-foreground-muted",
+            "focus:outline-none focus:ring-2 focus:ring-primary",
+            error && "border-red-500 focus:ring-red-500",
             className
           )}
           {...props}
         />
+        {error && (
+          <p className="mt-1 text-xs text-red-500">{error}</p>
+        )}
       </div>
     );
   }

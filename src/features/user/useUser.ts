@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userService } from './user.service';
 import { GetUsersParams, UserUpdateRequest, ChangePasswordRequest } from '@/features/user/user.types';
+import { useAuthStore } from '@/features/auth/auth.store';
+import { useUserStore } from './user.store';
 
 export const USER_QUERY_KEYS = {
   all: ['users'] as const,
@@ -26,6 +28,30 @@ export const useUser = (id: string) => {
     enabled: !!id,
   });
 };
+
+export const useCurrentUser = () => {
+  const { isAuthenticated } = useAuthStore();
+  const { setCurrentUser, setLoading, clearUser } = useUserStore();
+
+  return useQuery({
+    queryKey: ['current-user'],
+    enabled: isAuthenticated,
+    retry: 1,
+
+    queryFn: async () => {
+      try {
+        setLoading(true);
+        const data = await userService.getMe();
+        setCurrentUser(data);
+        return data;
+      } catch (error) {
+        clearUser();
+        throw error; 
+      }
+    },
+  });
+};
+
 
 //  Hook cập nhật thông tin User
 export const useUpdateUser = () => {
@@ -75,5 +101,17 @@ export const useUnlockUser = () => {
       queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.detail(id) });
       queryClient.invalidateQueries({ queryKey: USER_QUERY_KEYS.lists() });
     },
+  });
+};
+
+export const useFollowing = (userId: string) => {
+  return useQuery({
+    queryKey: ['following', userId],
+    queryFn: () => userService.getAllUsers({ 
+      keyword: userId, 
+      page: 1, 
+      size: 50 
+    }),
+    enabled: !!userId,
   });
 };

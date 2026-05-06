@@ -58,20 +58,20 @@ export const useLogout = () => {
 };
 
 
-// export const useRefresh = () => {
-//   const setAuth = useAuthStore((state) => state.setAuth);
-//   const logoutStore = useAuthStore((state) => state.logout);
+export const useRefresh = () => {
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const logoutStore = useAuthStore((state) => state.logout);
 
-//   return useMutation({
-//     mutationFn: authService.refresh,
-//     onSuccess: (data) => {
-//       if (data?.authenticated) {
-//         setAuth(true);
-//       }
-//     },
-//     onError: (error) => {
-//       console.error("Refresh token expired or invalid:", error);
-//       logoutStore(); // Nếu refresh cũng lỗi (hết hạn 7 ngày) thì logout luôn
-//     },
-//   });
-// };
+  return useMutation({
+    mutationFn: authService.refresh,
+    onSuccess: (data) => {
+      if (data?.authenticated) {
+        setAuth(true);
+      }
+    },
+    onError: (error) => {
+      console.error("Refresh token expired or invalid:", error);
+      logoutStore(); // Nếu refresh cũng lỗi (hết hạn 7 ngày) thì logout luôn
+    },
+  });
+};

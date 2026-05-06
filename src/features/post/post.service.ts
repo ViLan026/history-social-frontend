@@ -84,4 +84,19 @@ export const postService = {
     });
     return response.data.data;
   },
+
+    getUserPosts: async (userId: string, status: 'published' | 'draft', params?: PaginationParams) => {
+    const response = await axiosInstance.get<ApiResponse<PageResponse<PostResponse>>>(
+      `/posts/user/${userId}`,
+      { params: { status, ...params } }
+    );
+    return response.data.data;
+  },
+
+  deletePost: async (postId: string): Promise<void> => {
+    await axiosInstance.delete(`/posts/${postId}`);
+  },
+
 };
+
+

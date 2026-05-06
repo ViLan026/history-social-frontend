@@ -31,10 +31,10 @@ function LoadingScreen() {
 
 export default function MainLayout({ children }: { children: ReactNode }) {
     const router = useRouter();
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    // const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     const [isHydrated, setIsHydrated] = useState(false);
-    const [isChecking, setIsChecking] = useState(true);
+    // const [isChecking, setIsChecking] = useState(true);
 
     // Chờ Zustand persist hydrate xong trước khi check auth
     useEffect(() => {
@@ -49,19 +49,19 @@ export default function MainLayout({ children }: { children: ReactNode }) {
     }, []);
 
     // Redirect nếu chưa đăng nhập
-    useEffect(() => {
-        if (!isHydrated) return;
+    // useEffect(() => {
+    //     if (!isHydrated) return;
 
-        if (!isAuthenticated) {
-            router.replace("/login");
-        } else {
-            setIsChecking(false);
-        }
-    }, [isAuthenticated, isHydrated, router]);
+    //     if (!isAuthenticated) {
+    //         router.replace("/login");
+    //     } else {
+    //         setIsChecking(false);
+    //     }
+    // }, [isAuthenticated, isHydrated, router]);
 
-    if (!isHydrated || isChecking) {
-        return <LoadingScreen />;
-    }
+    // if (!isHydrated || isChecking) {
+    //     return <LoadingScreen />;
+    // }
 
     return (
         <div className="min-h-dvh flex flex-col">

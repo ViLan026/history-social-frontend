@@ -1,40 +1,13 @@
 // components/layout/Header.tsx
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { useAuthStore } from "@/features/auth/auth.store";
 import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
 import AuthArea from "../../features/user/components/AuthArea";
+import BrandLogo from "../ui/BrandLogo";
 
-// ─── Brand Logo ───────────────────────────────────────────────────────────────
-
-function BrandLogo() {
-    return (
-        <Link
-            href="/"
-            className="group flex items-center gap-2.5 shrink-0 select-none"
-            aria-label="Trang chủ Historia"
-        >
-            <span
-                className="text-primary text-lg leading-none opacity-80 group-hover:opacity-100 transition-opacity duration-200"
-                aria-hidden="true"
-            >
-                {" "}
-                ⌖{" "}
-            </span>
-
-            <span className="font-heading font-semibold text-xl tracking-[0.12em] uppercase text-foreground group-hover:text-primary transition-colors duration-200">
-                Historia
-            </span>
-        </Link>
-    );
-}
-
-// ─── Icon Button ──────────────────────────────────────────────────────────────
 
 interface IconButtonProps {
     onClick: () => void;
@@ -67,7 +40,6 @@ function IconButton({ onClick, label, icon, badge }: IconButtonProps) {
 
 export default function Header() {
     const router = useRouter();
-    const { isAuthenticated, user } = useAuthStore();
 
     // Notification count — thay bằng real data sau
     const notificationCount = 2;
@@ -119,7 +91,7 @@ export default function Header() {
                     aria-hidden="true"
                 />
 
-                <AuthArea isAuthenticated={isAuthenticated} user={user} />
+                <AuthArea />
             </div>
         </header>
     );

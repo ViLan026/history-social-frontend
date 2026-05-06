@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SidebarDrawer from "./SidebarDrawer";
+import SidebarDrawer from "../ui/SidebarDrawer";
 
 interface MainLayoutProps {
   leftSidebar: React.ReactNode;

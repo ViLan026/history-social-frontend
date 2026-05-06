@@ -1,7 +1,4 @@
 // components/layout/ThemeToggle.tsx
-// ============================================================
-// Theme toggle button dùng next-themes
-// ============================================================
 
 "use client";
 

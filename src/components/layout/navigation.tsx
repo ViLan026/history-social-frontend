@@ -1,10 +1,8 @@
-// components/sidebar/LeftSidebar.tsx
-
+// ================= FILE: components/sidebar/LeftSidebar.tsx =================
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 
 const NAV_ITEMS = [
   {
@@ -60,7 +58,6 @@ const NAV_ITEMS = [
   },
 ] as const;
 
-
 interface NavItemProps {
   href: string;
   icon: React.ReactNode;
@@ -70,39 +67,49 @@ interface NavItemProps {
 
 function NavItem({ href, icon, label, isActive }: NavItemProps) {
   return (
-    <li className="">
+    <li>
       <Link
         href={href}
         aria-current={isActive ? "page" : undefined}
         className={`
-          group flex items-center gap-3
+          group relative flex items-center gap-3
           px-3 py-2.5 rounded-lg
           text-sm font-medium
-          transition-colors duration-150
+          transition-all duration-150 ease-out
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-          ${isActive
-            ? "bg-sidebar-active text-primary"
-            : "text-foreground-muted hover:bg-sidebar-hover hover:text-foreground"
+          ${
+            isActive
+              ? "bg-primary/10 text-primary"
+              : "text-foreground-muted hover:text-foreground hover:bg-surface-raised"
           }
         `}
       >
+        {/* Active left indicator */}
+        {isActive && (
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r bg-primary" />
+        )}
+
         {/* Icon */}
         <span
           className={`
             shrink-0 transition-colors duration-150
-            ${isActive ? "text-primary" : "text-foreground-faint group-hover:text-foreground-muted"}
+            ${
+              isActive
+                ? "text-primary"
+                : "text-foreground-faint group-hover:text-foreground-muted"
+            }
           `}
         >
           {icon}
         </span>
 
         {/* Label */}
-        <span>{label}</span>
+        <span className="truncate">{label}</span>
 
-        {/* Active indicator */}
+        {/* Subtle dot indicator */}
         {isActive && (
           <span
-            className="ml-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0"
+            className="ml-auto w-1.5 h-1.5 rounded-full bg-primary/70 shrink-0"
             aria-hidden="true"
           />
         )}
@@ -111,17 +118,27 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
   );
 }
 
-
-export default function LeftSidebar() {
+export default function Navigation() {
   const pathname = usePathname();
 
   return (
     <nav
-      className="h-full px-3 py-4 flex flex-col gap-6"
-      // style={{ backgroundColor: "var(--sidebar-bg)" }}
+      className="
+        h-full px-3 py-4 flex flex-col gap-6
+        bg-sidebar-bg border-r border-border-muted
+      "
       aria-label="Navigation chính"
     >
-      <ul className="neu-raised flex flex-col gap-0.5 py-4" role="list">
+      <ul
+        className="
+          neu-raised
+          flex flex-col gap-1
+          p-3 rounded-xl
+          bg-surface border border-border
+          animate-fade-in
+        "
+        role="list"
+      >
         {NAV_ITEMS.map((item) => (
           <NavItem
             key={item.href}

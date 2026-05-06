@@ -30,7 +30,7 @@
   }
 
   body {
-    background-color: var(--background);
+    background-color: var(--surface);
     color: var(--foreground);
     /* Stack: sans-serif nhưng humanist — dễ đọc lâu */
     font-family:
@@ -170,7 +170,7 @@
     border: none;
     font-family: inherit;
     font-size: inherit;
-    color: inherit;
+    /* color: inherit; */
   }
 }
 

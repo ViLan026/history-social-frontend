@@ -1,25 +1,25 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { UserResponse, ProfileResponse, UserSummaryResponse } from '@/features/user/user.types';
+import { UserResponse, UserSummaryResponse } from '@/features/user/user.types';
 
 interface UserStore {
-  // Current logged-in user (thường đồng bộ với auth store)
   currentUser: UserResponse | null;
   isLoading: boolean;
 
-  // Danh sách users (dùng cho Admin page)
   users: UserSummaryResponse[];
   totalElements: number;
   totalPages: number;
   currentPage: number;
 
-  // UI States
   selectedUser: UserResponse | null;
   isUserModalOpen: boolean;
   isEditProfileModalOpen: boolean;
 
-  // Actions
+  // actions
   setCurrentUser: (user: UserResponse | null) => void;
+  setLoading: (loading: boolean) => void;
+  clearUser: () => void;
+
   updateCurrentUser: (updatedData: Partial<UserResponse>) => void;
 
   setUsers: (data: {
@@ -30,20 +30,17 @@ interface UserStore {
   }) => void;
 
   setSelectedUser: (user: UserResponse | null) => void;
-  
+
   openUserModal: (user?: UserResponse) => void;
   closeUserModal: () => void;
 
   openEditProfileModal: () => void;
   closeEditProfileModal: () => void;
-
-  reset: () => void;
 }
 
 export const useUserStore = create<UserStore>()(
   devtools(
     (set) => ({
-      // Initial State
       currentUser: null,
       isLoading: false,
 
@@ -56,10 +53,17 @@ export const useUserStore = create<UserStore>()(
       isUserModalOpen: false,
       isEditProfileModalOpen: false,
 
-      // Actions
       setCurrentUser: (user) =>
         set({
           currentUser: user,
+          isLoading: false,
+        }),
+
+      setLoading: (loading) => set({ isLoading: loading }),
+
+      clearUser: () =>
+        set({
+          currentUser: null,
           isLoading: false,
         }),
 
@@ -94,19 +98,7 @@ export const useUserStore = create<UserStore>()(
 
       openEditProfileModal: () => set({ isEditProfileModalOpen: true }),
       closeEditProfileModal: () => set({ isEditProfileModalOpen: false }),
-
-      reset: () =>
-        set({
-          currentUser: null,
-          users: [],
-          selectedUser: null,
-          isUserModalOpen: false,
-          isEditProfileModalOpen: false,
-          isLoading: false,
-        }),
     }),
-    {
-      name: 'user-store',
-    }
+    { name: 'user-store' }
   )
 );
