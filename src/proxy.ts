@@ -5,32 +5,28 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("access_token")?.value || request.cookies.get("refresh_token")?.value;
   const { pathname } = request.nextUrl;
 
-  // 1. ƯU TIÊN TRANG CHỦ: Luôn cho vào trang chủ, không cần kiểm tra token hay gì cả
+  // nếu là trang chủ thì được vào mà không cần đăng nhập
   if (pathname === "/") {
     return NextResponse.next();
   }
 
-  // 2. Xác định các trang Public khác (Login/Register)
   const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/register");
 
-  // 3. Nếu CHƯA ĐĂNG NHẬP
+  // nếu không có token và không phải trang login/register thì redirect về login
   if (!token) {
-    // Nếu vào trang login/register thì cho qua, các trang khác (Private) đá về /login
     if (isAuthPage) {
       return NextResponse.next();
     }
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // 4. Nếu ĐÃ ĐĂNG NHẬP
+  // nếu có token mà vào trang login/register thì redirect về home
   if (token) {
-    // Nếu cố vào lại login/register thì đẩy về trang chủ để tránh login lại
     if (isAuthPage) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
-  // Cho phép đi tiếp vào các trang private (dashboard, profile...)
   return NextResponse.next();
 }
 

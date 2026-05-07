@@ -69,18 +69,19 @@ const SOCIAL_LINKS = [
     }
 ] as const;
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-/** Tiêu đề section trong footer */
 function FooterHeading({ children }: { children: React.ReactNode }) {
     return (
-        <h3 className="font-heading font-semibold text-sm tracking-widest uppercase text-foreground-muted mb-4">
+        <h3
+            className="font-heading font-semibold text-sm tracking-widest uppercase mb-4"
+            style={{
+                color: "var(--primary-fg)"
+            }}
+        >
             {children}
         </h3>
     );
 }
 
-/** Link trong footer */
 function FooterLink({
     href,
     children
@@ -102,7 +103,6 @@ function FooterLink({
     );
 }
 
-/** Social icon button */
 function SocialButton({
     href,
     label,
@@ -119,23 +119,25 @@ function SocialButton({
             rel="noopener noreferrer"
             aria-label={`Theo dõi Historia trên ${label}`}
             title={label}
-            className="flex items-center justify-center w-8 h-8 rounded-md text-foreground-faint bg-surface border border-border-muted hover:text-foreground hover:border-border hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-150"
+            className="flex items-center justify-center w-8 h-8 rounded-md  bg-surface border border-border-muted hover:text-foreground hover:border-border hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-150"
         >
             {icon}
         </a>
     );
 }
 
-// ─── Footer ───────────────────────────────────────────────────────────────────
-
 export default function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
         <footer
-            className="border-t border-border-muted bg-surface mt-auto"
+            className="border-t border-border-muted mt-auto"
             role="contentinfo"
             aria-label="Footer"
+            style={{
+                backgroundColor: "var(--primary)",
+                color: "var(--primary-fg)"
+            }}
         >
             <div className="mx-auto max-w-layout px-4 md:px-6 lg:px-8">
                 {/* ── Main grid ── */}
@@ -156,7 +158,12 @@ export default function Footer() {
                             Historia
                         </Link>
 
-                        <p className="text-sm text-foreground-muted leading-relaxed max-w-[28ch]">
+                        <p
+                            className="text-sm leading-relaxed max-w-[28ch]"
+                            style={{
+                                color: "var(--primary-fg)"
+                            }}
+                        >
                             Nền tảng chia sẻ và khám phá kiến thức lịch sử — nơi
                             quá khứ được kể lại bằng ngôn ngữ của hiện tại.
                         </p>
@@ -207,7 +214,12 @@ export default function Footer() {
                         </div>
 
                         {/* Tagline nhỏ */}
-                        <p className="mt-5 text-xs text-foreground-faint leading-relaxed">
+                        <p
+                            className="mt-5 text-xs  leading-relaxed"
+                            style={{
+                                color: "var(--primary-fg)"
+                            }}
+                        >
                             Cập nhật nội dung lịch sử
                             <br />
                             mỗi ngày.
@@ -217,12 +229,22 @@ export default function Footer() {
 
                 {/* ── Bottom bar ── */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 border-t border-border-muted">
-                    <p className="text-xs text-foreground-faint">
+                    <p
+                        className="text-xs "
+                        style={{
+                            color: "var(--primary-fg)"
+                        }}
+                    >
                         © {currentYear} Historia. Nội dung thuộc quyền sở hữu
                         của tác giả.
                     </p>
 
-                    <p className="text-xs text-foreground-faint">
+                    <p
+                        className="text-xs "
+                        style={{
+                            color: "var(--primary-fg)"
+                        }}
+                    >
                         Xây dựng vì{" "}
                         <span className="text-primary" aria-label="tình yêu">
                             ♡

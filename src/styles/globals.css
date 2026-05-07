@@ -73,7 +73,7 @@
 
   /* --- Links --- */
   a {
-    color: var(--primary);
+    /* color: var(--primary); */
     text-decoration: none;
     transition: color 0.15s ease, opacity 0.15s ease;
   }
@@ -170,7 +170,10 @@
     border: none;
     font-family: inherit;
     font-size: inherit;
-    /* color: inherit; */
+  }
+
+  button:hover{
+    background-color: var(--primary-hover);
   }
 }
 

@@ -1,3 +1,4 @@
+// ================= FILE: src/features/user/components/EditProfileModal.tsx =================
 'use client';
 
 import { useState, useRef } from 'react';
@@ -80,22 +81,32 @@ export const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div
-        className="bg-white rounded-xl w-full max-w-md p-6 shadow-lg"
-        style={{ backgroundColor: '#F2F1ED' }}
-      >
-        <h2 className="text-xl font-bold mb-4" style={{ color: '#7F0716' }}>
-          Edit Profile
-        </h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/100 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md rounded-xl bg-surface border border-border shadow-lg animate-scale-in">
+        
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-foreground">
+            Edit Profile
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-foreground-muted hover:text-foreground transition"
+          >
+            ✕
+          </button>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Avatar Section */}
-          <div className="flex flex-col items-center gap-4">
+        {/* Content */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          
+          {/* Avatar (10% accent interaction via button) */}
+          <div className="flex flex-col items-center gap-3">
             <Avatar
               src={formData.avatarPreview}
               alt="Preview"
-              className="w-20 h-20 rounded-full"
+              className="w-20 h-20 border border-border"
+              
             />
             <input
               ref={fileInputRef}
@@ -106,18 +117,19 @@ export const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => 
             />
             <Button
               type="button"
+              variant="secondary"
               onClick={() => fileInputRef.current?.click()}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-3 py-1 rounded-lg text-sm"
             >
               Change Avatar
             </Button>
           </div>
 
-          {/* Name Field */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Display Name</label>
+          {/* Display Name */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">
+              Display Name
+            </label>
             <Input
-              type="text"
               value={formData.displayName}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -126,18 +138,15 @@ export const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => 
                 }))
               }
               placeholder="Your display name"
-              className={`w-full px-4 py-2 rounded-lg border ${
-                errors.displayName ? 'border-red-500' : 'border-gray-300'
-              }`}
+              error={errors.displayName}
             />
-            {errors.displayName && (
-              <p className="text-red-500 text-sm mt-1">{errors.displayName}</p>
-            )}
           </div>
 
-          {/* Bio Field */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Bio</label>
+          {/* Bio */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">
+              Bio
+            </label>
             <textarea
               value={formData.bio}
               onChange={(e) =>
@@ -147,37 +156,37 @@ export const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => 
                 }))
               }
               placeholder="Tell us about yourself"
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 resize-none h-24"
+              className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-foreground-faint focus:outline-none focus:ring-2 focus:ring-ring resize-none h-24"
             />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+          {/* Actions (10% accent concentrated here) */}
+          <div className="flex gap-3 pt-2">
             <Button
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg py-2"
+              className="flex-1"
             >
               Cancel
             </Button>
+
             <Button
               type="submit"
-              disabled={mutation.isPending}
-              className="flex-1 text-white rounded-lg py-2"
-              style={{
-                backgroundColor: mutation.isPending ? '#ccc' : '#7F0716',
-              }}
+              isLoading={mutation.isPending}
+              className="flex-1"
             >
-              {mutation.isPending ? 'Saving...' : 'Save Changes'}
+              Save Changes
             </Button>
           </div>
-        </form>
 
-        {mutation.isError && (
-          <p className="text-red-500 text-sm mt-4">
-            Failed to update profile. Please try again.
-          </p>
-        )}
+          {/* Error */}
+          {mutation.isError && (
+            <p className="text-sm text-destructive">
+              Failed to update profile. Please try again.
+            </p>
+          )}
+        </form>
       </div>
     </div>
   );

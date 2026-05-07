@@ -2,154 +2,114 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SidebarDrawer from "../ui/SidebarDrawer";
+import CompactSidebar from "./CompactSidebar";
 
 interface MainLayoutProps {
-  leftSidebar: React.ReactNode;
-  rightSidebar?: React.ReactNode;
-  children: React.ReactNode; // Feed
+    leftSidebar: React.ReactNode;
+    rightSidebar?: React.ReactNode;
+    children: React.ReactNode;
 }
 
 export default function MainLayout({
-  leftSidebar,
-  rightSidebar,
-  children,
+    leftSidebar,
+    rightSidebar,
+    children
 }: MainLayoutProps) {
-  const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
-  const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
+    const [showMobileMenu, setShowMobileMenu] = useState(true);
 
-  // Responsive đóng drawer tự động
-  useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 1024) setIsLeftDrawerOpen(false); // lg
-      if (window.innerWidth >= 1280) setIsRightDrawerOpen(false); // xl
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+    useEffect(() => {
+        let lastScrollY = window.scrollY;
+        let ticking = false;
 
-  // Lock body scroll
-  useEffect(() => {
-    if (isLeftDrawerOpen || isRightDrawerOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [isLeftDrawerOpen, isRightDrawerOpen]);
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY;
+                    const diff = currentScrollY - lastScrollY;
 
-  return (
-    <>
-      <div className="min-h-dvh bg-background">
-        <div className="mx-auto w-full max-w-[1280px] px-0 md:px-4 lg:px-6">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-6 ">
-            
-            {/* 1. LEFT SIDEBAR */}
-            <aside
-              className="hidden lg:block lg:col-span-3 sticky top-[60px] h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar py-4"
-              aria-label="Left sidebar"
-            >
-              {leftSidebar}
-            </aside>
+                    // Luôn hiển thị khi ở top
+                    if (currentScrollY < 20) {
+                        setShowMobileMenu(true);
+                    }
+                    // Ẩn khi scroll lên (diff > 0)
+                    else if (diff > 5) {
+                        setShowMobileMenu(false);
+                    }
+                    // Hiện khi scroll xuống (diff < 0)
+                    else if (diff < -5) {
+                        setShowMobileMenu(true);
+                    }
 
-            {/* 2. MAIN FEED */}
-            <main
-              className="col-span-1 lg:col-span-9 xl:col-span-6 w-full min-h-dvh  py-2 "
-              aria-label="Main feed"
-            >
-              {/*  Chỉ ẩn hẳn Header này khi lên màn hình xl (đủ 3 cột) */}
-              <div className="xl:hidden flex items-center border-b border-[var(--border-muted)] px-2 bg-surface min-h-[3.5rem]">
-                
-                {/* Nút Left Menu: Chỉ hiện dưới màn lg (<1024px) */}
-                <div className="lg:hidden">
-                  <MobileMenuButton onClick={() => setIsLeftDrawerOpen(true)} label="Menu" />
+                    lastScrollY = currentScrollY;
+                    ticking = false;
+                });
+
+                ticking = true;
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    return (
+        <>
+            <div className="min-h-dvh bg-background">
+                <div className="mx-auto w-full max-w-[1280px]">
+                    <div className="grid md:mx-10 md:grid-cols-[100px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_minmax(0,700px)_320px] min-h-screen" >
+                        {/* LEFT SIDEBAR - Full (lg+) */}
+                        <aside
+                            className="hidden lg:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-surface"
+                            aria-label="Navigation"
+                        >
+                            <div className="p-4 pb-20">{leftSidebar}</div>
+                        </aside>
+
+                        <aside
+                          className="hidden md:block lg:hidden sticky top-14 h-screen bg-surface"
+                          aria-label="Compact Navigation"
+                        >
+                          <div>{leftSidebar}</div>
+                        </aside>
+                        {/* MAIN FEED */}
+                        <main
+                            className="w-full min-h-screen flex flex-col bg-background top-10"
+                            aria-label="Main feed"
+                        >
+                            {/* Mobile Menu Bar - Fixed dưới Header */}
+                            <div
+                                className={`
+                                    md:hidden fixed top-14 left-0 right-0 z-40
+                                    flex items-center justify-between
+                                    bg-surface/95 backdrop-blur-sm
+                                    px-1 md:px-1 h-12
+                                    transition-transform duration-300 ease-in-out
+                                    ${showMobileMenu ? "translate-y-0" : "-translate-y-full"}
+                                `}
+                            >
+                                {leftSidebar}
+                            </div>
+
+                            {/* Feed Container - Padding top để tránh bị che bởi fixed menu */}
+                            <div className="flex-1 w-full flex justify-center px-0 sm:px-3 md:px-2 lg:px-2 pt-10 xl:pt-3 md:pt-2 xl:md:pt-2 pb-3 md:pb-4 lg:pb-6">
+                                <div className="w-full max-w-[720px]">
+                                    {children}
+                                </div>
+                            </div>
+                        </main>
+
+                        {/* RIGHT SIDEBAR */}
+                        {rightSidebar && (
+                            <aside
+                                className="hidden xl:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-surface"
+                                aria-label="Suggestions"
+                            >
+                                <div className="p-4 pb-20">{rightSidebar}</div>
+                            </aside>
+                        )}
+                    </div>
                 </div>
-
-                {/* Nút Right Menu: Dùng ml-auto để luôn bám sang góc phải */}
-                <div className="ml-auto">
-                  {rightSidebar && (
-                    <MobileMenuButton onClick={() => setIsRightDrawerOpen(true)} label="Khám phá" isRight />
-                  )}
-                </div>
-                
-              </div>
-
-              {/* Khu vực chứa bài viết */}
-              <div className="p-0 sm:p-4   border-x border-[var(--border-muted)]        
-">
-                {children}
-              </div>
-            </main>
-
-            {/* 3. RIGHT SIDEBAR */}
-            {rightSidebar && (
-              <aside
-                className="hidden xl:block xl:col-span-3 py-4 "
-                aria-label="Right sidebar"
-              >
-                {rightSidebar}
-              </aside>
-            )}
-
-          </div>
-        </div>
-      </div>
-
-      {/* Drawer Trái */}
-      <SidebarDrawer
-        isOpen={isLeftDrawerOpen}
-        onClose={() => setIsLeftDrawerOpen(false)}
-        side="left"
-        title="Menu chính"
-      >
-        {leftSidebar}
-      </SidebarDrawer>
-
-      {/* Drawer Phải */}
-      {rightSidebar && (
-        <SidebarDrawer
-          isOpen={isRightDrawerOpen}
-          onClose={() => setIsRightDrawerOpen(false)}
-          side="right"
-          title="Khám phá"
-        >
-          {rightSidebar}
-        </SidebarDrawer>
-      )}
-    </>
-  );
-}
-
-// Giữ nguyên MobileMenuButton
-interface MobileMenuButtonProps {
-  onClick: () => void;
-  label: string;
-  isRight?: boolean;
-}
-
-function MobileMenuButton({ onClick, label, isRight }: MobileMenuButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 p-3 text-sm font-medium transition-colors text-[var(--foreground-muted)] hover:text-foreground hover:bg-[var(--surface-raised)] rounded-lg ${isRight ? 'flex-row-reverse' : ''}`}
-    >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {isRight ? (
-          <>
-            <line x1="21" y1="6" x2="3" y2="6" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-            <line x1="21" y1="18" x2="7" y2="18" />
-          </>
-        ) : (
-          <>
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </>
-        )}
-      </svg>
-      <span className="hidden sm:inline">{label}</span>
-    </button>
-  );
+            </div>
+        </>
+    );
 }

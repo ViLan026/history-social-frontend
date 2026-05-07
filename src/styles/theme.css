@@ -2,24 +2,24 @@
 [data-theme="dark"],
 .dark {
   /* SURFACES (nền tối mặc định, nhẹ hơi xanh) */
-  --background:       oklch(0.10 0.018 255); /* nền tối rất đậm */
-  --surface:          oklch(0.14 0.018 255);
-  --surface-raised:   oklch(0.17 0.018 255);
-  --surface-overlay:  oklch(0.20 0.020 255);
+  --background:       oklch(21.432% 0.02503 266.836); /* Nền tổng của trang */
+  --surface:          oklch(0.14 0.018 255);       /* nền của các thành phần nhỏ */
+  --surface-raised:   oklch(0.17 0.018 255);    /* nền khi hover vào các thành phần nhỏ */
+  --surface-overlay:  oklch(0.20 0.020 255);   /* nền của các thành phần overlay như modal, dropdown */
 
   /* TEXT COLORS */
-  --foreground:       oklch(0.96 0.033 32);  /* chữ màu ngà sáng (#F2F1ED) */
+  --foreground:       oklch(0.96 0.033 32);  /* màu chữ chính */
   --foreground-muted: oklch(0.65 0.020 32);  /* chữ phụ, dấu hiệu */
-  --foreground-faint: oklch(0.45 0.015 32);  /* placeholder, disabled */
+  --foreground-faint: oklch(0.45 0.015 32);  /* placeholder, disabled (màu cho các chữ của các thành phần đang bị làm mờ) */
 
   /* BORDERS */
-  --border:           oklch(0.28 0.020 32);
-  --border-muted:     oklch(0.20 0.015 32);
+  --border:           oklch(0.28 0.020 32);    /* đường viền chính */
+  --border-muted:     oklch(0.20 0.015 32);    /* đường viền phụ, ví dụ: border của input khi không focus */
   --border-focus:     oklch(0.55 0.14 15);    /* vòng focus lấy tông đỏ */
 
   /* PRIMARY (Đỏ burgundy) */
-  --primary:          oklch(0.38 0.143 15);   /* ~ #7F0716 */
-  --primary-hover:    oklch(0.46 0.150 15);
+  --primary:          oklch(0.38 0.143 15);   /* ~ #7F0716 */ /* màu chủ đạo cho các nut */
+  --primary-hover:    oklch(0.46 0.150 15);   
   --primary-active:   oklch(0.34 0.130 15);
   --primary-subtle:   oklch(0.18 0.040 15);
   --primary-fg:       oklch(0.96 0.033 32);   /* chữ trắng/ngà trên nền primary */
