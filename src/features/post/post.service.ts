@@ -6,7 +6,8 @@ import {
   PostCreationRequest, 
   PostUpdateRequest, 
   PostResponse, 
-  PostSummaryResponse 
+  PostSummaryResponse, 
+  FeedPostResponse
 } from '@/features/post/post.types';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
 
@@ -48,11 +49,20 @@ export const postService = {
     return response.data.data;
   },
 
+
+  getFeed: async (params?:  PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+        const response = await axiosInstance.get(API_ENDPOINTS.POSTS.FEED, { params });
+    return response.data.data;
+  },
+
   // Lấy danh sách bài viết theo tác giả
   getPostsByAuthor: async (authorId: string, params?: PaginationParams): Promise<PageResponse<PostSummaryResponse>> => {
     const response = await axiosInstance.get(API_ENDPOINTS.POSTS.GET_BY_AUTHOR(authorId), { params });
     return response.data.data;
   },
+
+
+
 
   // Tìm kiếm bài viết theo từ khóa
   searchPosts: async (keyword: string, params?: PaginationParams): Promise<PageResponse<PostSummaryResponse>> => {

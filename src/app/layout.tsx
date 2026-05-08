@@ -6,6 +6,7 @@ import { Literata, Crimson_Pro } from "next/font/google";
 import Providers from "@/providers/Providers";
 import "@/styles/globals.css";
 
+
 // Fonts
 const literata = Literata({
     subsets: ["latin", "vietnamese"],

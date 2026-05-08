@@ -318,7 +318,7 @@ export const CreatePost: React.FC = () => {
               rounded-xl bg-surface-overlay border border-border
               p-6 md:p-8
               animate-scale-in
-              shadow-2xl
+              shadow-2xl mb-0
             "
                     >
                         {/* Header */}

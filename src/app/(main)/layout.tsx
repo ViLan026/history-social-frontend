@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/features/auth/auth.store";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import GlobalModals from "@/features/ui/components/GlobalModals";
 
 function LoadingScreen() {
     return (
@@ -69,6 +70,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 
             <main className="flex-1 pt-14 mx-auto w-full" id="main-content">
                 {children}
+                <GlobalModals /> {/* Mount 1 lần duy nhất */}
             </main>
 
             <Footer />

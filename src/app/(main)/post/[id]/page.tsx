@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PostCard } from "@/features/post/components/PostCard";
+import { PostCard } from "@/features/post/components/post-card/PostCard";
 import { CreatePost } from "@/features/post/components/CreatePost";
 import { usePosts } from "@/features/post/usePost";
 import { usePostStore } from "@/features/post/post.store";

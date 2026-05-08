@@ -73,7 +73,7 @@ export const CommentInput = memo<CommentInputProps>(
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isSubmitting}
-            placeholder="Viết bình luận... (Enter để gửi, Shift+Enter xuống dòng)"
+            placeholder="Viết bình luận..."
             rows={1}
             aria-label="Nội dung bình luận"
             className="

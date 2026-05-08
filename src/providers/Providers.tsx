@@ -9,7 +9,7 @@
 import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools"; // uncomment để dev
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"; 
 
 // QueryClient config — tối ưu cho social media feed
 function makeQueryClient() {
@@ -71,8 +71,7 @@ export default function Providers({ children }: ProvidersProps) {
         {children}
       </ThemeProvider>
 
-      {/* React Query Devtools — chỉ load trong development */}
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

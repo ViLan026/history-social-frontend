@@ -2,7 +2,7 @@
 [data-theme="dark"],
 .dark {
   /* SURFACES (nền tối mặc định, nhẹ hơi xanh) */
-  --background:       oklch(21.432% 0.02503 266.836); /* Nền tổng của trang */
+  --background:       oklch(0% 0 0); /* Nền tổng của trang */
   --surface:          oklch(0.14 0.018 255);       /* nền của các thành phần nhỏ */
   --surface-raised:   oklch(0.17 0.018 255);    /* nền khi hover vào các thành phần nhỏ */
   --surface-overlay:  oklch(0.20 0.020 255);   /* nền của các thành phần overlay như modal, dropdown */

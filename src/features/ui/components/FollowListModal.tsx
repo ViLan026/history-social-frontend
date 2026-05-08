@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { userService } from '../user.service';
+import { userService } from '../../user/user.service';
 import Avatar from '@/components/ui/Avatar';
 import Button from '@/components/ui/Button';
 

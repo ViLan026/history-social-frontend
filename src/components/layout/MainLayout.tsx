@@ -2,18 +2,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import CompactSidebar from "./CompactSidebar";
 
 interface MainLayoutProps {
     leftSidebar: React.ReactNode;
     rightSidebar?: React.ReactNode;
     children: React.ReactNode;
+    isDetailOpen?: boolean;
 }
 
 export default function MainLayout({
     leftSidebar,
     rightSidebar,
-    children
+    children,
+    isDetailOpen = false
 }: MainLayoutProps) {
     const [showMobileMenu, setShowMobileMenu] = useState(true);
 
@@ -52,11 +53,17 @@ export default function MainLayout({
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (isDetailOpen) {
+            setShowMobileMenu(false);
+        }
+    }, [isDetailOpen]);
+
     return (
         <>
             <div className="min-h-dvh bg-background">
                 <div className="mx-auto w-full max-w-[1280px]">
-                    <div className="grid md:mx-10 md:grid-cols-[100px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_minmax(0,700px)_320px] min-h-screen" >
+                    <div className="grid md:mx-10 md:grid-cols-[100px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_minmax(0,700px)_320px] min-h-screen">
                         {/* LEFT SIDEBAR - Full (lg+) */}
                         <aside
                             className="hidden lg:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-surface"
@@ -66,10 +73,10 @@ export default function MainLayout({
                         </aside>
 
                         <aside
-                          className="hidden md:block lg:hidden sticky top-14 h-screen bg-surface"
-                          aria-label="Compact Navigation"
+                            className="hidden md:block lg:hidden sticky top-14 h-screen bg-surface"
+                            aria-label="Compact Navigation"
                         >
-                          <div>{leftSidebar}</div>
+                            <div>{leftSidebar}</div>
                         </aside>
                         {/* MAIN FEED */}
                         <main
@@ -84,7 +91,7 @@ export default function MainLayout({
                                     bg-surface/95 backdrop-blur-sm
                                     px-1 md:px-1 h-12
                                     transition-transform duration-300 ease-in-out
-                                    ${showMobileMenu ? "translate-y-0" : "-translate-y-full"}
+                                    ${showMobileMenu && !isDetailOpen ? "translate-y-0" : "-translate-y-full"}
                                 `}
                             >
                                 {leftSidebar}

@@ -69,13 +69,20 @@ export interface PostResponse extends PostSummaryResponse {
 }
 
 export interface PostSummaryResponse {
-  id: string; // UUID
-  title: string;
-  authorId: string; // UUID
-  status: PostStatus;
+  postId: string; // UUID
   content: string;
+  title: string;
   viewCount: number;
-  thumbnailUrl?: string; // URL ảnh đại diện (media đầu tiên)
+  status: PostStatus;
   tags: TagResponse[]; // Set<TagResponse>
   createdAt: string; // LocalDateTime
+}
+
+export interface FeedPostResponse extends PostResponse{
+  userId: string;
+  displayName: string;
+  avatarUrl?: string;
+  reactionCount: number;
+  commentCount: number;
+
 }

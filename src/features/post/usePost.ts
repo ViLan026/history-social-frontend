@@ -1,6 +1,6 @@
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PaginationParams } from '@/types/api';
-import { PostCreationRequest, PostUpdateRequest, PostSummaryResponse } from '@/features/post/post.types';
+import { PostCreationRequest, PostUpdateRequest } from '@/features/post/post.types';
 import { postService } from './post.service';
 import { toast } from 'sonner';
 
@@ -9,7 +9,7 @@ export const useInfiniteFeed = () => {
   return useInfiniteQuery({
     queryKey: postKeys.infiniteFeed(),
     queryFn: ({ pageParam = 0 }) =>
-      postService.getPublishedPosts({ page: pageParam, size: 15, sort: 'createdAt,desc' }),
+      postService.getFeed({ page: pageParam, size: 15, sort: 'createdAt,desc' }),
     
     initialPageParam: 0,
     getNextPageParam: (lastPage) => 
@@ -38,6 +38,15 @@ export const usePosts = (params?: PaginationParams) => {
   return useQuery({
     queryKey: postKeys.list(params),
     queryFn: () => postService.getPublishedPosts(params),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+  });
+};
+
+export const useFeed = (params?: PaginationParams) => {
+  return useQuery({
+    queryKey: postKeys.list(params),
+    queryFn: () => postService.getFeed(params),
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
   });

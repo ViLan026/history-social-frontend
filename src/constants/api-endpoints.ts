@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
     GET_BY_ID: (id: string) => `/posts/${id}`,
     GET_BY_AUTHOR: (authorId: string) => `/posts/author/${authorId}`,
     SEARCH: '/posts/search',
+    FEED: '/feed',
   },
 
   BOOKMARKS: {

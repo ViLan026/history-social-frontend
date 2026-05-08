@@ -128,7 +128,7 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
           side="right"
           sideOffset={8}
           // Sử dụng lg:hidden để ẩn tooltip đi khi label đã được hiển thị trên màn hình lớn
-          className="hidden md:block px-3 py-2 text-sm font-medium bg-surface border border-border rounded-lg shadow-lg z-50 bg-white text-black dark:bg-gray-800 dark:text-white"
+          className="hidden md:block lg:hidden px-3 py-2 text-sm font-medium bg-surface border border-border rounded-lg shadow-lg z-50 bg-white text-black dark:bg-gray-800 dark:text-white"
         >
           {label}
           <Tooltip.Arrow className="fill-border" />
@@ -149,7 +149,6 @@ export default function Navigation() {
         aria-label="Navigation chính"
       >
         <ul
-          // Sử dụng logic flex flex-row md:flex-col theo yêu cầu
           className="flex flex-row md:flex-col justify-around md:justify-start gap-2 w-full md:p-2 p-0 md:gap-4 rounded-xl bg-card shadow-sm"
           role="list"
         >
