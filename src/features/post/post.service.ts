@@ -38,22 +38,22 @@ export const postService = {
   },
 
   // Lấy chi tiết bài viết theo ID
-  getPostById: async (id: string): Promise<PostResponse> => {
+  getPostById: async (id: string): Promise<FeedPostResponse> => {
     const response = await axiosInstance.get(API_ENDPOINTS.POSTS.GET_BY_ID(id));
     return response.data.data;
   },
 
   // Lấy danh sách bài viết đã xuất bản (Phân trang)
-  getPublishedPosts: async (params?: PaginationParams): Promise<PageResponse<PostSummaryResponse>> => {
+  getPublishedPosts: async (params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
     const response = await axiosInstance.get(API_ENDPOINTS.POSTS.BASE, { params });
     return response.data.data;
   },
 
 
-  getFeed: async (params?:  PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
-        const response = await axiosInstance.get(API_ENDPOINTS.POSTS.FEED, { params });
-    return response.data.data;
-  },
+  // getFeed: async (params?:  PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+  //       const response = await axiosInstance.get(API_ENDPOINTS.POSTS.FEED, { params });
+  //   return response.data.data;
+  // },
 
   // Lấy danh sách bài viết theo tác giả
   getPostsByAuthor: async (authorId: string, params?: PaginationParams): Promise<PageResponse<PostSummaryResponse>> => {

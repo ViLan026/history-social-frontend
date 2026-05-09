@@ -1,11 +1,12 @@
 // features/ui/ui.store.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { FeedPostResponse } from '../post/post.types';
 
 interface UIState {
     // Post Detail Modal
     isPostDetailOpen: boolean;
-    selectedPostId: string | null;
+    selectedPost: FeedPostResponse | null;
     
     // Các modal khác...
     isEditProfileOpen: boolean;
@@ -15,7 +16,7 @@ interface UIState {
     followListType: 'followers' | 'following' | null;
 
     // Actions
-    openPostDetail: (postId: string) => void;
+    openPostDetail: (post: FeedPostResponse) => void;
     closePostDetail: () => void;
     
     openEditProfile: () => void;
@@ -28,7 +29,7 @@ export const useUIStore = create<UIState>()(
         (set) => ({
             // Post Detail
             isPostDetailOpen: false,
-            selectedPostId: null,
+            selectedPost: null,
 
             // Các modal khác...
             isEditProfileOpen: false,
@@ -37,11 +38,17 @@ export const useUIStore = create<UIState>()(
             followListUserId: null,
             followListType: null,
 
-            openPostDetail: (postId: string) => 
-                set({ isPostDetailOpen: true, selectedPostId: postId }),
+            openPostDetail: (post) =>
+                set({
+                    isPostDetailOpen: true,
+                    selectedPost: post
+                }),
 
-            closePostDetail: () => 
-                set({ isPostDetailOpen: false, selectedPostId: null }),
+            closePostDetail: () =>
+            set({
+                isPostDetailOpen: false,
+                selectedPost: null
+            }),
 
             openEditProfile: () => set({ isEditProfileOpen: true }),
             closeEditProfile: () => set({ isEditProfileOpen: false }),

@@ -77,12 +77,13 @@ export interface PostSummaryResponse {
   tags: TagResponse[]; // Set<TagResponse>
   createdAt: string; // LocalDateTime
 }
-
-export interface FeedPostResponse extends PostResponse{
-  userId: string;
-  displayName: string;
-  avatarUrl?: string;
+export interface FeedPostResponse extends PostResponse {
+  // Bỏ các trường userId, displayName ở đây vì chúng nằm trong author
+  author: {
+    userId: string;
+    displayName: string;
+    avatarUrl?: string;
+  };
   reactionCount: number;
   commentCount: number;
-
 }

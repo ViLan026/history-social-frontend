@@ -9,7 +9,7 @@ export const useInfiniteFeed = () => {
   return useInfiniteQuery({
     queryKey: postKeys.infiniteFeed(),
     queryFn: ({ pageParam = 0 }) =>
-      postService.getFeed({ page: pageParam, size: 15, sort: 'createdAt,desc' }),
+      postService.getPublishedPosts({ page: pageParam, size: 15, sort: 'createdAt,desc' }),
     
     initialPageParam: 0,
     getNextPageParam: (lastPage) => 
@@ -43,14 +43,14 @@ export const usePosts = (params?: PaginationParams) => {
   });
 };
 
-export const useFeed = (params?: PaginationParams) => {
-  return useQuery({
-    queryKey: postKeys.list(params),
-    queryFn: () => postService.getFeed(params),
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
-  });
-};
+// export const useFeed = (params?: PaginationParams) => {
+//   return useQuery({
+//     queryKey: postKeys.list(params),
+//     queryFn: () => postService.getFeed(params),
+//     staleTime: 1000 * 60 * 5, // 5 minutes
+//     gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+//   });
+// };
 
 // Lấy chi tiết post
 export const usePost = (id: string, enabled = true) => {

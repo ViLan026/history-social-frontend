@@ -10,7 +10,7 @@ import { FollowListModal } from "./FollowListModal";
 export default function GlobalModals() {
     const {
         isPostDetailOpen,
-        selectedPostId,
+        selectedPost,
         isEditProfileOpen,
         isChangePasswordOpen,
         isFollowListOpen,
@@ -21,7 +21,7 @@ export default function GlobalModals() {
     return (
         <>
             {/* Post Detail Modal */}
-            {isPostDetailOpen && selectedPostId && <PostDetailModal />}
+            {isPostDetailOpen && selectedPost && <PostDetailModal />}
 
             {/* Edit Profile Modal */}
             {isEditProfileOpen && <EditProfileModal isOpen={false} onClose={function (): void {

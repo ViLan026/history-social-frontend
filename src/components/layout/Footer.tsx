@@ -125,7 +125,6 @@ function SocialButton({
         </a>
     );
 }
-
 export default function Footer() {
     const currentYear = new Date().getFullYear();
 
@@ -139,70 +138,69 @@ export default function Footer() {
                 color: "var(--primary-fg)"
             }}
         >
-            <div className="mx-auto max-w-layout px-4 md:px-6 lg:px-8">
-                {/* ── Main grid ── */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 py-12">
-                    {/* Brand column */}
-                    <div className="sm:col-span-2 lg:col-span-1">
-                        {/* Wordmark */}
+            <div className="mx-auto max-w-layout px-4 sm:px-6 lg:px-10">
+                {/* Main Grid: 1 cột trên mobile, 2 cột trên sm/md, 4 cột trên lg+ */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 py-12 md:py-16">
+                    {/* Brand Column - Luôn chiếm ưu thế */}
+                    <div className="flex flex-col items-start sm:col-span-2 lg:col-span-1">
                         <Link
                             href="/"
-                            className="inline-flex items-center gap-2 mb-4 font-heading font-semibold text-base tracking-[0.1em] uppercase text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm transition-colors duration-150"
+                            className="inline-flex items-center gap-2 mb-4 font-heading font-semibold text-lg tracking-[0.15em] uppercase hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm transition-opacity duration-150"
+                            style={{ color: "var(--primary-fg)" }}
                         >
-                            <span
-                                className="text-primary opacity-70"
-                                aria-hidden="true"
-                            >
+                            <span className="opacity-70" aria-hidden="true">
                                 ⌖
                             </span>
                             Historia
                         </Link>
 
-                        <p
-                            className="text-sm leading-relaxed max-w-[28ch]"
-                            style={{
-                                color: "var(--primary-fg)"
-                            }}
-                        >
+                        <p className="text-sm leading-relaxed max-w-[38ch] opacity-90" style={{ color: "var(--primary-fg)" }}>
                             Nền tảng chia sẻ và khám phá kiến thức lịch sử — nơi
                             quá khứ được kể lại bằng ngôn ngữ của hiện tại.
                         </p>
                     </div>
 
-                    {/* Nav column */}
-                    <div>
-                        <FooterHeading>Khám phá</FooterHeading>
-                        <ul className="space-y-2.5" role="list">
-                            {[
-                                { label: "Dòng thời gian", href: "/timeline" },
-                                { label: "Nhân vật lịch sử", href: "/figures" },
-                                { label: "Sự kiện nổi bật", href: "/events" },
-                                { label: "Chủ đề", href: "/topics" }
-                            ].map(({ label, href }) => (
-                                <li key={href}>
-                                    <FooterLink href={href}>{label}</FooterLink>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/* Nav columns - Sắp xếp 2 cột cạnh nhau trên Mobile để tiết kiệm diện tích */}
+                    <div className="grid grid-cols-2 gap-8 sm:col-span-2 lg:col-span-2 lg:grid-cols-2">
+                        <div>
+                            <FooterHeading>Khám phá</FooterHeading>
+                            <ul className="space-y-3" role="list">
+                                {[
+                                    {
+                                        label: "Dòng thời gian",
+                                        href: "/timeline"
+                                    },
+                                    { label: "Nhân vật", href: "/figures" },
+                                    { label: "Sự kiện", href: "/events" },
+                                    { label: "Chủ đề", href: "/topics" }
+                                ].map(({ label, href }) => (
+                                    <li key={href}>
+                                        <FooterLink href={href}>
+                                            {label}
+                                        </FooterLink>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
 
-                    {/* Info column */}
-                    <div>
-                        <FooterHeading>Thông tin</FooterHeading>
-                        <ul className="space-y-2.5" role="list">
-                            {NAV_LINKS.map(({ label, href }) => (
-                                <li key={href}>
-                                    <FooterLink href={href}>{label}</FooterLink>
-                                </li>
-                            ))}
-                        </ul>
+                        <div>
+                            <FooterHeading>Thông tin</FooterHeading>
+                            <ul className="space-y-3" role="list">
+                                {NAV_LINKS.map(({ label, href }) => (
+                                    <li key={href}>
+                                        <FooterLink href={href}>
+                                            {label}
+                                        </FooterLink>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                     {/* Social column */}
-                    <div>
+                    <div className="flex flex-col items-start">
                         <FooterHeading>Theo dõi</FooterHeading>
-
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             {SOCIAL_LINKS.map(({ label, href, icon }) => (
                                 <SocialButton
                                     key={label}
@@ -212,44 +210,20 @@ export default function Footer() {
                                 />
                             ))}
                         </div>
-
-                        {/* Tagline nhỏ */}
-                        <p
-                            className="mt-5 text-xs  leading-relaxed"
-                            style={{
-                                color: "var(--primary-fg)"
-                            }}
-                        >
+                        <p className="mt-6 text-[11px] uppercase tracking-wider opacity-70 leading-relaxed"style={{ color: "var(--primary-fg)" }}>
                             Cập nhật nội dung lịch sử
-                            <br />
-                            mỗi ngày.
+                            từ kho lưu trữ mỗi ngày
                         </p>
                     </div>
                 </div>
 
-                {/* ── Bottom bar ── */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 border-t border-border-muted">
-                    <p
-                        className="text-xs "
-                        style={{
-                            color: "var(--primary-fg)"
-                        }}
-                    >
-                        © {currentYear} Historia. Nội dung thuộc quyền sở hữu
-                        của tác giả.
+                {/* Bottom Bar: Bản quyền */}
+                <div className="border-t border-primary-fg/10 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p className="text-[11px] uppercase tracking-widest opacity-60" style={{ color: "var(--primary-fg)" }}>
+                        © {currentYear} Historia Archive. Bảo lưu mọi bản quyền.
                     </p>
-
-                    <p
-                        className="text-xs "
-                        style={{
-                            color: "var(--primary-fg)"
-                        }}
-                    >
-                        Xây dựng vì{" "}
-                        <span className="text-primary" aria-label="tình yêu">
-                            ♡
-                        </span>{" "}
-                        với lịch sử Việt Nam
+                    <p className="text-[11px] uppercase tracking-widest opacity-40 italic" style={{ color: "var(--primary-fg)" }}>
+                        "Historia Magistra Vitae Est"
                     </p>
                 </div>
             </div>

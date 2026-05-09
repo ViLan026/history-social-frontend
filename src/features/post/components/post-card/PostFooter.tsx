@@ -24,7 +24,7 @@ export default function PostFooter({ post}: PostFooterProps) {
 
                     <button
                         type="button"
-                        onClick={() => openPostDetail(post.postId)}
+                        onClick={() => openPostDetail(post)}
                         className={[
                             "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5",
                             "bg-surface text-foreground",

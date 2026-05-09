@@ -30,8 +30,6 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    console.log(error);
-    console.log('Original Request:', originalRequest);
     // Kiểm tra lỗi 401 và đảm bảo không phải là request vào chính API login/refresh để tránh lặp vô tận
     const isAuthRequest = originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/refresh');
 

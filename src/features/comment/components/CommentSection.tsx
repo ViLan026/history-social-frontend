@@ -105,7 +105,7 @@ export const CommentSection = memo<CommentSectionProps>(
                         </div>
                     )}
 
-                    <div className="space-y-4 pt-4 lg:pt-0">
+                    <div className="space-y-2 pt-4 lg:pt-0">
                         {isInitialLoading ? (
                             <CommentSkeleton />
                         ) : displayComments.length === 0 ? (
@@ -147,7 +147,7 @@ export const CommentSection = memo<CommentSectionProps>(
                     </div>
                 </div>
 
-                <div className="z-10 shrink-0 border-t border-border bg-background p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:p-6">
+                <div className="z-10 shrink-0 border-t border-border bg-background px-4 pt-4 pb-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:p-4 lg:pt-4 lg:pb-0">
                     <CommentInput
                         onSubmit={handleSubmit}
                         isSubmitting={createMutation.isPending}

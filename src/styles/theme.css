@@ -18,14 +18,14 @@
   --border-focus:     oklch(0.55 0.14 15);    /* vòng focus lấy tông đỏ */
 
   /* PRIMARY (Đỏ burgundy) */
-  --primary:          oklch(0.38 0.143 15);   /* ~ #7F0716 */ /* màu chủ đạo cho các nut */
+  --primary:          #7c0c29;   /* ~ #7F0716 */ /* màu chủ đạo cho các nut */
   --primary-hover:    oklch(0.46 0.150 15);   
   --primary-active:   oklch(0.34 0.130 15);
   --primary-subtle:   oklch(0.18 0.040 15);
   --primary-fg:       oklch(0.96 0.033 32);   /* chữ trắng/ngà trên nền primary */
 
   /* SECONDARY (Ví dụ: xanh ngọc) */
-  --secondary:        oklch(0.62 0.10 195);   /* teal */
+  --secondary:        #1d9999;   /* teal */
   --secondary-hover:  oklch(0.68 0.11 195);
   --secondary-active: oklch(0.56 0.09 195);
   --secondary-subtle: oklch(0.16 0.030 200);

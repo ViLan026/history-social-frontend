@@ -57,7 +57,7 @@ export const CommentInput = memo<CommentInputProps>(
     const canSubmit = value.trim().length > 0 && !isSubmitting;
 
     return (
-      <div className="flex items-end gap-2">
+      <div className="flex items-stretch gap-2">
         {/* Textarea */}
         <div
           className="
@@ -95,7 +95,7 @@ export const CommentInput = memo<CommentInputProps>(
           disabled={!canSubmit}
           aria-label="Gửi bình luận"
           className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+            "flex w-12 shrink-0 items-center justify-center rounded-xl",
             "border transition-all duration-150",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             canSubmit
