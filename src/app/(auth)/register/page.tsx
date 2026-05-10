@@ -45,13 +45,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#4f6f91] p-4">
-      <div className="neu w-full max-w-md space-y-8 rounded-2xl bg-[#4f6f91] p-8">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <div className="neu-raised w-full max-w-md space-y-8 rounded-2xl bg-background p-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-white text-balance">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground text-balance">
             Tạo tài khoản mới
           </h2>
-          <p className="mt-2 text-sm text-gray-200">
+          <p className="mt-2 text-sm text-foreground">
             Tham gia History Social ngay hôm nay
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function RegisterPage() {
           <div className="space-y-4">
             <div>
               <label
-                className="block text-sm font-medium text-gray-100"
+                className="block text-sm font-medium text-foreground"
                 htmlFor="email"
               >
                 Email
@@ -73,13 +73,13 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="neu-inset mt-1 block w-full rounded-lg border-0 bg-[#4f6f91] px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 sm:text-sm"
+                className="neu-inset mt-1 block w-full rounded-lg border-0 bg-surface px-4 py-3 text-foreground placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 sm:text-sm"
               />
             </div>
 
             <div>
               <label
-                className="block text-sm font-medium text-gray-100"
+                className="block text-sm font-medium text-foreground"
                 htmlFor="password"
               >
                 Mật khẩu
@@ -92,13 +92,13 @@ export default function RegisterPage() {
                 placeholder="Ít nhất 8 ký tự"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="neu-inset mt-1 block w-full rounded-lg border-0 bg-[#4f6f91] px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 sm:text-sm"
+                className="neu-inset mt-1 block w-full rounded-lg border-0 bg-surface px-4 py-3 text-foreground placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 sm:text-sm"
               />
             </div>
 
             <div>
               <label
-                className="block text-sm font-medium text-gray-100"
+                className="block text-sm font-medium text-foreground"
                 htmlFor="confirm-password"
               >
                 Xác nhận mật khẩu
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 placeholder="Nhập lại mật khẩu"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="neu-inset mt-1 block w-full rounded-lg border-0 bg-[#4f6f91] px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 sm:text-sm"
+                className="neu-inset mt-1 block w-full rounded-lg border-0 bg-surface px-4 py-3 text-foreground placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 sm:text-sm"
               />
             </div>
           </div>
@@ -125,17 +125,17 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isPending}
-            className="neu flex w-full justify-center rounded-lg bg-[#4f6f91] px-4 py-3 text-sm font-medium text-white transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-[#4f6f91] disabled:cursor-not-allowed disabled:opacity-70 active:translate-y-px active:shadow-none"
+            className="neu flex w-full justify-center rounded-lg bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-[#4f6f91] disabled:cursor-not-allowed disabled:opacity-70 active:translate-y-px active:shadow-none"
           >
             {isPending ? 'Đang tạo tài khoản...' : 'Đăng ký'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-200">
+        <p className="text-center text-sm text-foreground">
           Đã có tài khoản?{' '}
           <Link
             href="/login"
-            className="font-medium text-white underline underline-offset-2 hover:text-gray-100"
+            className="font-medium text-foreground underline underline-offset-2 hover:text-foreground-muted"
           >
             Đăng nhập
           </Link>

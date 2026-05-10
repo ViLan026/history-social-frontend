@@ -49,10 +49,7 @@ export default function PostDetailModal() {
     );
 
     return (
-        <div className="fixed inset-x-0 bottom-0 top-14 z-50 flex items-center justify-center p-0 md:p-4 bg-surface-overlay/100 backdrop-blur-sm "                 style={{
-                    backgroundColor: "background" // backdropFilter: "blur(6px)"
-                }}>
-            {/* 1. NÚT ĐÓNG - GIAO DIỆN DESKTOP */}
+        <div className="fixed inset-x-0 bottom-0 top-14 z-50 flex items-center justify-center p-0 md:p-4 bg-surface-overlay/100 backdrop-blur-sm ">
             <button
                 type="button"
                 onClick={closePostDetail}
@@ -69,7 +66,9 @@ export default function PostDetailModal() {
                     "md:h-auto md:max-h-[85dvh] md:max-w-2xl md:rounded-2xl",
                     "lg:h-[85dvh] lg:max-w-6xl xl:max-w-7xl lg:flex-row lg:rounded-3xl"
                 ].join(" ")}
-
+                style={{
+                    backgroundColor: "background" // backdropFilter: "blur(6px)"
+                }}
             >
                 {/* 2. NÚT ĐÓNG & HEADER - GIAO DIỆN MOBILE */}
                 <div className="flex md:hidden shrink-0 items-center justify-between border-b border-border bg-background px-4 py-3 z-20">

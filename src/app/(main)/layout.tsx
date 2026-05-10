@@ -15,7 +15,7 @@ function LoadingScreen() {
             role="status"
             aria-label="Đang tải"
         >
-            <div className=" flex flex-col items-center gap-4 px-8 py-6 rounded-xl bg-surface border border-border-muted">
+            <div className=" flex flex-col items-center gap-4 px-8 py-6 rounded-xl bg-background border border-border-muted">
                 {/* Spinner */}
                 <span
                     className=" block w-6 h-6 rounded-full border-2 border-border border-t-primary animate-spin"

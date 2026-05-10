@@ -1,31 +1,31 @@
 :root,
 [data-theme="dark"],
 .dark {
-  /* SURFACES (nền tối mặc định, nhẹ hơi xanh) */
-  --background:       oklch(0% 0 0); /* Nền tổng của trang */
-  --surface:          oklch(0.14 0.018 255);       /* nền của các thành phần nhỏ */
-  --surface-raised:   oklch(0.17 0.018 255);    /* nền khi hover vào các thành phần nhỏ */
-  --surface-overlay:  oklch(0.20 0.020 255);   /* nền của các thành phần overlay như modal, dropdown */
+  /* SURFACES (nền tối mặc định, nhẹ hơi xanh navy như bản gốc) */
+  --background:       oklch(0.08 0.010 260); /* Đẩy lên navy cực thẫm thay vì đen tuyền 0% */
+  --surface:          oklch(0.14 0.018 255);       
+  --surface-raised:   oklch(0.17 0.018 255);    
+  --surface-overlay:  oklch(0.20 0.020 255);  
 
-  /* TEXT COLORS */
-  --foreground:       oklch(0.96 0.033 32);  /* màu chữ chính */
-  --foreground-muted: oklch(0.65 0.020 32);  /* chữ phụ, dấu hiệu */
-  --foreground-faint: oklch(0.45 0.015 32);  /* placeholder, disabled (màu cho các chữ của các thành phần đang bị làm mờ) */
+  /* TEXT COLORS (Giữ nguyên tông đỏ) */
+  --foreground:       oklch(0.96 0.033 32);  
+  --foreground-muted: oklch(0.65 0.020 32);  
+  --foreground-faint: oklch(0.45 0.015 32);  
 
   /* BORDERS */
-  --border:           oklch(0.28 0.020 32);    /* đường viền chính */
-  --border-muted:     oklch(0.20 0.015 32);    /* đường viền phụ, ví dụ: border của input khi không focus */
-  --border-focus:     oklch(0.55 0.14 15);    /* vòng focus lấy tông đỏ */
+  --border:           oklch(0.28 0.020 32);    
+  --border-muted:     oklch(0.20 0.015 32);    
+  --border-focus:     oklch(0.55 0.14 15);    
 
   /* PRIMARY (Đỏ burgundy) */
-  --primary:          #7c0c29;   /* ~ #7F0716 */ /* màu chủ đạo cho các nut */
+  --primary:          oklch(0.38 0.143 15);
   --primary-hover:    oklch(0.46 0.150 15);   
   --primary-active:   oklch(0.34 0.130 15);
   --primary-subtle:   oklch(0.18 0.040 15);
-  --primary-fg:       oklch(0.96 0.033 32);   /* chữ trắng/ngà trên nền primary */
+  --primary-fg:       oklch(0.96 0.033 32);  
 
-  /* SECONDARY (Ví dụ: xanh ngọc) */
-  --secondary:        #1d9999;   /* teal */
+  /* SECONDARY (Teal) */
+  --secondary:        #1d9999;  
   --secondary-hover:  oklch(0.68 0.11 195);
   --secondary-active: oklch(0.56 0.09 195);
   --secondary-subtle: oklch(0.16 0.030 200);
@@ -40,7 +40,7 @@
   --warning-subtle:   oklch(0.16 0.040 85);
   --warning-fg:       oklch(0.12 0.020 255);
 
-  --destructive:      oklch(0.60 0.14 15);   /* đỏ nhạt hơn primary */
+  --destructive:      oklch(0.60 0.14 15);  
   --destructive-hover:oklch(0.66 0.15 15);
   --destructive-subtle:oklch(0.15 0.040 15);
   --destructive-fg:   oklch(0.96 0.010 255);
@@ -50,7 +50,7 @@
   --info-fg:          oklch(0.92 0.015 265);
 
   /* FOCUS RING */
-  --ring:             oklch(0.38 0.143 15);   /* match primary */
+  --ring:             oklch(0.38 0.143 15);  
   --ring-offset:      oklch(0.10 0.018 255);
 
   /* SCROLLBAR (tối) */
@@ -62,7 +62,7 @@
   --sidebar-bg:       oklch(0.12 0.020 255);
   --sidebar-border:   oklch(0.22 0.018 255);
   --sidebar-item-hover: oklch(0.17 0.022 255);
-  --sidebar-item-active: oklch(0.20 0.040 15); /* đỏ khi active */
+  --sidebar-item-active: oklch(0.20 0.040 15); 
 
   /* FEED / CARD */
   --feed-bg:          oklch(0.10 0.018 255);
@@ -77,40 +77,40 @@
 
 [data-theme="light"],
 .light {
-  /* SURFACES (nền sáng – kiểu giấy parchment) */
-  --background:       oklch(0.96 0.033 32);   /* ~ #F2F1ED */
-  --surface:          oklch(1.00 0.000 0);    /* trắng thuần */
-  --surface-raised:   oklch(0.94 0.030 75);   /* hover/bảng nhẹ */
+  /* SURFACES (Chuyển đổi hoàn toàn sang trắng ngả navy nhẹ) */
+  --background:       oklch(0.98 0.006 260);  /* Trắng navy nhẹ thay cho vàng parchment */
+  --surface:          oklch(0.99 0.002 260);  /* Fix lỗi mã màu cũ -> Trắng thuần ánh navy */
+  --surface-raised:   oklch(0.96 0.008 260);  /* Đổi từ ánh vàng (hue 75) sang xanh trắng */
   --surface-overlay:  oklch(1.00 0.000 0);
 
-  /* TEXT COLORS */
-  --foreground:       oklch(0.18 0.020 32);   /* chữ đen/burgundy sẫm */
+  /* TEXT COLORS (Giữ đỏ sẫm 32) */ 
+  --foreground:       oklch(0.18 0.020 32);   
   --foreground-muted: oklch(0.45 0.018 32);
   --foreground-faint: oklch(0.65 0.012 32);
 
   /* BORDERS */
-  --border:           oklch(0.82 0.012 32);   /* xám nâu nhạt */
+  --border:           oklch(0.82 0.012 32);   
   --border-muted:     oklch(0.90 0.008 32);
-  --border-focus:     oklch(0.58 0.14 15);   /* đỏ như primary */
+  --border-focus:     oklch(0.58 0.14 15);   
 
   /* PRIMARY (Đỏ burgundy) */
-  --primary:          oklch(0.38 0.143 15);
+  --primary:          #710014;
   --primary-hover:    oklch(0.46 0.150 15);
   --primary-active:   oklch(0.34 0.130 15);
-  --primary-subtle:   oklch(0.94 0.030 75);
-  --primary-fg:       oklch(0.97 0.006 75);  /* chữ trắng trên background */
+  --primary-subtle:   oklch(0.95 0.015 260); /* Đổi từ vàng sang trắng navy */
+  --primary-fg:       oklch(0.98 0.005 260); /* Đổi từ vàng sang trắng navy */
 
   /* SECONDARY (Teal) */
   --secondary:        oklch(0.42 0.12 195);
   --secondary-hover:  oklch(0.38 0.11 195);
   --secondary-active: oklch(0.36 0.10 195);
   --secondary-subtle: oklch(0.93 0.020 195);
-  --secondary-fg:     oklch(0.97 0.006 75);
+  --secondary-fg:     oklch(0.98 0.005 260); /* Đổi sang trắng navy */
 
   /* SEMANTIC STATES */
   --success:          oklch(0.42 0.14 155);
   --success-subtle:   oklch(0.94 0.020 155);
-  --success-fg:       oklch(0.97 0.006 75);
+  --success-fg:       oklch(0.98 0.005 260); /* Đổi sang trắng navy */
 
   --warning:          oklch(0.48 0.14 85);
   --warning-subtle:   oklch(0.96 0.025 85);
@@ -119,15 +119,15 @@
   --destructive:      oklch(0.48 0.18 15);
   --destructive-hover:oklch(0.44 0.17 15);
   --destructive-subtle:oklch(0.95 0.025 15);
-  --destructive-fg:   oklch(0.97 0.006 75);
+  --destructive-fg:   oklch(0.98 0.005 260); /* Đổi sang trắng navy */
 
   --info:             oklch(0.42 0.12 235);
   --info-subtle:      oklch(0.94 0.020 240);
-  --info-fg:          oklch(0.97 0.006 75);
+  --info-fg:          oklch(0.98 0.005 260); /* Đổi sang trắng navy */
 
   /* FOCUS RING */
   --ring:             oklch(0.55 0.14 15);
-  --ring-offset:      oklch(0.97 0.006 75);
+  --ring-offset:      oklch(0.98 0.005 260); /* Đổi sang trắng navy */
 
   /* SCROLLBAR (sáng) */
   --scrollbar-track:  oklch(0.92 0.008 32);
@@ -167,7 +167,3 @@ canvas,
 svg {
   transition: none;
 }
-
-
-
-

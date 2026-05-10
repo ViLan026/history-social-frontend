@@ -149,7 +149,7 @@ export default function Navigation() {
         aria-label="Navigation chính"
       >
         <ul
-          className="flex flex-row md:flex-col justify-around md:justify-start gap-2 w-full md:p-2 p-0 md:gap-4 rounded-xl bg-card shadow-sm"
+          className="flex flex-row md:flex-col justify-around md:justify-start gap-2 w-full md:p-2 p-0 md:gap-4 md:mt-6 rounded-xl bg-card shadow-sm"
           role="list"
         >
           {NAV_ITEMS.map((item) => (

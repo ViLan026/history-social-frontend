@@ -67,7 +67,7 @@ export default function PostList() {
                 className="flex h-14 items-center justify-center"
             >
                 {isFetchingNextPage && (
-                    <div className="flex items-center gap-3 rounded-lg md:rounded-xl bg-surface border border-border px-4 md:px-5 py-2.5 md:py-3">
+                    <div className="flex items-center gap-3 rounded-lg md:rounded-xl bg-background border border-border px-4 md:px-5 py-2.5 md:py-3">
                         <div className="h-4 w-4 md:h-5 md:w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                         <span className="text-xs md:text-sm font-medium text-foreground-muted">
                             Đang tải thêm...
@@ -77,7 +77,7 @@ export default function PostList() {
             </div>
 
             {!hasNextPage && posts.length > 0 && (
-                <div className="rounded-lg md:rounded-xl bg-surface border border-border py-3 md:py-4 text-center text-xs md:text-sm text-foreground-muted">
+                <div className="rounded-lg md:rounded-xl bg-background border border-border py-3 md:py-4 text-center text-xs md:text-sm text-foreground-muted">
                     Bạn đã xem hết bài viết
                 </div>
             )}

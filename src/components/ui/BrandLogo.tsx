@@ -4,18 +4,18 @@ export default function BrandLogo() {
     return (
         <Link
             href="/"
-            className="group flex items-center gap-2.5 shrink-0 select-none"
+            className="group flex items-center gap-2.5 shrink-0 select-none "
             aria-label="Trang chủ Historia"
         >
             <span
-                className="text-primary text-lg leading-none opacity-80 group-hover:opacity-100 transition-opacity duration-200"
+                className=" wh text-lg leading-none opacity-80 group-hover:opacity-100 transition-opacity duration-200"
                 aria-hidden="true"
             >
                 {" "}
                 ⌖{" "}
             </span>
 
-            <span className="font-heading font-semibold text-xl tracking-[0.12em] uppercase text-foreground group-hover:text-primary transition-colors duration-200">
+            <span className="wh font-heading font-semibold text-xl tracking-[0.12em] uppercase group-hover:text-primary transition-colors duration-200">
                 Historia
             </span>
         </Link>

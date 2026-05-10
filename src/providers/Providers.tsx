@@ -63,7 +63,7 @@ export default function Providers({ children }: ProvidersProps) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"       // Tailwind dùng class strategy
-        defaultTheme="dark"     
+        defaultTheme="light"     
         enableSystem            // nếu mặc định của người dùng là light thì sẽ dùng light còn không thì hệ thống mặc định là dark 
         disableTransitionOnChange={false} // Cho phép smooth transition
         storageKey="historia-theme"       // localStorage key. đặt tên khác để tráng đụng với các site khác nếu user dùng chung browser 

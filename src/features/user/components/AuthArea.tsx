@@ -7,7 +7,7 @@ import { useAuthStore } from "@/features/auth/auth.store";
 import { useCurrentUser } from "@/features/user/useUser";
 
 export default function AuthArea() {
-    // Lấy dữ liệu trực tiếp từ store 
+    // Lấy dữ liệu trực tiếp từ store
     const { isAuthenticated, logout } = useAuthStore();
 
     // gọi API lấy user
@@ -49,19 +49,20 @@ export default function AuthArea() {
     }
 
     // 2. Trạng thái đã đăng nhập
-    const displayName = currentUser?.profile?.displayName ?? currentUser?.email ?? "User";
+    const displayName =
+        currentUser?.profile?.displayName ?? currentUser?.email ?? "User";
     const avatarUrl = currentUser?.profile?.avatarUrl;
     const initial = displayName.charAt(0).toUpperCase();
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative " ref={dropdownRef}>
             {/* Nút Avatar để bật/tắt menu */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
                 title={displayName}
-                className="relative flex items-center justify-center w-9 h-9 rounded-full shrink-0 overflow-hidden border border-border hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-150"
+                className="relative flex items-center justify-center w-9 h-9 rounded-full shrink-0 overflow-hidden border border-white hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-150"
             >
                 {avatarUrl ? (
                     <Image
@@ -80,7 +81,12 @@ export default function AuthArea() {
 
             {/* Menu Dropdown */}
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-surface border border-border-muted rounded-xl shadow-lg py-1.5 z-50 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200">
+                <div
+                    className="absolute right-0 mt-2 w-56 border border-border-muted rounded-xl shadow-lg py-1.5 z-50 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200"
+                    style={{
+                        backgroundColor: "background" // backdropFilter: "blur(6px)"
+                    }}
+                >
                     {/* Thông tin vắn tắt (Tên + Email) */}
                     <div className="px-4 py-2 border-b border-border-muted mb-1">
                         <p className="text-sm font-semibold text-foreground truncate">

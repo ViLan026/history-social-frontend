@@ -1,8 +1,4 @@
 // components/sidebar/SuggestedUsers.tsx
-// ============================================================
-// "Gợi ý theo dõi" widget — tách từ RightSidebar
-// Styling: 100% semantic tokens, zero hardcoded colors
-// ============================================================
 
 "use client";
 
@@ -11,7 +7,6 @@ import Link from "next/link";
 import { useUsers } from "@/features/user/useUser";
 import { useUserStore } from "@/features/user/user.store";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface UserRowProps {
   id: string;
@@ -21,20 +16,19 @@ interface UserRowProps {
   onFollow: (id: string) => void;
 }
 
-// ─── Components ───────────────────────────────────────────────────────────────
 
 function UserSkeleton() {
   return (
     <div className="flex items-center gap-3 animate-pulse">
       {/* Avatar skeleton */}
-      <div className="w-9 h-9 rounded-full bg-[var(--border-muted)] shrink-0" />
+      <div className="w-9 h-9 rounded-full bg-surface shrink-0" />
       {/* Info skeleton */}
       <div className="flex-1 space-y-2">
-        <div className="h-3.5 bg-[var(--border-muted)] rounded w-2/3" />
-        <div className="h-3 bg-[var(--border-muted)] rounded w-1/2" />
+        <div className="h-3.5 bg-surface rounded w-2/3" />
+        <div className="h-3 bg-surface rounded w-1/2" />
       </div>
       {/* Button skeleton */}
-      <div className="w-16 h-7 rounded-lg bg-[var(--border-muted)] shrink-0" />
+      <div className="w-16 h-7 rounded-lg bg-surface shrink-0" />
     </div>
   );
 }
@@ -50,7 +44,7 @@ function UserRow({
   const initial = name[0].toUpperCase();
 
   return (
-    <div className="flex items-center gap-3 group">
+    <div className="flex items-center gap-3 group ">
       {/* Avatar + name */}
       <Link
         href={`/profile/${id}`}
@@ -149,10 +143,13 @@ export default function SuggestedUsers() {
 
   return (
     <section
-      className="rounded-xl bg-card   p-4 shadow-sm"
+      className="rounded-xl  p-4  shadow-sm bg-surface"
       aria-labelledby="suggested-users-heading"
+    //   style ={{
+    //   backgroundColor: "background"
+    // }}
     >
-      {/* Header */}
+
       <div className="flex items-center justify-between mb-4">
         <h2
           id="suggested-users-heading"

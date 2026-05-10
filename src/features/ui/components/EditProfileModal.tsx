@@ -8,6 +8,7 @@ import { useCurrentUser } from "../../user/useUser";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Avatar from "@/components/ui/Avatar";
+import { useEffect } from "react";
 
 interface EditProfileModalProps {
     isOpen: boolean;
@@ -44,6 +45,17 @@ export const EditProfileModal = ({
             onClose();
         }
     });
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
 
     const validateForm = (): boolean => {
         const newErrors: { displayName?: string } = {};
@@ -84,18 +96,23 @@ export const EditProfileModal = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/100 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md rounded-xl bg-surface border border-border shadow-lg animate-scale-in">
-                {/* Header */}
-                <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay/100 backdrop-blur-sm">
+            <div
+                className="w-full max-w-md rounded-xl bg-surface border border-border shadow-lg animate-scale-in"
+                style={{
+                    backgroundColor: "background",
+                    backdropFilter: "blur(6px)"
+                }}
+            >
+                <div className="px-4 py-2 border-b border-border flex items-center justify-between">
                     <h2 className="text-lg font-semibold text-foreground">
                         Edit Profile
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-foreground-muted hover:text-foreground transition"
+                        className=" transition py-2 px-3"
                     >
-                        ✕
+                        ✕  
                     </button>
                 </div>
 
@@ -104,9 +121,8 @@ export const EditProfileModal = ({
                     {/* Avatar (10% accent interaction via button) */}
                     <div className="flex flex-col items-center gap-3">
                         <Avatar
-                            src={formData.avatarPreview}
-                            alt="Preview"
-                            className="w-20 h-20 border border-border"
+                            avatarUrl={formData.avatarPreview}
+                            displayName={formData.displayName}
                         />
                         <input
                             ref={fileInputRef}

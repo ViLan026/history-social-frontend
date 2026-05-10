@@ -1,3 +1,4 @@
+// components/post/CreatePost.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -17,7 +18,174 @@ interface CreatePostFormData {
     sources: PostSourceRequest[];
 }
 
-export const CreatePost: React.FC = () => {
+/** Label + error wrapper */
+function Field({
+    label,
+    required,
+    error,
+    children
+}: {
+    label: string;
+    required?: boolean;
+    error?: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-foreground">
+                {label}
+                {required && (
+                    <span
+                        className="text-destructive ml-0.5"
+                        aria-hidden="true"
+                    >
+                        *
+                    </span>
+                )}
+            </label>
+            {children}
+            {error && (
+                <p className="text-xs text-destructive" role="alert">
+                    {error}
+                </p>
+            )}
+        </div>
+    );
+}
+
+/** Shared input class */
+const inputClass = `
+  w-full rounded-lg px-4 py-2.5
+  bg-surface border border-border
+  text-foreground placeholder:text-foreground-faint
+  text-sm
+  focus:outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring/30
+  transition-all duration-150
+`;
+
+/** Shared ghost button (secondary action) */
+const ghostBtnClass = `
+  rounded-lg px-4 py-2.5 text-sm font-medium
+  text-foreground-muted border border-border
+  hover:bg-surface-raised hover:text-foreground hover:border-border-focus
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+  transition-all duration-150
+`;
+
+/** Primary filled button */
+const primaryBtnClass = `
+  rounded-lg px-5 py-2.5 text-sm font-semibold
+  bg-primary text-primary-fg
+  hover:bg-primary-hover
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+  disabled:opacity-50 disabled:cursor-not-allowed
+  transition-all duration-150
+`;
+
+// ─── Source Row ───────────────────────────────────────────────────────────────
+
+interface SourceRowProps {
+    index: number;
+    onRemove: () => void;
+    register: ReturnType<typeof useForm<CreatePostFormData>>["register"];
+}
+
+function SourceRow({ index, onRemove, register }: SourceRowProps) {
+    return (
+        <div className="rounded-lg bg-surface border border-border-muted p-4">
+            <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium text-foreground-muted">
+                    Nguồn {index + 1}
+                </span>
+                <button
+                    type="button"
+                    onClick={onRemove}
+                    className="
+            text-xs text-destructive hover:text-destructive-hover
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+            rounded-sm transition-colors duration-150
+          "
+                >
+                    Xóa
+                </button>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+                <input
+                    {...register(`sources.${index}.title`)}
+                    placeholder="Tên nguồn"
+                    className={inputClass}
+                />
+                <input
+                    {...register(`sources.${index}.authorName`)}
+                    placeholder="Tác giả"
+                    className={inputClass}
+                />
+                <input
+                    {...register(`sources.${index}.url`)}
+                    placeholder="Đường dẫn"
+                    className={inputClass}
+                />
+                <input
+                    {...register(`sources.${index}.publishedYear`, {
+                        valueAsNumber: true
+                    })}
+                    type="number"
+                    placeholder="Năm xuất bản"
+                    className={inputClass}
+                />
+            </div>
+        </div>
+    );
+}
+
+// ─── Image Previews ───────────────────────────────────────────────────────────
+
+function ImagePreviews({
+    previews,
+    onRemove
+}: {
+    previews: string[];
+    onRemove: (i: number) => void;
+}) {
+    if (previews.length === 0) return null;
+
+    return (
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {previews.map((src, i) => (
+                <div key={i} className="relative group">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={src}
+                        alt={`Ảnh xem trước ${i + 1}`}
+                        className="h-28 w-full rounded-lg object-cover border border-border-muted"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => onRemove(i)}
+                        aria-label={`Xóa ảnh ${i + 1}`}
+                        className="
+              absolute right-1.5 top-1.5
+              flex items-center justify-center
+              w-6 h-6 rounded-full
+              bg-surface/90 text-foreground border border-border
+              opacity-0 group-hover:opacity-100
+              hover:bg-destructive-subtle hover:text-destructive hover:border-destructive/30
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+              transition-all duration-150 text-xs
+            "
+                    >
+                        ✕
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+// ─── CreatePost ───────────────────────────────────────────────────────────────
+
+export const CreatePostModal: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [files, setFiles] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
@@ -45,42 +213,44 @@ export const CreatePost: React.FC = () => {
         name: "sources"
     });
 
-    // Khoá scroll khi modal mở
+    // Lock body scroll khi modal mở
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
+        document.body.style.overflow = isOpen ? "hidden" : "";
         return () => {
             document.body.style.overflow = "";
         };
+    }, [isOpen]);
+
+    // Escape key đóng modal
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") handleClose();
+        };
+        if (isOpen) document.addEventListener("keydown", onKey);
+        return () => document.removeEventListener("keydown", onKey);
     }, [isOpen]);
 
     const handleClose = () => {
         reset();
         setFiles([]);
         setPreviews((prev) => {
-            prev.forEach((url) => URL.revokeObjectURL(url));
+            prev.forEach(URL.revokeObjectURL);
             return [];
         });
         setIsOpen(false);
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFiles = Array.from(e.target.files || []);
-        setFiles(selectedFiles);
-        const newPreviews = selectedFiles.map((file) =>
-            URL.createObjectURL(file)
-        );
-        setPreviews(newPreviews);
+        const selected = Array.from(e.target.files || []);
+        setFiles(selected);
+        setPreviews(selected.map(URL.createObjectURL));
     };
 
-    const removeFile = (index: number) => {
-        setFiles((prev) => prev.filter((_, i) => i !== index));
+    const removeFile = (i: number) => {
+        setFiles((prev) => prev.filter((_, idx) => idx !== i));
         setPreviews((prev) => {
-            URL.revokeObjectURL(prev[index]);
-            return prev.filter((_, i) => i !== index);
+            URL.revokeObjectURL(prev[i]);
+            return prev.filter((_, idx) => idx !== i);
         });
     };
 
@@ -88,17 +258,15 @@ export const CreatePost: React.FC = () => {
         try {
             const tagNames = data.tagNames
                 .split(",")
-                .map((tag) => tag.trim())
-                .filter((tag) => tag.length > 0);
+                .map((t) => t.trim())
+                .filter(Boolean);
 
             const requestData: PostCreationRequest = {
                 title: data.title,
                 content: data.content,
                 status: data.status,
                 tagNames,
-                sources: data.sources.filter(
-                    (source) => source.title.trim().length > 0
-                )
+                sources: data.sources.filter((s) => s.title.trim().length > 0)
             };
 
             await createPostMutation.mutateAsync({
@@ -107,44 +275,48 @@ export const CreatePost: React.FC = () => {
             });
 
             handleClose();
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
         }
     };
 
     return (
         <>
-            {/* ── Nút mở modal ── */}
-            <button
-                onClick={() => setIsOpen(true)}
-                className="neu rounded-xl px-5 py-3 font-semibold text-white bg-gradient-to-br from-[#a0cafa] to-[#6b8ab8] dark:from-[#4f6f91] dark:to-[#2c4a6b] hover:brightness-110 active:scale-95 transition-all"
-            >
+            {/* ── Trigger button ── */}
+            <button onClick={() => setIsOpen(true)} className={primaryBtnClass}>
                 + Thêm bài viết
             </button>
 
-            {/* ── Backdrop + Modal ── */}
+            {/* ── Modal ── */}
             {isOpen && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                    style={{
-                        backgroundColor: "rgba(0,0,0,0.55)",
-                        backdropFilter: "blur(4px)"
-                    }}
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay/100 backdrop-blur-sm"
                     onClick={(e) => {
-                        // Đóng khi click ra ngoài modal
                         if (e.target === e.currentTarget) handleClose();
                     }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="create-post-heading"
                 >
-                    <div className="w-full max-w-4xl rounded-3xl p-6 md:p-8 lg:p-10 max-h-[90vh] overflow-y-auto animate-[fadeScaleIn_0.2s_ease-out] bg-[#d4e3f0] text-[#4f6f91] dark:bg-[#1a2332] dark:text-white shadow-2xl">
-                        <div className="mb-6 flex items-center justify-between">
-                            <h2 className="text-2xl font-bold">
+                    <div
+                        className=" w-full max-w-3xl max-h-[90dvh] overflow-y-auto rounded-xl bg-surface-overlay border border-border p-6 md:p-8 animate-scale-in shadow-2xl mb-0     "
+                        style={{
+                            backgroundColor: "background",
+                            backdropFilter: "blur(6px)"
+                        }}
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-6">
+                            <h2
+                                id="create-post-heading"
+                                className="text-xl font-heading font-semibold text-foreground"
+                            >
                                 Tạo bài viết mới
                             </h2>
                             <button
                                 type="button"
                                 onClick={handleClose}
-                                className="neu rounded-full w-9 h-9 flex items-center justify-center text-[#4f6f91] hover:text-[#6b8ab8] dark:text-white dark:hover:text-[#a0cafa] active:scale-95 transition-all text-lg"
                                 aria-label="Đóng"
+                                className="  flex items-center justify-center w-8 h-8 rounded-full  text-foreground-muted hover:text-foreground hover:bg-surface-raised  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring  transition-all duration-150 text-sm"
                             >
                                 ✕
                             </button>
@@ -152,55 +324,50 @@ export const CreatePost: React.FC = () => {
 
                         <form
                             onSubmit={handleSubmit(onSubmit)}
-                            className="space-y-6"
+                            className="space-y-5"
+                            noValidate
                         >
                             {/* Title */}
-                            <div>
-                                <label className="mb-2 block text-sm font-medium">
-                                    Tiêu đề *
-                                </label>
+                            <Field
+                                label="Tiêu đề"
+                                required
+                                error={errors.title?.message}
+                            >
                                 <input
                                     {...register("title", {
                                         required: "Tiêu đề là bắt buộc"
                                     })}
-                                    className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                                     placeholder="Nhập tiêu đề bài viết"
+                                    className={inputClass}
+                                    aria-invalid={!!errors.title}
                                 />
-                                {errors.title && (
-                                    <p className="mt-2 text-sm text-red-500 dark:text-red-400">
-                                        {errors.title.message}
-                                    </p>
-                                )}
-                            </div>
+                            </Field>
 
                             {/* Content */}
-                            <div>
-                                <label className="mb-2 block text-sm font-medium">
-                                    Nội dung *
-                                </label>
+                            <Field
+                                label="Nội dung"
+                                required
+                                error={errors.content?.message}
+                            >
                                 <textarea
                                     {...register("content", {
                                         required: "Nội dung là bắt buộc"
                                     })}
                                     rows={8}
-                                    className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none resize-none dark:text-white dark:placeholder-gray-500"
                                     placeholder="Viết nội dung bài viết..."
+                                    className={`${inputClass} resize-none`}
+                                    aria-invalid={!!errors.content}
                                 />
-                                {errors.content && (
-                                    <p className="mt-2 text-sm text-red-500 dark:text-red-400">
-                                        {errors.content.message}
-                                    </p>
-                                )}
-                            </div>
+                            </Field>
 
                             {/* Status */}
-                            <div>
-                                <label className="mb-2 block text-sm font-medium">
-                                    Trạng thái
-                                </label>
+                            <Field label="Trạng thái">
                                 <select
                                     {...register("status")}
-                                    className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] focus:outline-none dark:text-white [&>option]:bg-[#d4e3f0] dark:[&>option]:bg-[#1a2332]"
+                                    className={`${inputClass} cursor-pointer`}
+                                    style={{
+                                        backgroundColor: "var(--surface)"
+                                    }}
                                 >
                                     <option value={PostStatus.PUBLISHED}>
                                         Công khai
@@ -209,24 +376,21 @@ export const CreatePost: React.FC = () => {
                                         Nháp
                                     </option>
                                 </select>
-                            </div>
+                            </Field>
 
                             {/* Tags */}
-                            <div>
-                                <label className="mb-2 block text-sm font-medium">
-                                    Thẻ (phân tách bằng dấu phẩy)
-                                </label>
+                            <Field label="Thẻ (phân tách bằng dấu phẩy)">
                                 <input
                                     {...register("tagNames")}
-                                    className="neu-inset w-full rounded-xl border-0 bg-transparent px-4 py-3 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
                                     placeholder="ví dụ: chiến tranh, việt nam, cổ đại"
+                                    className={inputClass}
                                 />
-                            </div>
+                            </Field>
 
                             {/* Sources */}
-                            <div className="neu rounded-2xl p-4">
-                                <div className="mb-4 flex items-center justify-between">
-                                    <h3 className="text-lg font-semibold">
+                            <div className="rounded-lg bg-surface border border-border p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-heading font-semibold text-foreground">
                                         Nguồn trích dẫn
                                     </h3>
                                     <button
@@ -239,131 +403,96 @@ export const CreatePost: React.FC = () => {
                                                 publishedYear: undefined
                                             })
                                         }
-                                        className="neu rounded-xl px-4 py-2 text-sm text-[#4f6f91] hover:text-[#6b8ab8] hover:brightness-110 dark:text-white dark:hover:text-[#a0cafa]"
+                                        className="  text-xs font-medium  text-primary hover:text-primary-hover  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring  rounded-sm transition-colors duration-150"
                                     >
                                         + Thêm nguồn
                                     </button>
                                 </div>
 
-                                <div className="space-y-4">
-                                    {fields.map((field, index) => (
-                                        <div
+                                <div className="space-y-3">
+                                    {fields.length === 0 && (
+                                        <p className="text-xs text-foreground-faint text-center py-2">
+                                            Chưa có nguồn nào. Nhấn "+ Thêm
+                                            nguồn" để thêm.
+                                        </p>
+                                    )}
+                                    {fields.map((field, i) => (
+                                        <SourceRow
                                             key={field.id}
-                                            className="neu-inset rounded-2xl p-4"
-                                        >
-                                            <div className="mb-3 flex justify-between">
-                                                <span className="font-medium">
-                                                    Nguồn {index + 1}
-                                                </span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        remove(index)
-                                                    }
-                                                    className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                                                >
-                                                    Xóa
-                                                </button>
-                                            </div>
-                                            <div className="grid gap-3 md:grid-cols-2">
-                                                <input
-                                                    {...register(
-                                                        `sources.${index}.title`
-                                                    )}
-                                                    placeholder="Tên nguồn"
-                                                    className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
-                                                />
-                                                <input
-                                                    {...register(
-                                                        `sources.${index}.authorName`
-                                                    )}
-                                                    placeholder="Tác giả"
-                                                    className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
-                                                />
-                                                <input
-                                                    {...register(
-                                                        `sources.${index}.url`
-                                                    )}
-                                                    placeholder="Link"
-                                                    className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
-                                                />
-                                                <input
-                                                    {...register(
-                                                        `sources.${index}.publishedYear`,
-                                                        { valueAsNumber: true }
-                                                    )}
-                                                    type="number"
-                                                    placeholder="Năm xuất bản"
-                                                    className="neu w-full rounded-xl border-0 bg-transparent px-3 py-2 text-[#4f6f91] placeholder-[#a0cafa] focus:outline-none dark:text-white dark:placeholder-gray-500"
-                                                />
-                                            </div>
-                                        </div>
+                                            index={i}
+                                            onRemove={() => remove(i)}
+                                            register={register}
+                                        />
                                     ))}
                                 </div>
                             </div>
 
                             {/* Upload */}
-                            <div>
-                                <label className="mb-2 block text-sm font-medium">
-                                    Ảnh minh họa
-                                </label>
-                                <div className="neu rounded-2xl p-6 text-center">
+                            <Field label="Ảnh minh họa">
+                                <div className="  rounded-lg border border-dashed border-border  bg-surface p-5 text-center  hover:border-primary/50 hover:bg-surface-raised  transition-all duration-150">
                                     <input
                                         type="file"
                                         multiple
                                         accept="image/*"
                                         id="upload-file"
-                                        className="hidden"
+                                        className="sr-only"
                                         onChange={handleFileChange}
                                     />
                                     <label
                                         htmlFor="upload-file"
-                                        className="neu inline-block cursor-pointer rounded-xl px-4 py-2 text-[#4f6f91] hover:brightness-110 dark:text-white"
+                                        className="  inline-flex items-center gap-2 cursor-pointer  text-sm font-medium text-primary hover:text-primary-hover  focus-visible:outline-none  transition-colors duration-150"
                                     >
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <rect
+                                                x="3"
+                                                y="3"
+                                                width="18"
+                                                height="18"
+                                                rx="2"
+                                                ry="2"
+                                            />
+                                            <circle cx="8.5" cy="8.5" r="1.5" />
+                                            <polyline points="21 15 16 10 5 21" />
+                                        </svg>
                                         Chọn ảnh
                                     </label>
+                                    <p className="mt-1 text-xs text-foreground-faint">
+                                        Hỗ trợ JPG, PNG, WebP
+                                    </p>
                                 </div>
 
-                                {previews.length > 0 && (
-                                    <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
-                                        {previews.map((preview, index) => (
-                                            <div
-                                                key={index}
-                                                className="relative"
-                                            >
-                                                <img
-                                                    src={preview}
-                                                    alt="preview"
-                                                    className="h-28 w-full rounded-xl object-cover"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        removeFile(index)
-                                                    }
-                                                    className="neu absolute right-2 top-2 rounded-full px-2 py-1 text-xs text-[#4f6f91] dark:text-white"
-                                                >
-                                                    ✕
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                                <ImagePreviews
+                                    previews={previews}
+                                    onRemove={removeFile}
+                                />
+                            </Field>
 
-                            {/* Error */}
+                            {/* API error */}
                             {createPostMutation.isError && (
-                                <div className="neu-inset rounded-xl p-3 text-sm text-red-500 dark:text-red-400">
+                                <div
+                                    className="  rounded-lg px-4 py-3 text-sm  bg-destructive-subtle text-destructive  border border-destructive/20"
+                                    role="alert"
+                                >
                                     Không thể tạo bài viết. Vui lòng thử lại.
                                 </div>
                             )}
 
-                            {/* Buttons */}
-                            <div className="flex justify-end gap-4 pt-4">
+                            {/* Actions */}
+                            <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-muted">
                                 <button
                                     type="button"
                                     onClick={handleClose}
-                                    className="neu rounded-xl px-5 py-3 text-[#4f6f91] hover:brightness-110 dark:text-white"
+                                    className={ghostBtnClass}
                                 >
                                     Hủy
                                 </button>
@@ -373,10 +502,10 @@ export const CreatePost: React.FC = () => {
                                         isSubmitting ||
                                         createPostMutation.isPending
                                     }
-                                    className="neu rounded-xl px-6 py-3 font-medium text-white bg-gradient-to-br from-[#a0cafa] to-[#6b8ab8] hover:brightness-110 disabled:opacity-60 dark:from-[#4f6f91] dark:to-[#2c4a6b]"
+                                    className={primaryBtnClass}
                                 >
                                     {createPostMutation.isPending
-                                        ? "Đang tạo..."
+                                        ? "Đang đăng..."
                                         : "Đăng bài"}
                                 </button>
                             </div>
@@ -384,16 +513,8 @@ export const CreatePost: React.FC = () => {
                     </div>
                 </div>
             )}
-
-            {/* Animation keyframe */}
-            <style>{`
-        @keyframes fadeScaleIn {
-          from { opacity: 0; transform: scale(0.95) translateY(8px); }
-          to   { opacity: 1; transform: scale(1)    translateY(0);   }
-        }
-      `}</style>
         </>
     );
 };
 
-export default CreatePost;
+export default CreatePostModal;

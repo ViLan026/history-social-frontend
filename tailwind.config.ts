@@ -1,8 +1,4 @@
 // tailwind.config.ts
-// ============================================================
-// Tailwind config — bridge CSS variables → Tailwind utilities
-// ============================================================
-
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -87,18 +83,14 @@ const config: Config = {
         },
       },
 
-      // ======================================================
       // Font Families — CSS variables từ next/font
-      // ======================================================
       fontFamily: {
         body:    ["var(--font-body)", "Georgia", "serif"],
         heading: ["var(--font-heading)", "Georgia", "serif"],
         mono:    ["JetBrains Mono", "Fira Code", "monospace"],
       },
 
-      // ======================================================
       // Breakpoints — Custom (giải thích ở dưới)
-      // ======================================================
       screens: {
         // mobile: default (no prefix) — Mobile First!
         sm:   "480px",   // Large mobile / small tablet
@@ -108,9 +100,7 @@ const config: Config = {
         "2xl": "1536px", // Large desktop
       },
 
-      // ======================================================
       // Max widths — consistent containers
-      // ======================================================
       maxWidth: {
         feed:    "680px",  // Feed column max width
         sidebar: "300px",  // Right sidebar max width
@@ -118,9 +108,7 @@ const config: Config = {
         prose:   "65ch",   // Readable prose width
       },
 
-      // ======================================================
       // Ring
-      // ======================================================
       ringColor: {
         DEFAULT: "var(--ring)",
       },
@@ -128,9 +116,7 @@ const config: Config = {
         DEFAULT: "var(--ring-offset)",
       },
 
-      // ======================================================
       // Border radius — consistent
-      // ======================================================
       borderRadius: {
         sm:  "4px",
         md:  "8px",
@@ -139,9 +125,7 @@ const config: Config = {
         "2xl": "20px",
       },
 
-      // ======================================================
       // Animation — ref globals.css keyframes
-      // ======================================================
       animation: {
         "fade-in":    "fadeIn 0.2s ease",
         "slide-up":   "slideUp 0.25s ease",

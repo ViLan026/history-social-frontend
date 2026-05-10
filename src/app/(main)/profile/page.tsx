@@ -16,13 +16,14 @@ export default function ProfilePage() {
     return (
         <div className="w-full max-w-2xl mx-auto px-4 py-8">
             {/* Profile Header */}
-            <div className="rounded-xl p-6 mb-6 bg-surface border border-border">
+            <div className="rounded-xl p-6 mb-6 bg-background border border-border">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
                         <Avatar
-                            src={currentUser?.profile?.avatarUrl}
-                            alt={currentUser?.profile?.displayName ?? ""}
-                            className="w-24 h-24"
+                            avatarUrl={currentUser?.profile?.avatarUrl}
+                            displayName={
+                                currentUser?.profile?.displayName ?? ""
+                            }
                         />
                         <div>
                             <h1 className="text-2xl font-bold text-primary">
@@ -49,18 +50,18 @@ export default function ProfilePage() {
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="p-4 rounded-xl text-center bg-surface border border-border">
+                <div className="p-4 rounded-xl text-center bg-background border border-border">
                     <p className="text-2xl font-bold text-primary">1.2K</p>
                     <p className="text-sm text-foreground-muted">Followers</p>
                 </div>
-                <div className="p-4 rounded-xl text-center bg-surface border border-border">
+                <div className="p-4 rounded-xl text-center bg-background border border-border">
                     <p className="text-2xl font-bold text-primary">850</p>
                     <p className="text-sm text-foreground-muted">Following</p>
                 </div>
             </div>
 
             {/* Settings Section */}
-            <div className="rounded-xl p-6 space-y-4 bg-surface border border-border">
+            <div className="rounded-xl p-6 space-y-4 bg-background border border-border">
                 <h2 className="text-lg font-bold text-primary mb-4">
                     Settings
                 </h2>

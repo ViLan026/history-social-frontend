@@ -66,21 +66,21 @@ export default function MainLayout({
                     <div className="grid md:mx-10 md:grid-cols-[100px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_minmax(0,700px)_320px] min-h-screen">
                         {/* LEFT SIDEBAR - Full (lg+) */}
                         <aside
-                            className="hidden lg:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-surface"
+                            className="hidden lg:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-background"
                             aria-label="Navigation"
                         >
                             <div className="p-4 pb-20">{leftSidebar}</div>
                         </aside>
 
                         <aside
-                            className="hidden md:block lg:hidden sticky top-14 h-screen bg-surface"
+                            className="hidden md:block lg:hidden sticky top-14 h-screen bg-background "
                             aria-label="Compact Navigation"
                         >
                             <div>{leftSidebar}</div>
                         </aside>
                         {/* MAIN FEED */}
                         <main
-                            className="w-full min-h-screen flex flex-col bg-background top-10"
+                            className="w-full min-h-screen flex flex-col bg-background"
                             aria-label="Main feed"
                         >
                             {/* Mobile Menu Bar - Fixed dưới Header */}
@@ -88,7 +88,7 @@ export default function MainLayout({
                                 className={`
                                     md:hidden fixed top-14 left-0 right-0 z-40
                                     flex items-center justify-between
-                                    bg-surface/95 backdrop-blur-sm
+                                    bg-background/95 backdrop-blur-sm
                                     px-1 md:px-1 h-12
                                     transition-transform duration-300 ease-in-out
                                     ${showMobileMenu && !isDetailOpen ? "translate-y-0" : "-translate-y-full"}
@@ -108,7 +108,7 @@ export default function MainLayout({
                         {/* RIGHT SIDEBAR */}
                         {rightSidebar && (
                             <aside
-                                className="hidden xl:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-surface"
+                                className="hidden xl:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-background"
                                 aria-label="Suggestions"
                             >
                                 <div className="p-4 pb-20">{rightSidebar}</div>

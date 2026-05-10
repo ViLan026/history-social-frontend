@@ -1,4 +1,5 @@
 // components/post/PostHeader.tsx
+import { Avatar } from "@/components/ui/Avatar";
 import { FeedPostResponse } from "@/features/post/post.types";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
@@ -21,21 +22,7 @@ export default function PostHeader({ post }: PostHeaderProps) {
         <div>
             {/* Author Info */}
             <div className="flex items-center gap-3">
-                <div className="relative w-9 h-9 rounded-full overflow-hidden bg-surface flex-shrink-0 ring-1 ring-border">
-                    {avatarUrl ? (
-                        <Image
-                            src={avatarUrl}
-                            alt={authorName}
-                            fill
-                            sizes="36px"
-                            className="object-cover"
-                        />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-primary-active text-primary-fg font-bold text-base">
-                            {authorName.charAt(0).toUpperCase() || "N"}
-                        </div>
-                    )}
-                </div>
+                <Avatar avatarUrl={avatarUrl} displayName={authorName} />
 
                 <div>
                     <span className="font-semibold leading-none pr-2">

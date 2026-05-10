@@ -1,40 +1,27 @@
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 
 interface AvatarProps {
-  src?: string | null;
-  alt?: string;
-  size?: number; // px
-  className?: string;
+    avatarUrl?: string | null;
+    displayName?: string;
 }
 
-export function Avatar({
-  src,
-  alt = "avatar",
-  size = 40,
-  className,
-}: AvatarProps) {
-  return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-full bg-surface border border-border",
-        className
-      )}
-      style={{ width: size, height: size }}
-    >
-      {src ? (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          className="object-cover"
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center text-sm text-foreground-muted">
-          {alt?.charAt(0).toUpperCase()}
+export function Avatar({ avatarUrl, displayName = "avatar" }: AvatarProps) {
+    return (
+        <div className="relative w-9 h-9 rounded-full overflow-hidden bg-surface flex-shrink-0 ring-1 ring-border">
+            {avatarUrl ? (
+                <Image
+                    src={avatarUrl}
+                    alt={displayName}
+                    fill
+                    sizes="36px"
+                    className="object-cover"
+                />
+            ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-primary-active text-primary-fg font-bold text-base">
+                    {displayName.charAt(0).toUpperCase() || "N"}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
 export default Avatar;

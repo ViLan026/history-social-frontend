@@ -22,7 +22,7 @@ function IconButton({ onClick, label, icon, badge }: IconButtonProps) {
             onClick={onClick}
             aria-label={label}
             title={label}
-            className="relative flex items-center justify-center w-9 h-9 rounded-full text-foreground-muted hover:text-foreground hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors duration-150  "
+            className="relative flex items-center justify-center w-9 h-9 rounded-full text-white hover:text-foreground hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors duration-150  "
         >
             {icon}
 
@@ -53,8 +53,13 @@ export default function Header() {
 
     return (
         <header
-            className=" fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 md:px-6 lg:px-8 h-14 bg-surface/90 backdrop-blur-md  "
+            className=" fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 py-2 md:px-6 lg:px-8 h-14  "
             role="banner"
+            style={{
+                backgroundColor: "var(--primary)",
+                // color: "var(--primary-fg)"
+                color: "white"
+            }}
         >
             <BrandLogo />
 
@@ -73,7 +78,7 @@ export default function Header() {
                             height="17"
                             viewBox="0 0 24 24"
                             fill="none"
-                            stroke="currentColor"
+                            stroke="white"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
