@@ -1,26 +1,29 @@
-// Không có "use client"
-import { notFound } from "next/navigation";
+// app/(main)/in-this-day/page.tsx
+import MainLayout from "@/components/layout/MainLayout";
+import Navigation from "@/components/layout/Navigation";
 
-export default async function InThisDayPage() {
-  // Dùng Next.js fetch, tự động cache 24h
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/history/today`, {
-    next: { revalidate: 86400 } // 86400 giây = 24 giờ
-  });
+import OnThisDayHeader from "@/features/onthisday/components/OnThisDayHeader";
+import OnThisDayList from "@/features/onthisday/components/OnThisDayList";
+import SuggestedUsers from "@/features/user/components/SuggestedUsers";
 
-  if (!res.ok) return notFound();
-  const events = await res.json();
-
+export default function InThisDayPage() {
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Ngày Này Năm Xưa</h1>
-      <div className="space-y-4">
-        {events.map((event: any) => (
-          <article key={event.id} className="p-4 bg-white shadow rounded-lg">
-            <h2 className="text-xl font-semibold text-blue-800">Năm {event.year}</h2>
-            <p className="mt-2 text-gray-700">{event.description}</p>
-          </article>
-        ))}
+    <MainLayout
+      leftSidebar={<Navigation />}
+      rightSidebar={
+              <div className="h-full relative space-y-6">
+                <SuggestedUsers />
+      
+                <div className="sticky top-20 pb-8">
+                  {/* <TodayInHistory /> */}
+                </div>
+              </div>
+            }
+    >
+      <div className="max-w-feed mx-auto px-4 py-2">
+        <OnThisDayHeader />
+        <OnThisDayList />
       </div>
-    </main>
+    </MainLayout>
   );
 }

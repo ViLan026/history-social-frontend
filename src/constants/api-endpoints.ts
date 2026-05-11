@@ -53,7 +53,11 @@ export const API_ENDPOINTS = {
       GET_DETAILS: (postId: string) => `/reactions/posts/${postId}`,
     },
 
-
+    ON_THIS_DAY: {
+        BASE: '/on-this-day',
+        TODAY: '/on-this-day/today',
+        BY_DATE: '/on-this-day/by-date',
+      },
 
 
 };
