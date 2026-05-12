@@ -62,7 +62,7 @@ export const CommentInput = memo<CommentInputProps>(
         <div
           className="
             flex-1 overflow-hidden rounded-xl
-            bg-surface border border-border
+            bg-surface border border-slate-200
             focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-ring/30
             transition-all duration-150
           "

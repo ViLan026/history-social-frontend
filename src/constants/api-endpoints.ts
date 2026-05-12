@@ -54,9 +54,9 @@ export const API_ENDPOINTS = {
     },
 
     ON_THIS_DAY: {
-        BASE: '/on-this-day',
-        TODAY: '/on-this-day/today',
-        BY_DATE: '/on-this-day/by-date',
+        // BASE: '/onthisday',
+        TODAY: '/onthisday/today',
+        BY_DATE: '/onthisday/by-date',
       },
 
 

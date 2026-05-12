@@ -54,7 +54,7 @@ export default function PostList() {
     }
 
     const posts = data?.pages.flatMap((page) => page.content) ?? [];
-    console.log("Hiển thị dữ liệu của posts", posts);
+    // console.log("Hiển thị dữ liệu của posts", posts);
 
     return (
         <div className="space-y-4 md:space-y-5 bg-background">

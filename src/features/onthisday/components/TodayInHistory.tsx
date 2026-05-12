@@ -26,7 +26,7 @@ export default function TodayInHistory() {
   }, []);
 
   return (
-    <div className="neu-raised bg-surface rounded-2xl p-5 border border-border">
+    <div className=" bg-surface rounded-2xl p-5 shadow-sm bg-surface">
       <div className="flex items-center gap-3 mb-5">
         <div className="w-9 h-9 rounded-2xl bg-primary/10 flex items-center justify-center text-xl">
           📜

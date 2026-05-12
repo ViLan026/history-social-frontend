@@ -42,7 +42,7 @@ export default function PostCard({ post, isInModal = false }: PostCardProps) {
                 <PostContent post={post} isInModal={isInModal} />
                 <PostTags tags={post.tags} />
 
-                {!isInModal && <PostFooter post={post} />}
+                <PostFooter post={post} isInModal={isInModal} />
             </div>
         </article>
     );

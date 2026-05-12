@@ -13,7 +13,7 @@ interface ProfileFormData {
 }
 
 interface Props {
-    currentUser: UserResponse; // Nên thay bằng type từ user.types.ts sau
+    currentUser: UserResponse; 
     onClose: () => void;
     isSubmitting: boolean;
     setIsSubmitting: (value: boolean) => void;
@@ -79,7 +79,6 @@ export default function ProfileTab({
         }));
     };
 
-    // ==================== RENDER ====================
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <AvatarUpload

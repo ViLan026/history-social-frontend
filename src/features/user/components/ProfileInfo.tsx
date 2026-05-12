@@ -30,8 +30,8 @@ export default function ProfileInfo() {
   const displayName = profile.displayName || profile.username;
 
   return (
-    <div className="bg-surface border-b border-border">
-      <div className="max-w-feed mx-auto px-4 py-6">
+    <div className="bg-surface">
+      <div className=" mx-auto px-4 py-6">
         {/* Avatar & Name Section */}
         <div className="flex items-start gap-6 mb-6">
           {/* Avatar */}

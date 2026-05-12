@@ -12,7 +12,7 @@ export const onThisDayService = {
     year?: number;
   }): Promise<OnThisDayResponse> => {
     const response = await axiosInstance.get<ApiResponse<OnThisDayResponse>>(
-      API_ENDPOINTS.ON_THIS_DAY.BASE,
+      API_ENDPOINTS.ON_THIS_DAY.TODAY,
       { params }
     );
     return response.data.data;

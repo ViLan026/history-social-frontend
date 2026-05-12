@@ -6,13 +6,14 @@ import { useUIStore } from "@/features/ui/ui.store";
 
 interface PostFooterProps {
     post: FeedPostResponse;
+    isInModal?: boolean;
 }
-export default function PostFooter({ post}: PostFooterProps) {
+export default function PostFooter({ post, isInModal = false}: PostFooterProps) {
     const openPostDetail = useUIStore((state) => state.openPostDetail);
 
     return (
         <>
-            <div className="flex items-center justify-between border-t border-border pt-4 text-sm">
+            <div className="flex items-center justify-between border-t border-slate-200 pt-4 text-sm">
                 <div className="flex items-center gap-3 md:gap-5 text-foreground-muted">
                     <button
                         type="button"
@@ -22,7 +23,7 @@ export default function PostFooter({ post}: PostFooterProps) {
                         <span>48</span>
                     </button>
 
-                    <button
+                    {!isInModal && ( <button
                         type="button"
                         onClick={() => openPostDetail(post)}
                         className={[
@@ -34,7 +35,7 @@ export default function PostFooter({ post}: PostFooterProps) {
                     >
                         <span aria-hidden="true">💬</span>
                         <span>12</span>
-                    </button>
+                    </button>)}
 
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5">
                         <span aria-hidden="true">👁</span>
@@ -44,13 +45,13 @@ export default function PostFooter({ post}: PostFooterProps) {
                     </div>
                 </div>
 
-                <button
+                {!isInModal && (<button
                     type="button"
                     className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-foreground-muted transition-colors hover:bg-surface hover:text-amber-500"
                 >
                     <span aria-hidden="true">📌</span>
                     <span>Lưu</span>
-                </button>
+                </button>)}
             </div>
 
         </>

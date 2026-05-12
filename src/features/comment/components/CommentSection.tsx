@@ -19,7 +19,7 @@ interface CommentSectionProps {
 const CommentSkeleton: React.FC = () => (
     <div className="space-y-4 animate-pulse" aria-label="Đang tải bình luận" role="status">
         {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="rounded-2xl border border-border bg-card p-4">
+            <div key={i} className="rounded-2xl border border-slate-200 bg-card p-4">
                 <div className="flex items-start gap-3">
                     <div className="h-9 w-9 shrink-0 rounded-full bg-surface" />
                     <div className="flex-1 space-y-2">
@@ -147,7 +147,7 @@ export const CommentSection = memo<CommentSectionProps>(
                     </div>
                 </div>
 
-                <div className="z-10 shrink-0 border-t border-border bg-background px-4 pt-4 pb-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:p-4 lg:pt-4 lg:pb-0">
+                <div className="z-10 shrink-0 border-t border-slate-200 bg-background px-4 pt-4 pb-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:p-4 lg:pt-4 lg:pb-0">
                     <CommentInput
                         onSubmit={handleSubmit}
                         isSubmitting={createMutation.isPending}

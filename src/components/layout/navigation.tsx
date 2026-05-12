@@ -65,7 +65,7 @@ function BookmarkIcon() {
 const NAV_ITEMS = [
   { label: "Trang chủ", href: "/", icon: <HomeIcon /> },
   { label: "Xu hướng", href: "/trending", icon: <TrendingIcon /> },
-  { label: "Ngày này năm xưa", href: "/timeline", icon: <HistoryIcon /> },
+  { label: "Ngày này năm xưa", href: "/in-this-day", icon: <HistoryIcon /> },
   { label: "Sách", href: "/book-reviews", icon: <BookIcon /> },
   { label: "Đang theo dõi", href: "/following", icon: <FollowingIcon /> },
   { label: "Đã lưu", href: "/bookmarks", icon: <BookmarkIcon /> },

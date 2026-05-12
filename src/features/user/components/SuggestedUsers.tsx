@@ -46,7 +46,7 @@ export default function SuggestedUsers() {
     <section
       className="rounded-xl  p-4  shadow-sm bg-surface"
       aria-labelledby="suggested-users-heading"
-    //   style ={{
+    //   style ={{x
     //   backgroundColor: "background"
     // }}
     >

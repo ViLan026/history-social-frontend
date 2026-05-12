@@ -68,7 +68,7 @@ export default function PostDetailModal() {
                     "relative flex w-full flex-col overflow-hidden bg-background shadow-2xl animate-slide-up",
                     "h-[calc(100dvh-3.5rem)] rounded-none",
                     "md:h-auto md:max-h-[85dvh] md:max-w-2xl md:rounded-2xl",
-                    "lg:h-[85dvh] lg:max-w-6xl xl:max-w-7xl lg:flex-row lg:rounded-3xl"
+                    "lg:h-auto not-first:lg:h-[85dvh] lg:max-w-6xl xl:max-w-7xl lg:flex-row lg:rounded-3xl"
                 ].join(" ")}
                 style={{
                     backgroundColor: "background" // backdropFilter: "blur(6px)"

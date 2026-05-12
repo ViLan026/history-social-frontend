@@ -49,8 +49,8 @@ export default function ProfileTabs() {
   };
 
   return (
-    <div className="border-b border-border bg-background sticky top-[60px] z-10">
-      <div className="max-w-feed mx-auto">
+    <div className=" bg-background sticky top-[60px] z-10">
+      <div className="max-w-feed mx-auto border-b border-slate-200">
         <nav
           className="flex items-center"
           role="tablist"
@@ -76,7 +76,7 @@ export default function ProfileTabs() {
                 )}
               >
                 {/* Tab Label */}
-                <span className="flex items-center justify-center gap-2">
+                <span className="flex items-center justify-center gap-2 ">
                   {tab.label}
                   {tab.count !== undefined && (
                     <span
@@ -106,13 +106,4 @@ export default function ProfileTabs() {
       </div>
     </div>
   );
-}
-
-/**
- * Hook để lấy current active tab
- * Sử dụng trong page component để render nội dung tương ứng
- */
-export function useProfileTab(): ProfileTab {
-  const searchParams = useSearchParams();
-  return (searchParams.get("tab") as ProfileTab) || "posts";
 }
