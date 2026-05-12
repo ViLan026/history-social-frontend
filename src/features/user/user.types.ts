@@ -1,7 +1,4 @@
 // src/types/user.ts
-import { PageResponse } from '../../types/api';
-
-
 export type AccountStatus = 'ACTIVE' | 'INACTIVE' | string;
 
 export interface RoleCreationRequest {
@@ -68,7 +65,7 @@ export interface UserSummaryResponse {
   displayName: string | null;
   avatarUrl: string | null;
   status: string;
-  roles: any[]; // Map theo Set<Role> của backend
+  roles: []; // Map theo Set<Role> của backend
 }
 
 // Params cho GET /users

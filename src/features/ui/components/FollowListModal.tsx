@@ -1,107 +1,146 @@
-'use client';
+"use client";
 
-import { useQuery } from '@tanstack/react-query';
-import { userService } from '../../user/user.service';
-import Avatar from '@/components/ui/Avatar';
-import Button from '@/components/ui/Button';
+import { useEffect } from "react";
 
-interface FollowListModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  userId: string;
-  type: 'followers' | 'following';
+import { useUsers } from "@/features/user/useUser";
+import { useUserStore } from "@/features/user/user.store";
+import { useUIStore } from "@/features/ui/ui.store";
+
+import UserRow from "@/features/user/components/UserRow";
+
+function UserSkeleton() {
+    return (
+        <div className="flex animate-pulse items-center gap-3">
+            {/* Avatar */}
+            <div className="h-9 w-9 shrink-0 rounded-full bg-surface" />
+
+            {/* User Info */}
+            <div className="flex-1 space-y-2">
+                <div className="h-3.5 w-2/3 rounded bg-surface" />
+
+                <div className="h-3 w-1/2 rounded bg-surface" />
+            </div>
+
+            {/* Follow Button */}
+            <div className="h-7 w-16 shrink-0 rounded-lg bg-surface" />
+        </div>
+    );
 }
 
-const LoadingCard = ({ count = 3 }: { count?: number }) => (
-  <>
-    {Array.from({ length: count }).map((_, i) => (
-      <div
-        key={i}
-        className="flex items-center gap-3 p-4 rounded-lg animate-pulse"
-        style={{ backgroundColor: '#F2F1ED' }}
-      >
-        <div className="w-12 h-12 rounded-full bg-gray-300" />
-        <div className="flex-1">
-          <div className="h-4 bg-gray-300 rounded w-24 mb-2" />
-          <div className="h-3 bg-gray-300 rounded w-16" />
-        </div>
-      </div>
-    ))}
-  </>
-);
+export const FollowListModal = () => {
+    const { followListModal, closeFollowList } = useUIStore();
 
-export const FollowListModal = ({
-  isOpen,
-  onClose,
-  userId,
-  type,
-}: FollowListModalProps) => {
-  const { data: users = [], isLoading } = useQuery({
-    queryKey: [`follow-${type}`, userId],
-    queryFn: () => userService.getAllUsers({ keyword: userId, page: 1, size: 50 }),
-    enabled: isOpen && !!userId,
-  });
+    const isOpen = followListModal.isOpen;
 
-  if (!isOpen) return null;
+    const modalData = followListModal.data;
 
-  const title = type === 'followers' ? 'Followers' : 'Following';
+    const { currentUser } = useUserStore();
 
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div
-        className="bg-white rounded-xl w-full max-w-md p-6 shadow-lg max-h-96 flex flex-col"
-        style={{ backgroundColor: '#F2F1ED' }}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold" style={{ color: '#7F0716' }}>
-            {title}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 font-bold text-2xl"
-          >
-            ×
-          </button>
-        </div>
+    const { data, isLoading } = useUsers({
+        page: 0,
+        size: 5,
+        keyword: ""
+    });
 
-        <div className="overflow-y-auto flex-1 space-y-3">
-          {isLoading ? (
-            <LoadingCard count={5} />
-          ) : users.content && users.content.length > 0 ? (
-            users.content.map((user: any) => (
-              <div
-                key={user.id}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 transition"
-              >
-                <div className="flex items-center gap-3">
-                  <Avatar
-                    src={user.avatarUrl}
-                    alt={user.displayName}
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div>
-                    <p className="font-medium text-sm">{user.displayName}</p>
-                    <p className="text-xs text-gray-500">@{user.email}</p>
-                  </div>
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+
+    useEffect(() => {
+        const handleEsc = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && isOpen) {
+                closeFollowList();
+            }
+        };
+
+        window.addEventListener("keydown", handleEsc);
+
+        return () => {
+            window.removeEventListener("keydown", handleEsc);
+        };
+    }, [isOpen, closeFollowList]);
+
+    if (!isOpen || !modalData) {
+        return null;
+    }
+
+    const { type } = modalData;
+
+    const title = type === "followers" ? "Followers" : "Following";
+
+    // Remove current user
+    const suggestedUsers =
+        data?.content?.filter((user) => user.id !== currentUser?.id) || [];
+
+    const handleFollow = (userId: string) => {
+        console.log("Follow:", userId);
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+            {/* Overlay */}
+            <button
+                type="button"
+                aria-label="Close modal"
+                onClick={closeFollowList}
+                className="absolute inset-0 cursor-default"
+            />
+
+            {/* Modal */}
+            <div className="relative flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl animate-fade-in">
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                    <h2 className="text-xl font-bold text-foreground">
+                        {title}
+                    </h2>
+
+                    <button
+                        type="button"
+                        onClick={closeFollowList}
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground-muted transition-colors hover:bg-surface hover:text-foreground"
+                    >
+                        ×
+                    </button>
                 </div>
-                <Button
-                  className="text-sm px-3 py-1 rounded-lg"
-                  style={{
-                    backgroundColor: '#7F0716',
-                    color: 'white',
-                  }}
-                >
-                  {type === 'followers' ? 'Follow Back' : 'Following'}
-                </Button>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 py-8">
-              No {title.toLowerCase()} yet
-            </p>
-          )}
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto p-5">
+                    <div className="space-y-4">
+                        {isLoading ? (
+                            Array.from({ length: 5 }).map((_, index) => (
+                                <UserSkeleton key={index} />
+                            ))
+                        ) : suggestedUsers.length > 0 ? (
+                            suggestedUsers.map((user) => (
+                                <UserRow
+                                    key={user.id}
+                                    id={user.id}
+                                    displayName={
+                                        user.displayName || "anonymous"
+                                    }
+                                    email={user.email}
+                                    avatarUrl={user.avatarUrl}
+                                    onFollow={handleFollow}
+                                />
+                            ))
+                        ) : (
+                            <div className="flex items-center justify-center py-10">
+                                <p className="text-sm text-foreground-faint">
+                                    Chưa có dữ liệu
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };

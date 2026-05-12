@@ -1,62 +1,116 @@
 // features/ui/ui.store.ts
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { FeedPostResponse } from '../post/post.types';
+
+import { FeedPostResponse } from '@/features/post/post.types';
+
+interface ModalState<T = null> {
+    isOpen: boolean;
+    data: T | null;
+}
 
 interface UIState {
-    // Post Detail Modal
-    isPostDetailOpen: boolean;
-    selectedPost: FeedPostResponse | null;
-    
-    // Các modal khác...
-    isEditProfileOpen: boolean;
-    isChangePasswordOpen: boolean;
-    isFollowListOpen: boolean;
-    followListUserId: string | null;
-    followListType: 'followers' | 'following' | null;
 
-    // Actions
+    postDetailModal: ModalState<FeedPostResponse>;
+
+    editProfileModal: ModalState;
+
+    followListModal: ModalState<{
+        userId: string;
+        type: 'followers' | 'following';
+    }>;
+
+    // Post Detail
     openPostDetail: (post: FeedPostResponse) => void;
     closePostDetail: () => void;
-    
+
+    // Edit Profile
     openEditProfile: () => void;
     closeEditProfile: () => void;
-    // ... các action khác
+
+    openFollowList: (
+        userId: string,
+        type: 'followers' | 'following'
+    ) => void;
+
+    closeFollowList: () => void;
+
+    // Global
+    closeAllModals: () => void;
 }
+
+const initialModalState = {
+    isOpen: false,
+    data: null,
+};
 
 export const useUIStore = create<UIState>()(
     persist(
         (set) => ({
-            // Post Detail
-            isPostDetailOpen: false,
-            selectedPost: null,
+            postDetailModal: initialModalState,
 
-            // Các modal khác...
-            isEditProfileOpen: false,
-            isChangePasswordOpen: false,
-            isFollowListOpen: false,
-            followListUserId: null,
-            followListType: null,
+            editProfileModal: initialModalState,
+
+            followListModal: initialModalState,
 
             openPostDetail: (post) =>
                 set({
-                    isPostDetailOpen: true,
-                    selectedPost: post
+                    postDetailModal: {
+                        isOpen: true,
+                        data: post,
+                    },
                 }),
 
             closePostDetail: () =>
-            set({
-                isPostDetailOpen: false,
-                selectedPost: null
-            }),
+                set({
+                    postDetailModal: initialModalState,
+                }),
 
-            openEditProfile: () => set({ isEditProfileOpen: true }),
-            closeEditProfile: () => set({ isEditProfileOpen: false }),
-            // ... các action khác
+            openEditProfile: () =>
+                set({
+                    editProfileModal: {
+                        isOpen: true,
+                        data: null,
+                    },
+                }),
+
+            closeEditProfile: () =>
+                set({
+                    editProfileModal: initialModalState,
+                }),
+
+            openFollowList: (userId, type) =>
+                set({
+                    followListModal: {
+                        isOpen: true,
+                        data: {
+                            userId,
+                            type,
+                        },
+                    },
+                }),
+
+            closeFollowList: () =>
+                set({
+                    followListModal: initialModalState,
+                }),
+
+            closeAllModals: () =>
+                set({
+                    postDetailModal: initialModalState,
+                    editProfileModal: initialModalState,
+                    followListModal: initialModalState,
+                }),
         }),
         {
             name: 'ui-storage',
-            partialize: (state) => ({ /* chỉ persist những gì cần */ }),
+
+            /**
+             * Không persist modal state
+             * vì UI state không nên survive refresh
+             */
+            partialize: () => ({}),
         }
     )
 );

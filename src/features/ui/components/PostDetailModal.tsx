@@ -7,8 +7,12 @@ import { CommentSection } from "@/features/comment/components/CommentSection";
 import { useCurrentUser } from "@/features/user/useUser";
 
 export default function PostDetailModal() {
-    const { isPostDetailOpen, selectedPost, closePostDetail } = useUIStore();
+    const { postDetailModal, closePostDetail } = useUIStore();
+    const isPostDetailOpen = postDetailModal.isOpen;
+    const selectedPost = postDetailModal.data;
+
     const { data: currentUser } = useCurrentUser();
+    
     const currentUserId = currentUser?.id;
 
     useEffect(() => {

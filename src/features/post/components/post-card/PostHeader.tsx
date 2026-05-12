@@ -3,7 +3,6 @@ import { Avatar } from "@/components/ui/Avatar";
 import { FeedPostResponse } from "@/features/post/post.types";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
-import Image from "next/image";
 
 interface PostHeaderProps {
     post: FeedPostResponse;

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { useAuthStore } from "@/features/auth/auth.store";
 import { useCurrentUser } from "@/features/user/useUser";
+import Avatar from "@/components/ui/Avatar";
 
 export default function AuthArea() {
     // Lấy dữ liệu trực tiếp từ store
@@ -49,10 +49,8 @@ export default function AuthArea() {
     }
 
     // 2. Trạng thái đã đăng nhập
-    const displayName =
-        currentUser?.profile?.displayName ?? currentUser?.email ?? "User";
+    const displayName = currentUser?.profile?.displayName ?? currentUser?.email ?? "User";
     const avatarUrl = currentUser?.profile?.avatarUrl;
-    const initial = displayName.charAt(0).toUpperCase();
 
     return (
         <div className="relative " ref={dropdownRef}>
@@ -64,19 +62,7 @@ export default function AuthArea() {
                 title={displayName}
                 className="relative flex items-center justify-center w-9 h-9 rounded-full shrink-0 overflow-hidden border border-white hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-150"
             >
-                {avatarUrl ? (
-                    <Image
-                        src={avatarUrl}
-                        alt={displayName}
-                        fill
-                        sizes="36px"
-                        className="object-cover"
-                    />
-                ) : (
-                    <span className="w-full h-full flex items-center justify-center bg-primary-subtle text-primary text-sm font-heading font-semibold select-none">
-                        {initial}
-                    </span>
-                )}
+                <Avatar avatarUrl={avatarUrl} displayName={displayName} />
             </button>
 
             {/* Menu Dropdown */}

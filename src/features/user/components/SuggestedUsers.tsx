@@ -1,21 +1,10 @@
 // components/sidebar/SuggestedUsers.tsx
-
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useUsers } from "@/features/user/useUser";
 import { useUserStore } from "@/features/user/user.store";
-
-
-interface UserRowProps {
-  id: string;
-  displayName?: string | null;
-  email: string;
-  avatarUrl?: string | null;
-  onFollow: (id: string) => void;
-}
-
+import UserRow from "./UserRow";
 
 function UserSkeleton() {
   return (
@@ -33,94 +22,6 @@ function UserSkeleton() {
   );
 }
 
-function UserRow({
-  id,
-  displayName,
-  email,
-  avatarUrl,
-  onFollow,
-}: UserRowProps) {
-  const name = displayName || email.split("@")[0];
-  const initial = name[0].toUpperCase();
-
-  return (
-    <div className="flex items-center gap-3 group ">
-      {/* Avatar + name */}
-      <Link
-        href={`/profile/${id}`}
-        className="
-          flex items-center gap-3 flex-1 min-w-0
-          rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-        "
-      >
-        {/* Avatar */}
-        <div
-          className="
-            relative w-9 h-9 rounded-full shrink-0 overflow-hidden
-            ring-1 ring-border
-            group-hover:ring-primary/40
-            transition-all duration-150
-          "
-        >
-          {avatarUrl ? (
-            <Image
-              src={avatarUrl}
-              alt={name}
-              fill
-              sizes="36px"
-              className="object-cover"
-            />
-          ) : (
-            <span
-              className="
-                w-full h-full flex items-center justify-center
-                bg-primary-subtle text-primary
-                text-sm font-heading font-semibold
-                select-none
-              "
-            >
-              {initial}
-            </span>
-          )}
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <p
-            className="
-              text-sm font-medium leading-tight text-foreground
-              group-hover:text-primary
-              truncate transition-colors duration-150
-            "
-          >
-            {name}
-          </p>
-          <p className="text-xs text-foreground-faint truncate mt-0.5">
-            {email}
-          </p>
-        </div>
-      </Link>
-
-      {/* Follow button */}
-      <button
-        onClick={() => onFollow(id)}
-        aria-label={`Theo dõi ${name}`}
-        className="
-          shrink-0 px-3 py-1.5 rounded-lg
-          text-xs font-medium
-          text-primary border border-primary/40
-          hover:bg-primary-subtle hover:border-primary/70
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-          transition-all duration-150
-        "
-      >
-        Theo dõi
-      </button>
-    </div>
-  );
-}
-
-// ─── SuggestedUsers ───────────────────────────────────────────────────────────
 
 export default function SuggestedUsers() {
   // Lấy gợi ý người dùng (không lấy current user)
@@ -174,7 +75,7 @@ export default function SuggestedUsers() {
             <UserRow
               key={user.id}
               id={user.id}
-              displayName={user.displayName}
+              displayName={user.displayName || "anonymous"}
               email={user.email}
               avatarUrl={user.avatarUrl}
               onFollow={handleFollow}

@@ -1,46 +1,26 @@
-// src/features/ui/components/GlobalModals.tsx
 "use client";
 
 import { useUIStore } from "../ui.store";
+
 import PostDetailModal from "./PostDetailModal";
-import { EditProfileModal } from "./EditProfileModal";
-import { ChangePasswordModal } from "./ChangePasswordModal";
+import EditProfileModal from "./EditProfileModal";
 import { FollowListModal } from "./FollowListModal";
 
 export default function GlobalModals() {
     const {
-        isPostDetailOpen,
-        selectedPost,
-        isEditProfileOpen,
-        isChangePasswordOpen,
-        isFollowListOpen,
-        followListUserId,
-        followListType,
+        postDetailModal,
+        editProfileModal,
+        followListModal,
     } = useUIStore();
 
     return (
         <>
-            {/* Post Detail Modal */}
-            {isPostDetailOpen && selectedPost && <PostDetailModal />}
+            {postDetailModal.isOpen && <PostDetailModal />}
 
-            {/* Edit Profile Modal */}
-            {isEditProfileOpen && <EditProfileModal isOpen={false} onClose={function (): void {
-                throw new Error("Function not implemented.");
-            } } />}
+            {editProfileModal.isOpen && <EditProfileModal />}
 
-            {/* Change Password Modal */}
-            {isChangePasswordOpen && <ChangePasswordModal isOpen={false} onClose={function (): void {
-                throw new Error("Function not implemented.");
-            } } />}
+            {followListModal.isOpen && <FollowListModal />}
 
-            {/* Follow List Modal */}
-            {isFollowListOpen && followListUserId && (
-                <FollowListModal
-                    userId={followListUserId}
-                    type={followListType || "followers"} isOpen={false} onClose={function (): void {
-                        throw new Error("Function not implemented.");
-                    } }                />
-            )}
         </>
     );
 }
