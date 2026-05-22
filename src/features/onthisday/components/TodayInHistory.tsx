@@ -1,62 +1,65 @@
-// src/features/onthisday/components/TodayInHistory.tsx
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import OnThisDayCard from './OnThisDayCard';
-import { OnThisDayEvent } from '../onthisday.types';
-import { onThisDayService } from '../onthisday.service';
+import Link from "next/link";
+import OnThisDayCard from "./OnThisDayCard";
+import { useTodayEvents } from "../useOnThisDay";
 
 export default function TodayInHistory() {
-  const [events, setEvents] = useState<OnThisDayEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: events = [], isLoading } = useTodayEvents();
 
-  useEffect(() => {
-    const fetchTodayEvents = async () => {
-      try {
-        const data = await onThisDayService.getAllEvents();
-        setEvents(data.events);
-      } catch (error) {
-        console.error('Failed to fetch today in history:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTodayEvents();
-  }, []);
+  // Lấy tối đa 3 sự kiện để hiển thị ở khung rút gọn
+  const displayedEvents = events.slice(0, 3);
 
   return (
-    <div className=" bg-surface rounded-2xl p-5 shadow-sm bg-surface">
+    <section className="bg-surface rounded-2xl p-5 shadow-sm">
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-9 h-9 rounded-2xl bg-primary/10 flex items-center justify-center text-xl">
-          📜
-        </div>
         <div>
-          <h3 className="font-semibold text-lg text-foreground">Ngày này năm xưa</h3>
+          <h3 className="font-semibold text-lg text-foreground">
+            Ngày này năm xưa
+          </h3>
           <p className="text-sm text-foreground-muted">Historical moments</p>
         </div>
       </div>
 
       <div className="space-y-4">
-        {loading ? (
-          Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-24 bg-muted/50 animate-pulse rounded-xl" />
+        {isLoading ? (
+          Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="h-24 bg-muted/50 animate-pulse rounded-xl"
+            />
           ))
-        ) : events.length > 0 ? (
-          events.map((event) => (
-            <OnThisDayCard key={event.id} event={event} compact />
-          ))
+        ) : displayedEvents.length > 0 ? (
+          <>
+            <div className="space-y-4">
+              {displayedEvents.map((event) => (
+                <OnThisDayCard key={event.id} event={event} compact />
+              ))}
+            </div>
+
+            {events.length > 3 && (
+              <Link
+                href="/in-this-day"
+                className="mt-2 block text-center text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-2"
+              >
+                Xem tất cả sự kiện →
+              </Link>
+            )}
+            {events.length <= 3 && (
+              <Link
+                href="/in-this-day"
+                className="mt-2 block text-center text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-2"
+              >
+                Xem chi tiết sự kiện 
+              </Link>
+            )}
+          </>
         ) : (
-          <p className="text-sm text-foreground-muted py-4">Không có dữ liệu hôm nay.</p>
+          <p className="text-sm text-foreground-muted py-4">
+            Không có dữ liệu hôm nay.
+          </p>
         )}
       </div>
-
-      <a 
-        href="/in-this-day" 
-        className="mt-5 block text-center text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-      >
-        Xem tất cả sự kiện →
-      </a>
-    </div>
+    </section>
   );
 }

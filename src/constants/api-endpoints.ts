@@ -59,5 +59,14 @@ export const API_ENDPOINTS = {
         BY_DATE: '/onthisday/by-date',
       },
 
+    FOLLOW: {
+      BASE: '/follows',
+      FOLLOW_USER: (userId: string) => `/follows/${userId}`,
+      UNFOLLOW_USER: (userId: string) => `/follows/${userId}`,
+      GET_FOLLOWERS: (userId: string) => `/follows/${userId}/followers`,
+      GET_FOLLOWING: (userId: string) => `/follows/${userId}/following`,
+      GET_SUGGESTIONS: '/follows/suggestions',
+    }
+
 
 };

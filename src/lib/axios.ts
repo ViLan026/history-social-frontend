@@ -1,72 +1,95 @@
 // lib/axios.ts
-import axios from 'axios';
-import { useAuthStore } from '@/features/auth/auth.store'; 
+import axios from "axios";
+import { useAuthStore } from "@/features/auth/auth.store";
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    'Content-Type': 'application/json',
-    'X-Tunnel-Skip-AntiPhishing-Page': 'true',
+    "Content-Type": "application/json",
+    "X-Tunnel-Skip-AntiPhishing-Page": "true",
   },
   withCredentials: true,
 });
 
-// Biến kiểm soát trạng thái refresh
-let isRefreshing = false;
-let failedQueue: any[] = [];
+const refreshClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
+});
 
-const processQueue = (error: any = null) => {
+let isRefreshing = false;
+let failedQueue: {
+  resolve: () => void;
+  reject: (error: unknown) => void;
+}[] = [];
+
+const processQueue = (error: unknown = null) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve();
-    }
+    if (error) prom.reject(error);
+    else prom.resolve();
   });
+
   failedQueue = [];
+};
+
+const redirectToLogin = () => {
+  useAuthStore.getState().logout();
+
+  if (typeof window !== "undefined") {
+    const currentPath = window.location.pathname;
+
+    if (currentPath !== "/login" && currentPath !== "/register") {
+      window.location.href = "/login";
+    }
+  }
 };
 
 axiosInstance.interceptors.response.use(
   (response) => response,
+
   async (error) => {
     const originalRequest = error.config;
-    // Kiểm tra lỗi 401 và đảm bảo không phải là request vào chính API login/refresh để tránh lặp vô tận
-    const isAuthRequest = originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/refresh');
 
-    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
-      // chặn nếu có nhiều api cùng trả về 401, chỉ xử lý refresh một lần
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then(() => axiosInstance(originalRequest))
-          .catch((err) => Promise.reject(err));
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        await axios.post(`${axiosInstance.defaults.baseURL}/auth/refresh`, {}, { withCredentials: true });
-
-        processQueue(null);
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError);
-        
-        // Xóa sạch state trong Zustand
-        useAuthStore.getState().logout();
-
-        //  Chuyển hướng về login
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
-      }
+    if (!originalRequest) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    const status = error.response?.status;
+
+    const isAuthRequest =
+      originalRequest.url?.includes("/auth/login") ||
+      originalRequest.url?.includes("/auth/register") ||
+      originalRequest.url?.includes("/auth/refresh");
+
+    if (status !== 401 || isAuthRequest) {
+      return Promise.reject(error);
+    }
+
+    if (originalRequest._retry) {
+      redirectToLogin();
+      return Promise.reject(error);
+    }
+
+    if (isRefreshing) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+    isRefreshing = true;
+
+    try {
+      await refreshClient.post("/auth/refresh", {});
+
+      processQueue(null);
+
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      processQueue(refreshError);
+
+      redirectToLogin();
+
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
   }
 );

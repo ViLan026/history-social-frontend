@@ -1,5 +1,5 @@
 import Avatar from "@/components/ui/Avatar";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 
 interface UserRowProps {

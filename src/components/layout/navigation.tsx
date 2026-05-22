@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as Tooltip from "@radix-ui/react-tooltip";
 
-// 1. Tách các icon thành hàm riêng theo yêu cầu
 function HomeIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,14 +60,24 @@ function BookmarkIcon() {
   );
 }
 
-// 2. Sử dụng NAV_ITEMS với các hàm gọi Icon
+function UserIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+}
+
+
 const NAV_ITEMS = [
   { label: "Trang chủ", href: "/", icon: <HomeIcon /> },
-  { label: "Xu hướng", href: "/trending", icon: <TrendingIcon /> },
+  // { label: "Xu hướng", href: "/trending", icon: <TrendingIcon /> },
   { label: "Ngày này năm xưa", href: "/in-this-day", icon: <HistoryIcon /> },
-  { label: "Sách", href: "/book-reviews", icon: <BookIcon /> },
-  { label: "Đang theo dõi", href: "/following", icon: <FollowingIcon /> },
+  // { label: "Sách", href: "/book-reviews", icon: <BookIcon /> },
+  { label: "Theo dõi", href: "/follow", icon: <FollowingIcon /> },
   { label: "Đã lưu", href: "/bookmarks", icon: <BookmarkIcon /> },
+  { label: "Hồ sơ cá nhân", href: "/profile", icon: <UserIcon /> },
 ] as const;
 
 interface NavItemProps {
@@ -78,7 +87,6 @@ interface NavItemProps {
   isActive: boolean;
 }
 
-// 3. Component NavItem tích hợp cả Tooltip của CompactSidebar và Label
 function NavItem({ href, icon, label, isActive }: NavItemProps) {
   return (
     <Tooltip.Root>

@@ -2,7 +2,7 @@
 [data-theme="dark"],
 .dark {
   /* SURFACES (nền tối mặc định, nhẹ hơi xanh navy như bản gốc) */
-  --background:       oklch(0.08 0.010 260); /* Đẩy lên navy cực thẫm thay vì đen tuyền 0% */
+  --background:       #14171C; /* Đẩy lên navy cực thẫm thay vì đen tuyền 0% */
   --surface:          oklch(0.14 0.018 255);       
   --surface-raised:   oklch(0.17 0.018 255);    
   --surface-overlay:  oklch(0.20 0.020 255);  
@@ -18,7 +18,7 @@
   --border-focus:     oklch(0.55 0.14 15);    
 
   /* PRIMARY (Đỏ burgundy) */
-  --primary:          oklch(0.38 0.143 15);
+  --primary:          #3E0C17;
   --primary-hover:    oklch(0.46 0.150 15);   
   --primary-active:   oklch(0.34 0.130 15);
   --primary-subtle:   oklch(0.18 0.040 15);

@@ -8,25 +8,22 @@ export interface ErrorMessageProps {
   className?: string;
 }
 
-export function ErrorMessage({
+export default function ErrorMessage({
   message = "Something went wrong",
   className,
 }: ErrorMessageProps) {
-  try {
-    if (!message) return null;
+  // Kiểm tra điều kiện trực tiếp thay vì dùng try/catch
+  if (!message) return null;
 
-    return (
-      <div
-        role="alert"
-        className={cn(
-          "rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700",
-          className
-        )}
-      >
-        {message}
-      </div>
-    );
-  } catch {
-    return null;
-  }
+  return (
+    <div
+      role="alert"
+      className={cn(
+        "rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700",
+        className
+      )}
+    >
+      {message}
+    </div>
+  );
 }

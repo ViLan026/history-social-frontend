@@ -7,6 +7,7 @@ export function proxy(request: NextRequest) {
 
   // nếu là trang chủ thì được vào mà không cần đăng nhập
   if (pathname === "/") {
+    console.log("Accessing home page, allowing without auth");
     return NextResponse.next();
   }
 

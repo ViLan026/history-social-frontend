@@ -8,7 +8,10 @@ interface PostFooterProps {
     post: FeedPostResponse;
     isInModal?: boolean;
 }
-export default function PostFooter({ post, isInModal = false}: PostFooterProps) {
+export default function PostFooter({
+    post,
+    isInModal = false
+}: PostFooterProps) {
     const openPostDetail = useUIStore((state) => state.openPostDetail);
 
     return (
@@ -23,37 +26,53 @@ export default function PostFooter({ post, isInModal = false}: PostFooterProps) 
                         <span>48</span>
                     </button>
 
-                    {!isInModal && ( <button
-                        type="button"
-                        onClick={() => openPostDetail(post)}
-                        className={[
-                            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5",
-                            "bg-surface text-foreground",
-                            "transition-all duration-200",
-                            "hover:bg-primary hover:text-primary-fg"
-                        ].join(" ")}
-                    >
-                        <span aria-hidden="true">💬</span>
-                        <span>12</span>
-                    </button>)}
+                    {!isInModal && (
+                        <button
+                            type="button"
+                            onClick={() => openPostDetail(post)}
+                            className={[
+                                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5",
+                                "bg-surface text-foreground",
+                                "transition-all duration-200",
+                                "hover:bg-primary hover:text-primary-fg"
+                            ].join(" ")}
+                        >
+                            <span aria-hidden="true">💬</span>
+                            <span>12</span>
+                        </button>
+                    )}
 
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5">
+                    {/* <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5">
                         <span aria-hidden="true">👁</span>
                         <span>
                             {post.viewCount?.toLocaleString("vi-VN") || 0}
                         </span>
-                    </div>
+                    </div> */}
                 </div>
 
-                {!isInModal && (<button
-                    type="button"
-                    className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-foreground-muted transition-colors hover:bg-surface hover:text-amber-500"
-                >
-                    <span aria-hidden="true">📌</span>
-                    <span>Lưu</span>
-                </button>)}
-            </div>
+                { (
+                    <button
+                        type="button"
+                        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-foreground-muted transition-colors hover:bg-surface hover:text-amber-500"
+                    >
+                        <span
+                            aria-hidden="true"
+                            className="inline-block text-red-700 transform rotate-45"
+                        >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <path d="M16 12V4c0-1.1-.9-2-2-2H10c-1.1 0-2 .9-2 2v8l-2 2v2h5.2v6l.8 1 1-1v-6H18v-2l-2-2z"></path>
+                            </svg>
+                        </span>
 
+                        <span>Lưu</span>
+                    </button>
+                )}
+            </div>
         </>
     );
 }

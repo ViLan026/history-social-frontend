@@ -2,7 +2,6 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/features/auth/auth.store";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -31,7 +30,7 @@ function LoadingScreen() {
 }
 
 export default function MainLayout({ children }: { children: ReactNode }) {
-    const router = useRouter();
+    // const router = useRouter();
     // const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     const [isHydrated, setIsHydrated] = useState(false);
@@ -49,20 +48,6 @@ export default function MainLayout({ children }: { children: ReactNode }) {
         }
     }, []);
 
-    // Redirect nếu chưa đăng nhập
-    // useEffect(() => {
-    //     if (!isHydrated) return;
-
-    //     if (!isAuthenticated) {
-    //         router.replace("/login");
-    //     } else {
-    //         setIsChecking(false);
-    //     }
-    // }, [isAuthenticated, isHydrated, router]);
-
-    // if (!isHydrated || isChecking) {
-    //     return <LoadingScreen />;
-    // }
 
     return (
         <div className="min-h-dvh flex flex-col">
@@ -73,7 +58,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
                 <GlobalModals /> {/* Mount 1 lần duy nhất */}
             </main>
 
-            <Footer />
+            <Footer />  
         </div>
     );
 }

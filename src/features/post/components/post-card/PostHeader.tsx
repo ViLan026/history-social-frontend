@@ -10,7 +10,7 @@ interface PostHeaderProps {
 
 export default function PostHeader({ post }: PostHeaderProps) {
     const formattedTime = formatDistanceToNow(new Date(post.createdAt), {
-        addSuffix: true,
+        addSuffix: false,
         locale: vi
     });
 
@@ -28,7 +28,7 @@ export default function PostHeader({ post }: PostHeaderProps) {
                         {authorName}
                     </span> 
                     <span className="opacity-80 blur-[0.3px] text-xs text-foreground-faint text-blur-sm">
-                        {formattedTime}
+                        {formattedTime} trước 
                     </span>
                 </div>
             </div> 

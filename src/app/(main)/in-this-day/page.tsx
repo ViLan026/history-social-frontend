@@ -4,26 +4,26 @@ import Navigation from "@/components/layout/Navigation";
 
 import OnThisDayHeader from "@/features/onthisday/components/OnThisDayHeader";
 import OnThisDayList from "@/features/onthisday/components/OnThisDayList";
-import SuggestedUsers from "@/features/user/components/SuggestedUsers";
+import SuggestedUsers from "@/features/follow/components/SuggestedUsers";
 
 export default function InThisDayPage() {
-  return (
-    <MainLayout
-      leftSidebar={<Navigation />}
-      rightSidebar={
-              <div className="h-full relative space-y-6">
-                <SuggestedUsers />
-      
-                <div className="sticky top-20 pb-8">
-                  {/* <TodayInHistory /> */}
+    return (
+        <MainLayout
+            leftSidebar={<Navigation />}
+            rightSidebar={
+                <div className="h-full relative space-y-6">
+                    <SuggestedUsers />
+
+                    <div className="sticky top-20 pb-8">
+                        {/* <TodayInHistory /> */}
+                    </div>
                 </div>
-              </div>
             }
-    >
-      <div className="max-w-feed mx-auto px-4 py-2">
-        <OnThisDayHeader />
-        <OnThisDayList />
-      </div>
-    </MainLayout>
-  );
+        >
+            <div className="max-w-feed mx-auto px-4 py-2">
+                <OnThisDayHeader />
+                <OnThisDayList />
+            </div>
+        </MainLayout>
+    );
 }

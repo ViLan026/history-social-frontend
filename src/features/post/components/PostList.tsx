@@ -1,4 +1,3 @@
-// features/post/components/PostList.tsx
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -53,8 +52,13 @@ export default function PostList() {
         );
     }
 
-    const posts = data?.pages.flatMap((page) => page.content) ?? [];
-    // console.log("Hiển thị dữ liệu của posts", posts);
+    // Gộp tất cả bài viết từ các trang được tải về
+    const rawPosts = data?.pages.flatMap((page) => page.content) ?? [];
+    
+    // 🛠️ FIX LỖI TRÙNG KEY: Sử dụng đối tượng Map để lọc sạch toàn bộ bài viết bị trùng lặp postId
+    const posts = Array.from(
+        new Map(rawPosts.map((post) => [post.postId, post])).values()
+    );
 
     return (
         <div className="space-y-4 md:space-y-5 bg-background">

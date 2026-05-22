@@ -1,14 +1,6 @@
-// src/features/onthisday/onthisday.types.ts
 export interface OnThisDayEvent {
   id: string;
-  date: string;        // ví dụ: "05-11"
-  year: number;
-  title: string;
+  eventDate: string;
   description: string;
+  note?: string | null;
 }
-
-export interface OnThisDayResponse {
-  date: string;
-  events: OnThisDayEvent[];
-  total: number;
-}   

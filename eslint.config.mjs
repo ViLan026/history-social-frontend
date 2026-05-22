@@ -4,6 +4,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
 import boundaries from "eslint-plugin-boundaries";
+import { features } from "process";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -31,6 +32,9 @@ const eslintConfig = defineConfig([
             "src/providers/**/*",
             "src/styles/**/*",
             "src/types/**/*",
+            "src/utils/**/*",
+            "src/proxy.ts",
+            "src/features/auth/auth.store.ts",
           ],
         },
 

@@ -1,36 +1,17 @@
-// src/features/onthisday/components/OnThisDayList.tsx
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import OnThisDayCard from './OnThisDayCard';
-import { OnThisDayEvent } from '../onthisday.types';
-import { onThisDayService } from '../onthisday.service';
-import LoadingCard from '@/components/shared/LoadingCard';
+import OnThisDayCard from "./OnThisDayCard";
+import LoadingCard from "@/components/shared/LoadingCard";
+import { useTodayEvents } from "../useOnThisDay";
 
 export default function OnThisDayList() {
-  const [events, setEvents] = useState<OnThisDayEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: events = [], isLoading } = useTodayEvents();
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const data = await onThisDayService.getAllEvents();
-        setEvents(data.events);
-      } catch (error) {
-        console.error('Failed to fetch on this day events:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="space-y-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <LoadingCard key={i} className="h-36" />
+        {Array.from({ length: 8 }).map((_, index) => (
+          <LoadingCard key={index} className="h-36" />
         ))}
       </div>
     );

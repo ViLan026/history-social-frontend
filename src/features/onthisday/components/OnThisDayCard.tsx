@@ -1,38 +1,60 @@
-// src/features/onthisday/components/OnThisDayCard.tsx
-import { OnThisDayEvent } from '../onthisday.types';
+import { OnThisDayEvent } from "../onthisday.types";
 
 interface OnThisDayCardProps {
   event: OnThisDayEvent;
   compact?: boolean;
 }
 
-export default function OnThisDayCard({ event, compact = false }: OnThisDayCardProps) {
+function formatEventDate(eventDate: string) {
+  const date = new Date(eventDate);
+
+  if (Number.isNaN(date.getTime())) {
+    return eventDate;
+  }
+
+  return date.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+}
+
+export default function OnThisDayCard({
+  event,
+  compact = false,
+}: OnThisDayCardProps) {
   return (
-    <div className={`neu-raised bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/30 ${compact ? 'cursor-pointer' : ''}`}>
-      <div className="flex gap-5">
-        {/* Year */}
-        <div className="text-right shrink-0">
-          <div className="text-3xl font-bold text-primary leading-none">
-            {event.year}
+    <article
+      className={`bg-card border border-border rounded-xl p-4 transition-all duration-300 hover:border-primary/30 ${
+        compact ? "cursor-pointer" : ""
+      }`}
+    >
+      <div className="flex flex-col gap-2">
+        <div className="flex items-baseline gap-1.5 shrink-0">
+          <div className="text-sm font-bold text-foreground-muted leading-none">
+            {formatEventDate(event.eventDate)}
           </div>
-          <div className="text-xs text-foreground-muted mt-1">
-            {event.date}
+
+          <div className="text-[13px] tracking-wider text-foreground-muted">
+            • Sự kiện lịch sử
           </div>
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
-          <h4 className={`font-medium text-foreground leading-snug ${compact ? 'line-clamp-2' : 'line-clamp-3'}`}>
-            {event.title}
+          <h4
+            className={`text-sm md:text-base font-normal leading-relaxed text-foreground-muted whitespace-pre-line ${
+              compact ? "line-clamp-2" : "line-clamp-3"
+            }`}
+          >
+            {event.description}
           </h4>
-          
-          {!compact && (
-            <p className="mt-3 text-sm text-foreground-muted line-clamp-4 leading-relaxed">
-              {event.description}
+
+          {!compact && event.note && (
+            <p className="mt-1.5 text-xs text-foreground-muted line-clamp-4 leading-relaxed">
+              {event.note}
             </p>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }

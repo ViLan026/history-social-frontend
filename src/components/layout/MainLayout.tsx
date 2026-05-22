@@ -51,14 +51,9 @@ export default function MainLayout({
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    useEffect(() => {
-        if (isDetailOpen) {
-            setShowMobileMenu(false);
-        }
     }, [isDetailOpen]);
 
+    const shouldDisplayMobileMenu = showMobileMenu && !isDetailOpen;
     return (
         <>
             <div className="min-h-dvh bg-background">
@@ -91,7 +86,7 @@ export default function MainLayout({
                                     bg-background/95 backdrop-blur-sm
                                     px-1 md:px-1 h-12
                                     transition-transform duration-300 ease-in-out
-                                    ${showMobileMenu && !isDetailOpen ? "translate-y-0" : "-translate-y-full"}
+                                    ${shouldDisplayMobileMenu ? "translate-y-0" : "-translate-y-full"}
                                 `}
                             >
                                 {leftSidebar}
