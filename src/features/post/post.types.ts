@@ -23,31 +23,31 @@ export interface PostSourceRequest {
 }
 
 export interface PostCreationRequest {
-  title: string; // @NotBlank, @Size(max = 500)
-  content: string; // @NotBlank
-  status?: PostStatus; // Mặc định là DRAFT ở backend
-  tagNames?: string[]; // Set<String>
-  sources?: PostSourceRequest[]; // List<PostSourceRequest>
+  title: string; 
+  content: string; 
+  status?: PostStatus; 
+  tagNames?: string[];
+  sources?: PostSourceRequest[]; 
 }
 
 export interface PostUpdateRequest {
-  title?: string; // @Size(max = 500)
+  title?: string;
   content?: string;
   status?: PostStatus;
   tagNames?: string[];
   sources?: PostSourceRequest[];
-  removeMediaPublicIds?: string[]; // publicId của các media cần xóa
+  removeMediaPublicIds?: string[]; 
 }
 
 // Responses (Dữ liệu nhận từ Backend)
 
 export interface TagResponse {
-  id: string; // UUID
+  id: string; 
   name: string;
 }
 
 export interface PostSourceResponse {
-  id: string; // UUID
+  id: string; 
   title: string;
   url?: string;
   author?: string;

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from './auth.service';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/auth.store';
@@ -14,7 +14,6 @@ export const useLogin = () => {
       if (data?.authenticated) {
         setAuth(true); // Cập nhật store
         console.log("Đã setAuth(true), chuẩn bị redirect...");
-        
         
         router.push('/'); // push hoặc replace
         // window.location.href = '/';
@@ -44,19 +43,27 @@ export const useRegister = () => {
 
 export const useLogout = () => {
   const router = useRouter();
-  // Lấy hàm logout từ store ra ĐỂ SỬ DỤNG
+  const queryClient = useQueryClient(); // <-- Khởi tạo queryClient
   const logoutStore = useAuthStore((state) => state.logout); 
 
   return useMutation({
     mutationFn: authService.logout,
     onSuccess: () => {
-      logoutStore(); // Gọi hàm xóa state trong store
-      router.replace('/login');
+      logoutStore(); //  Xóa state trong Zustand Store (clearUser và isAuthenticated = false)
+      
+      queryClient.clear(); // Xóa sạch bộ nhớ đệm React Query để tránh lộ dữ liệu cũ
+      
+      router.replace('/login'); //  Đẩy về trang đăng nhập
       router.refresh();
     },
+    onError: (error) => {
+      console.error("Lỗi khi gọi API đăng xuất:", error);
+      logoutStore();
+      queryClient.clear();
+      router.replace('/login');
+    }
   });
 };
-
 
 export const useRefresh = () => {
   const setAuth = useAuthStore((state) => state.setAuth);

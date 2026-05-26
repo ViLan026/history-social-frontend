@@ -27,7 +27,7 @@ export default function FollowItem({ user, isFollowingByDefault }: FollowItemPro
   };
 
   return (
-    <div className="flex items-center justify-between p-3  hover:bg-surface-raised transition-colors animate-fade-in">
+    <div className="flex items-center justify-between p-3 hover:bg-surface-raised transition-colors animate-fade-in">
       <Link href={`/profile/${user.userId}`} className="flex items-center gap-3 flex-1 min-w-0 group">
         <Avatar avatarUrl={user.avatarUrl} displayName={user.displayName} />
         <div className="flex-1 min-w-0">

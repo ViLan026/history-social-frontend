@@ -1,3 +1,4 @@
+// history-social-frontend\src\features\bookmark\bookmark.service.ts
 import {axiosInstance} from '@/lib/axios';
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';

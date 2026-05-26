@@ -10,10 +10,11 @@ export const FOLLOW_QUERY_KEYS = {
 };
 
 // Hook lấy danh sách gợi ý
-export const useFollowSuggestions = (limit: number) => {
+export const useFollowSuggestions = (limit: number,isAuthenticated: boolean = true) => {
   return useQuery({
     queryKey: FOLLOW_QUERY_KEYS.suggestions(limit),
     queryFn: () => followService.getFollowSuggestions(limit),
+    enabled: isAuthenticated && limit > 0, 
   });
 };
 

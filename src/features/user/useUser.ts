@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userService } from './user.service';
 import { GetUsersParams, UserUpdateRequest, ChangePasswordRequest } from '@/features/user/user.types';
-import { useAuthStore } from '@/features/auth/auth.store';
 import { useUserStore } from './user.store';
 
 export const USER_QUERY_KEYS = {
@@ -30,12 +29,12 @@ export const useUser = (id: string) => {
 };
 
 export const useCurrentUser = () => {
-  const { isAuthenticated } = useAuthStore();
+  // const { isAuthenticated } = useAuthStore();
   const { setCurrentUser, setLoading, clearUser } = useUserStore();
 
   return useQuery({
     queryKey: ['current-user'],
-    enabled: isAuthenticated,
+    // enabled: isAuthenticated,
     retry: 1,
 
     queryFn: async () => {

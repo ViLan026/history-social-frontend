@@ -28,10 +28,11 @@ export const API_ENDPOINTS = {
 
   POSTS: {
     BASE: '/posts',
+    HOME: '/posts/home',
     GET_BY_ID: (id: string) => `/posts/${id}`,
+    UPDATE: (id: string) => `/posts/${id}`,       // Trùng URL với GET nhưng khác Method (PUT)
     GET_BY_AUTHOR: (authorId: string) => `/posts/author/${authorId}`,
     SEARCH: '/posts/search',
-    FEED: '/feed',
   },
 
   BOOKMARKS: {
@@ -66,7 +67,12 @@ export const API_ENDPOINTS = {
       GET_FOLLOWERS: (userId: string) => `/follows/${userId}/followers`,
       GET_FOLLOWING: (userId: string) => `/follows/${userId}/following`,
       GET_SUGGESTIONS: '/follows/suggestions',
-    }
+    },
+    
+    REPORTS: {
+    BASE: '/reports',
+    ME: '/reports/me',
+  },
 
 
 };

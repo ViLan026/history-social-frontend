@@ -43,8 +43,10 @@ const redirectToLogin = () => {
   }
 };
 
+// nhận toàn bộ response từ backend, nếu có lỗi 401 (Unauthorized) thì sẽ tự động refresh token và retry request đó. 
+// Nếu refresh token cũng thất bại, sẽ tự động logout và chuyển hướng về trang login.
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => { console.log("Received response:", response.config); return response; },
 
   async (error) => {
     const originalRequest = error.config;
@@ -53,6 +55,7 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
+
     const status = error.response?.status;
 
     const isAuthRequest =
@@ -60,7 +63,7 @@ axiosInstance.interceptors.response.use(
       originalRequest.url?.includes("/auth/register") ||
       originalRequest.url?.includes("/auth/refresh");
 
-    if (status !== 401 || isAuthRequest) {
+    if (status !== 401 && status !== 403 ||  isAuthRequest) {
       return Promise.reject(error);
     }
 
@@ -68,13 +71,20 @@ axiosInstance.interceptors.response.use(
       redirectToLogin();
       return Promise.reject(error);
     }
-
-    if (isRefreshing) {
-      return Promise.reject(error);
-    }
+// nếu đang refesh token thì các api khác gọi bị lỗi đều sẽ được đẩy vào hàng đợi failedQueue, sau khi refresh token thành công thì sẽ tự động retry tất cả các request trong hàng đợi này.
+  if (isRefreshing) {
+    return new Promise((resolve, reject) => {
+      failedQueue.push({
+        resolve: () => resolve(axiosInstance(originalRequest)),
+        reject: (err) => reject(err),
+      });
+    });
+  }
 
     originalRequest._retry = true;
     isRefreshing = true;
+
+
 
     try {
       await refreshClient.post("/auth/refresh", {});

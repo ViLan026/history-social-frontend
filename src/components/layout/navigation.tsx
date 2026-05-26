@@ -76,7 +76,7 @@ const NAV_ITEMS = [
   { label: "Ngày này năm xưa", href: "/in-this-day", icon: <HistoryIcon /> },
   // { label: "Sách", href: "/book-reviews", icon: <BookIcon /> },
   { label: "Theo dõi", href: "/follow", icon: <FollowingIcon /> },
-  { label: "Đã lưu", href: "/bookmarks", icon: <BookmarkIcon /> },
+  // { label: "Đã lưu", href: "/bookmarks", icon: <BookmarkIcon /> },
   { label: "Hồ sơ cá nhân", href: "/profile", icon: <UserIcon /> },
 ] as const;
 

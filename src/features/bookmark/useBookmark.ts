@@ -1,3 +1,4 @@
+// history-social-frontend\src\features\bookmark\useBookmark.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { bookmarkService } from './bookmark.service';
 import { PaginationParams } from '@/types/api';
@@ -46,7 +47,7 @@ export const useToggleBookmark = () => {
       // Làm mới lại các query liên quan để UI tự động cập nhật
       queryClient.invalidateQueries({ queryKey: BOOKMARK_QUERY_KEYS.status(postId) });
       queryClient.invalidateQueries({ queryKey: BOOKMARK_QUERY_KEYS.count() });
-      queryClient.invalidateQueries({ queryKey: BOOKMARK_QUERY_KEYS.lists() });
+      // queryClient.invalidateQueries({ queryKey: BOOKMARK_QUERY_KEYS.lists() });
     },
   });
 };

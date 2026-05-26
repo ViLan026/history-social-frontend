@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const token = request.cookies.get("access_token")?.value || request.cookies.get("refresh_token")?.value;
   const { pathname } = request.nextUrl;
 
   // nếu là trang chủ thì được vào mà không cần đăng nhập
-  if (pathname === "/") {
-    console.log("Accessing home page, allowing without auth");
+  if (pathname === "/" || pathname === "/in-this-day") {
+    // console.log("Accessing home page, allowing without auth");
+    // await new Promise(() => {}); 
     return NextResponse.next();
   }
 

@@ -1,11 +1,33 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useInfiniteFeed } from "@/features/post/usePost";
+import { useInfiniteFeed, useInfiniteFeedHome,  useInfinitePostsByAuthor} from "@/features/post/usePost";
 import PostCard from "./post-card/PostCard";
 import PostListSkeleton from "./PostListSkeleton";
+import { useAuthStore } from "@/features/auth/auth.store";
 
-export default function PostList() {
+interface PostListProps {
+    authorId?: string;
+}
+
+export default function PostList({ authorId }: PostListProps) {
+    const { isAuthenticated } = useAuthStore();
+
+    // !! được dịch từ phải sang trái với biến authorId có giá trị thị !authorId sẽ là false, sau đó !false sẽ là true và ngược lại
+    const isAuthorMode = !!authorId; // Có authorId => Chế độ xem trang cá nhân
+    const isAuthMode = !isAuthorMode && isAuthenticated; // Đã login + Không có authorId => Trang chủ cá nhân hóa
+    const isPublicMode = !isAuthorMode && !isAuthenticated; // Chưa login + Không có authorId => Trang chủ công khai
+
+    // 3. Khai báo cả 3 hook với điều kiện enabled tương ứng
+    const  authFeed = useInfiniteFeed(isAuthMode);
+    const publicFeed = useInfiniteFeedHome(isPublicMode);
+    const authorFeed = useInfinitePostsByAuthor(authorId || "", isAuthorMode); // Truyền thêm điều kiện bật/tắt ở tham số thứ 2
+
+    // 4. Lựa chọn feed chính xác dựa trên chế độ hiện tại
+    let currentFeed = publicFeed;
+    if (isAuthMode) currentFeed = authFeed;
+    if (isAuthorMode) currentFeed = authorFeed;
+
     const {
         data,
         fetchNextPage,
@@ -13,7 +35,7 @@ export default function PostList() {
         isFetchingNextPage,
         isLoading,
         isError
-    } = useInfiniteFeed();
+    } = currentFeed;
 
     const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -54,8 +76,7 @@ export default function PostList() {
 
     // Gộp tất cả bài viết từ các trang được tải về
     const rawPosts = data?.pages.flatMap((page) => page.content) ?? [];
-    
-    // 🛠️ FIX LỖI TRÙNG KEY: Sử dụng đối tượng Map để lọc sạch toàn bộ bài viết bị trùng lặp postId
+
     const posts = Array.from(
         new Map(rawPosts.map((post) => [post.postId, post])).values()
     );

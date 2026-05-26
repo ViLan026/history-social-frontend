@@ -5,7 +5,7 @@ import { postService } from './post.service';
 import { toast } from 'sonner';
 
 // Infinite Scroll Feed
-export const useInfiniteFeed = () => {
+export const useInfiniteFeed = (isEnabled: boolean) => {
   return useInfiniteQuery({
     queryKey: postKeys.infiniteFeed(),
     queryFn: ({ pageParam = 0 }) =>
@@ -14,9 +14,39 @@ export const useInfiniteFeed = () => {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => 
       lastPage.last ? undefined : lastPage.currentPage + 1,
-    
+    enabled:isEnabled, 
     staleTime: 1000 * 60 * 3,   // 3 phút
     gcTime: 1000 * 60 * 10,
+  });
+};
+
+// lấy danh sách bài viết khi chưa đăng nhập 
+export const useInfiniteFeedHome = (isEnabled: boolean) => {
+  return useInfiniteQuery({
+    queryKey: postKeys.infiniteFeedHome(),
+    queryFn: ({ pageParam = 0 }) =>
+      postService.getPublicHomePosts({ page: pageParam, size: 15, sort: 'createdAt,desc' }),
+    
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => 
+      lastPage.last ? undefined : lastPage.currentPage + 1,
+    enabled: isEnabled, 
+    staleTime: 1000 * 60 * 3,   // 3 phút
+    gcTime: 1000 * 60 * 10,
+  });
+};
+
+// Theo author
+export const useInfinitePostsByAuthor = (authorId: string, isEnabled: boolean) => {
+  return useInfiniteQuery({
+    queryKey: ['posts', 'author', authorId],
+    // Ép kiểu params ép buộc page theo cấu trúc pageParam của infinite scroll
+    queryFn: ({ pageParam = 0 }) =>
+      postService.getPostsByAuthor(authorId, { page: pageParam, size: 15, sort: 'createdAt,desc' }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => (lastPage.last ? undefined : lastPage.currentPage + 1),
+    enabled: !!authorId && isEnabled,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -25,7 +55,8 @@ export const postKeys = {
   all: ['posts'] as const,
   lists: () => [...postKeys.all, 'list'] as const,
   list: (params?: PaginationParams) => [...postKeys.lists(), params] as const,
-  infiniteFeed: () => [...postKeys.all, 'infinite-feed'] as const,
+  infiniteFeed: () => [...postKeys.all, 'need-auth'] as const,
+  infiniteFeedHome: () => [...postKeys.all, 'public-home'] as const,
   detail: (id: string) => [...postKeys.all, 'detail', id] as const,
   byAuthor: (authorId: string, params?: PaginationParams) => 
     [...postKeys.all, 'author', authorId, params] as const,
@@ -62,15 +93,7 @@ export const usePost = (id: string, enabled = true) => {
   });
 };
 
-// Theo author
-export const usePostsByAuthor = (authorId: string, params?: PaginationParams) => {
-  return useQuery({
-    queryKey: postKeys.byAuthor(authorId, params),
-    queryFn: () => postService.getPostsByAuthor(authorId, params),
-    enabled: !!authorId,
-    staleTime: 1000 * 60 * 5,
-  });
-};
+
 
 // Search
 export const useSearchPosts = (

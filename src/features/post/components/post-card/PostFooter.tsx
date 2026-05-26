@@ -50,28 +50,29 @@ export default function PostFooter({
                     </div> */}
                 </div>
 
-                { (
+                {
                     <button
                         type="button"
                         className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-foreground-muted transition-colors hover:bg-surface hover:text-amber-500"
                     >
-                        <span
-                            aria-hidden="true"
-                            className="inline-block text-red-700 transform rotate-45"
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            className="w-5 h-5 text-black"
                         >
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                            >
-                                <path d="M16 12V4c0-1.1-.9-2-2-2H10c-1.1 0-2 .9-2 2v8l-2 2v2h5.2v6l.8 1 1-1v-6H18v-2l-2-2z"></path>
-                            </svg>
-                        </span>
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+                            />
+                        </svg>
 
                         <span>Lưu</span>
                     </button>
-                )}
+                }
             </div>
         </>
     );

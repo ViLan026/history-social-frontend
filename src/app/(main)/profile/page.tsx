@@ -5,6 +5,8 @@ import ProfileInfo from "@/features/user/components/ProfileInfo";
 import ProfileTabs from "@/components/layout/ProfileTabs";
 import PostList from "@/features/post/components/PostList";
 import Navigation from "@/components/layout/Navigation";
+import BookmarkList from "@/features/bookmark/components/BookmarkList";
+import ReportList from "@/features/repost/components/RepostList";
 
 export type ProfileTab = "posts" | "bookmarks" | "reposts";
 
@@ -130,10 +132,10 @@ function ProfileContent({ activeTab }: ProfileContentProps) {
                 </div>
             )}
             {activeTab === "bookmarks" && (
-                <div className="p-4 text-foreground/70">Bookmarks</div>
+                <div className="p-4 text-foreground/70"><BookmarkList /></div>
             )}
             {activeTab === "reposts" && (
-                <div className="p-4 text-foreground/70">Reposts</div>
+                <div className="p-4 text-foreground/70"><ReportList /></div>
             )}
         </div>
     );

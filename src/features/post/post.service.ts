@@ -1,112 +1,89 @@
-// src/features/post/post.service.ts
-
-import {axiosInstance} from '@/lib/axios';
+import { axiosInstance } from '@/lib/axios';
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { 
   PostCreationRequest, 
   PostUpdateRequest, 
   PostResponse, 
-  PostSummaryResponse, 
   FeedPostResponse
 } from '@/features/post/post.types';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
 
 export const postService = {
-  // Tạo bài viết mới (Hỗ trợ upload file đính kèm)
+  // 1. Tạo bài viết
   createPost: async (request: PostCreationRequest, files?: File[]): Promise<PostResponse> => {
     const formData = new FormData();
-    
-    // Tạo Blob dạng JSON để Spring Boot @RequestPart hiểu đây là đối tượng JSON (DTO)
-    const postBlob = new Blob([JSON.stringify(request)], {
-      type: 'application/json',
-    });
-    formData.append('post', postBlob);
-
-    // Append danh sách files nếu có
-    if (files && files.length > 0) {
-      files.forEach((file) => {
-        formData.append('files', file);
-      });
-    }
-
-    const response = await axiosInstance.post(API_ENDPOINTS.POSTS.BASE, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data.data;
-  },
-
-  // Lấy chi tiết bài viết theo ID
-  getPostById: async (id: string): Promise<FeedPostResponse> => {
-    const response = await axiosInstance.get(API_ENDPOINTS.POSTS.GET_BY_ID(id));
-    return response.data.data;
-  },
-
-  // Lấy danh sách bài viết đã xuất bản (Phân trang)
-  getPublishedPosts: async (params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
-    const response = await axiosInstance.get(API_ENDPOINTS.POSTS.BASE, { params });
-    return response.data.data;
-  },
-
-
-  // getFeed: async (params?:  PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
-  //       const response = await axiosInstance.get(API_ENDPOINTS.POSTS.FEED, { params });
-  //   return response.data.data;
-  // },
-
-  // Lấy danh sách bài viết theo tác giả
-  getPostsByAuthor: async (authorId: string, params?: PaginationParams): Promise<PageResponse<PostSummaryResponse>> => {
-    const response = await axiosInstance.get(API_ENDPOINTS.POSTS.GET_BY_AUTHOR(authorId), { params });
-    return response.data.data;
-  },
-
-
-
-
-  // Tìm kiếm bài viết theo từ khóa
-  searchPosts: async (keyword: string, params?: PaginationParams): Promise<PageResponse<PostSummaryResponse>> => {
-    const response = await axiosInstance.get(API_ENDPOINTS.POSTS.SEARCH, {
-      params: { keyword, ...params },
-    });
-    return response.data.data;
-  },
-
-  // Cập nhật bài viết
-  updatePost: async (id: string, request: PostUpdateRequest, files?: File[]): Promise<PostResponse> => {
-    const formData = new FormData();
-    
-    const postBlob = new Blob([JSON.stringify(request)], {
-      type: 'application/json',
-    });
+    const postBlob = new Blob([JSON.stringify(request)], { type: 'application/json' });
     formData.append('post', postBlob);
 
     if (files && files.length > 0) {
-      files.forEach((file) => {
-        formData.append('files', file);
-      });
+      files.forEach((file) => formData.append('files', file));
     }
 
-    const response = await axiosInstance.put(API_ENDPOINTS.POSTS.GET_BY_ID(id), formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data.data;
-  },
-
-    getUserPosts: async (userId: string, status: 'published' | 'draft', params?: PaginationParams) => {
-    const response = await axiosInstance.get<ApiResponse<PageResponse<PostResponse>>>(
-      `/posts/user/${userId}`,
-      { params: { status, ...params } }
+    const response = await axiosInstance.post<ApiResponse<PostResponse>>(
+      API_ENDPOINTS.POSTS.BASE, 
+      formData
     );
     return response.data.data;
   },
 
-  deletePost: async (postId: string): Promise<void> => {
-    await axiosInstance.delete(`/posts/${postId}`);
+  // 2. Xem chi tiết bài viết
+  getPostById: async (id: string): Promise<FeedPostResponse> => {
+    const response = await axiosInstance.get<ApiResponse<FeedPostResponse>>(
+      API_ENDPOINTS.POSTS.GET_BY_ID(id)
+    );
+    return response.data.data;
   },
 
+  // 3. Khách vãng lai xem trang chủ (Chưa đăng nhập)
+  getPublicHomePosts: async (params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+    const response = await axiosInstance.get<ApiResponse<PageResponse<FeedPostResponse>>>(
+      API_ENDPOINTS.POSTS.HOME, 
+      { params }
+    );
+    return response.data.data;
+  },
+
+  // 4. Người dùng xem trang chủ (Đã đăng nhập)
+  getPublishedPosts: async (params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+    const response = await axiosInstance.get<ApiResponse<PageResponse<FeedPostResponse>>>(
+      API_ENDPOINTS.POSTS.BASE, 
+      { params }
+    );
+    return response.data.data;
+  },
+
+  // 5. Xem bài viết theo tác giả
+  getPostsByAuthor: async (authorId: string, params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+    const response = await axiosInstance.get<ApiResponse<PageResponse<FeedPostResponse>>>(
+      API_ENDPOINTS.POSTS.GET_BY_AUTHOR(authorId), 
+      { params }
+    );
+    return response.data.data;
+  },
+
+  // 6. Tìm kiếm bài viết (Keyword là bắt buộc)
+  searchPosts: async (keyword: string, params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+    const response = await axiosInstance.get<ApiResponse<PageResponse<FeedPostResponse>>>(
+      API_ENDPOINTS.POSTS.SEARCH, 
+      { params: { keyword, ...params } }
+    );
+    return response.data.data;
+  },
+
+  // 7. Cập nhật bài viết
+  updatePost: async (id: string, request: PostUpdateRequest, files?: File[]): Promise<PostResponse> => {
+    const formData = new FormData();
+    const postBlob = new Blob([JSON.stringify(request)], { type: 'application/json' });
+    formData.append('post', postBlob);
+
+    if (files && files.length > 0) {
+      files.forEach((file) => formData.append('files', file));
+    }
+
+    const response = await axiosInstance.put<ApiResponse<PostResponse>>(
+      API_ENDPOINTS.POSTS.UPDATE(id), 
+      formData
+    );
+    return response.data.data;
+  },
 };
-
-
