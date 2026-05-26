@@ -7,8 +7,10 @@ export interface CommentResponse {
   id: string;
   postId: string;
   authorId: string;
-  parentId?: string; // Thêm parentId để hỗ trợ comment reply trong tương lai
+  authorName: string;
+  authorAvatarUrl: string; 
+  parentId?: string; 
   content: string;
-  createdAt: string; // ISO String từ LocalDateTime
-  updatedAt: string; // ISO String từ LocalDateTime
+  createdAt: string; 
+  updatedAt: string; 
 }

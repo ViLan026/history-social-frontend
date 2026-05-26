@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
+// eslint-disable-next-line boundaries/element-types
 import AuthArea from "../../features/user/components/AuthArea";
 import BrandLogo from "../ui/BrandLogo";
 

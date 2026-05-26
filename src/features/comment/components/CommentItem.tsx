@@ -10,6 +10,7 @@ import React, { memo, useCallback } from "react";
 import { CommentResponse } from "@/features/comment/comment.types";
 import { formatRelativeTimeVi, cn } from "@/lib/utils";
 import { useDeleteComment } from "@/features/comment/useComment";
+import Avatar from "@/components/ui/Avatar";
 
 interface CommentItemProps {
     comment: CommentResponse;
@@ -33,10 +34,6 @@ const AVATAR_HUES = [
     "bg-warning-subtle text-warning"
 ] as const;
 
-const getAvatarClass = (authorId: string): string => {
-    if (!authorId) return AVATAR_HUES[0];
-    return AVATAR_HUES[authorId.charCodeAt(0) % AVATAR_HUES.length];
-};
 
 export const CommentItem = memo<CommentItemProps>(
     ({ comment, currentUserId, postId, isOptimistic = false }) => {
@@ -58,20 +55,8 @@ export const CommentItem = memo<CommentItemProps>(
                     isDeleting && "opacity-40 pointer-events-none"
                 )}
             >
-                {/* Avatar */}
-                <div
-                    className={cn(
-                        "flex h-8 w-8 shrink-0 items-center justify-center",
-                        "rounded-full text-xs font-semibold select-none",
-                        "ring-1 ring-border",
-                        getAvatarClass(comment.authorId)
-                    )}
-                    aria-hidden="true"
-                >
-                    {getInitial(comment.authorId)}
-                </div>
+                <Avatar avatarUrl={comment.authorAvatarUrl} displayName={comment.authorName} />
 
-                {/* Bubble + meta */}
                 <div className="min-w-0 flex-1">
                     {/* Bubble */}
                     <div
@@ -83,7 +68,7 @@ export const CommentItem = memo<CommentItemProps>(
                     >
                         {/* Author label */}
                         <span className="mb-0.5 block text-xs font-semibold text-foreground-muted">
-                            {isOptimistic ? "Bạn" : "Người dùng"}
+                            {comment.authorName}
                         </span>
 
                         {/* Content */}

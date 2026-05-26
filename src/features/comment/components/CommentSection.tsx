@@ -151,18 +151,15 @@ export const CommentSection = memo<CommentSectionProps>(
                             <>
                                 {rootComments.map((comment) => (
                                     <div key={comment.id} className="rounded-2xl transition-colors bg-background">
-                                        {/* BÌNH LUẬN GỐC (CẤP 1) */}
                                         <div className="px-4 py-2 hover:bg-surface/40 rounded-2xl">
                                             <CommentItem
                                                 comment={comment}
                                                 currentUserId={currentUserId}
                                                 postId={postId}
                                                 isOptimistic={comment.id.startsWith("optimistic-")}
-                                                // Bạn có thể truyền hàm onReply={setReplyingToId} vào CommentItem để bấm nút Reply
                                             />
                                         </div>
                                         
-                                        {/* BÌNH LUẬN PHẢN HỒI (CẤP 2) */}
                                         {repliesMap.has(comment.id) && (
                                             <div className="ml-10 md:ml-12 mt-1 space-y-1 border-l-2 border-slate-100 pl-2">
                                                 {repliesMap.get(comment.id)!.map(reply => (
