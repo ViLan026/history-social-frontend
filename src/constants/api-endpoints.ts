@@ -8,7 +8,7 @@ export const API_ENDPOINTS = {
   },
 
   USERS: {
-      BASE: '/users',
+      BASE: 'admin/users',
       GET_BY_ID: (id: string) => `/users/${id}`,
       UPDATE: (id: string) => `/users/${id}`,
       CHANGE_PASSWORD: (id: string) => `/users/${id}/password`,

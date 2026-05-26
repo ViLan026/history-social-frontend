@@ -19,7 +19,7 @@ export default function ReportActionButtons({ reportId }: Props) {
     };
 
     return (
-        <div className="flex gap-3 pt-4 border-t border-border mt-4">
+        <div className="flex gap-3">
             <button
                 onClick={() => handleReview("DISMISSED")}
                 disabled={isPending}
@@ -30,7 +30,7 @@ export default function ReportActionButtons({ reportId }: Props) {
             <button
                 onClick={() => handleReview("RESOLVED")}
                 disabled={isPending}
-                className="flex-1 py-2 px-4 rounded-lg bg-destructive text-white hover:bg-destructive/90 font-medium transition-colors disabled:opacity-50"
+                className="flex-1 py-2 px-4 rounded-lg bg-destructive border border-border text-foreground hover:bg-destructive/90 font-medium transition-colors disabled:opacity-50"
             >
                 Xác nhận vi phạm (Xóa/Ẩn nội dung)
             </button>

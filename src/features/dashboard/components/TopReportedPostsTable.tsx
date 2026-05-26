@@ -41,7 +41,7 @@ export function TopReportedPostsTable({ data }: Props) {
                 Report
               </th>
               <th className="text-right py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
-                Điểm CL
+                Điểm chất lượng 
               </th>
               <th className="text-right py-2 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Ngày tạo

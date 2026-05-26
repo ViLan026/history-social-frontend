@@ -54,7 +54,7 @@ export const AdminOnThisDayTable: React.FC<AdminOnThisDayTableProps> = ({
                     {item.title}
                   </td>
                   <td className="p-4 align-top break-words max-w-prose text-justify leading-relaxed">
-                    <p className="line-clamp-3 group-hover:line-clamp-none transition-all duration-200">
+                    <p className="line-clamp-2 group-hover:line-clamp-none transition-all duration-200">
                       {item.description}
                     </p>
                   </td>

@@ -50,7 +50,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <div className="min-h-screen flex flex-col bg-background text-foreground">
             <Header />
 
-            <div className="flex-1 w-full pt-14">
+            <div className="flex-1 w-full pt-14 py-4 md:py-6">
                 <AdminMainLayout leftSidebar={<AdminSidebar />}>
                     <div className="pt-4  md:pt-6">{children}</div>
                 </AdminMainLayout>

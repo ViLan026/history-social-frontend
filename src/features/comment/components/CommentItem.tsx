@@ -53,7 +53,7 @@ export const CommentItem = memo<CommentItemProps>(
         return (
             <div
                 className={cn(
-                    "group flex items-start gap-2.5 transition-opacity duration-300",
+                    "group flex items-start gap-2.5 transition-opacity duration-300 bg-background",
                     isOptimistic && "opacity-60",
                     isDeleting && "opacity-40 pointer-events-none"
                 )}

@@ -50,20 +50,20 @@ export function DashboardStatCards({ overview }: Props) {
     //   value: overview.publishedPosts,
     //   sub: `Bản nháp: ${overview.draftPosts.toLocaleString('vi-VN')}`,
     // },
-    {
-      label: 'Báo cáo đang chờ',
-      value: overview.pendingReports,
-      sub: `Đã xử lý: ${overview.resolvedReports.toLocaleString('vi-VN')}`,
-    },
+    // {
+    //   label: 'Báo cáo đang chờ',
+    //   value: overview.pendingReports,
+    //   sub: `Đã xử lý: ${overview.resolvedReports.toLocaleString('vi-VN')}`,
+    // },
     // {
     //   label: 'Bài viết bị gắn cờ',
     //   value: overview.flaggedPosts,
     //   sub: `Bị ẩn: ${overview.hiddenPosts.toLocaleString('vi-VN')}`,
     // },
-    // {
-    //   label: 'Tổng bình luận',
-    //   value: overview.totalComments,
-    // },
+    {
+      label: 'Tổng bình luận',
+      value: overview.totalComments,
+    },
     {
       label: 'Tổng tương tác',
       value: overview.totalReactions,

@@ -53,7 +53,10 @@ export default function PostDetailModal() {
     );
 
     return (
-        <div className="fixed inset-x-0 bottom-0 top-14 z-50 flex items-center justify-center p-0 md:p-4 bg-surface-overlay/100 backdrop-blur-sm ">
+        <div 
+            className="fixed inset-x-0 bottom-0 top-14 z-50 flex items-center justify-center p-0 md:p-4 bg-surface-overlay/100 backdrop-blur-sm"
+            onClick={closePostDetail} 
+        >
             <button
                 type="button"
                 onClick={closePostDetail}
@@ -70,24 +73,21 @@ export default function PostDetailModal() {
                     "md:h-auto md:max-h-[85dvh] md:max-w-2xl md:rounded-2xl",
                     "lg:h-auto not-first:lg:h-[85dvh] lg:max-w-6xl xl:max-w-7xl lg:flex-row lg:rounded-3xl"
                 ].join(" ")}
-                style={{
-                    backgroundColor: "background" // backdropFilter: "blur(6px)"
-                }}
+                onClick={(e) => e.stopPropagation()} 
             >
-                {/* 2. NÚT ĐÓNG & HEADER - GIAO DIỆN MOBILE */}
-                <div className="flex md:hidden shrink-0 items-center justify-between border-b border-border bg-background px-4 py-3 z-20">
-                    <h3 className="font-semibold text-foreground">Bài viết</h3>
+                <div className="flex md:hidden shrink-0 items-center justify-between border-b border-border bg-primary px-4 py-3 z-20">
+                    {/* <h3 className="font-semibold text-foreground">Bài viết</h3> */}
                     <button
                         type="button"
                         onClick={closePostDetail}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-surface text-foreground-muted transition-colors hover:bg-surface-raised hover:text-foreground"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-full "
                     >
                         ✕
                     </button>
                 </div>
 
                 <div className="flex h-full w-full flex-col lg:flex-row min-h-0 overflow-hidden md:p-6 p-0">
-                    <section className="hidden lg:block shrink-0 w-full overflow-y-auto bg-surface-overlay lg:w-[55%] xl:w-[60%] lg:h-full lg:flex-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <section className="hidden bg-background lg:block shrink-0 w-full overflow-y-auto lg:w-[55%] xl:w-[60%] lg:h-full lg:flex-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {postContent}
                     </section>
 
@@ -95,7 +95,7 @@ export default function PostDetailModal() {
                         <CommentSection
                             postId={selectedPost.postId}
                             currentUserId={currentUserId}
-                            mobileHeader={postContent} // TRUYỀN BÀI VIẾT VÀO LÀM HEADER TRÊN MOBILE
+                            mobileHeader={postContent}
                         />
                     </aside>
                 </div>

@@ -32,15 +32,7 @@ export default function AdminUserActions({
   };
 
   return (
-    <div className="flex items-center justify-end gap-2">
-      <button
-        type="button"
-        onClick={onEdit}
-        disabled={disabled}
-        className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        Sửa
-      </button>
+    <div className="flex items-center justify-center gap-2">
 
       {status === "ACTIVE" ? (
         <button

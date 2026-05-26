@@ -49,6 +49,9 @@ export const CommentSection = memo<CommentSectionProps>(
     ({ postId, currentUserId, mobileHeader }) => {
         const [pageSize, setPageSize] = useState(10);
         
+        // Thêm state để lưu trữ id của bình luận đang được reply (nếu bạn muốn làm chức năng reply)
+        const [replyingToId, setReplyingToId] = useState<string | null>(null);
+        
         const params = useMemo(() => ({ page: 0, size: pageSize, sort: "createdAt,desc" }), [pageSize]);
         const { data, isLoading, isFetching } = useCommentsByPost(postId, params);
         const createMutation = useCreateComment();
@@ -66,14 +69,16 @@ export const CommentSection = memo<CommentSectionProps>(
         const optimisticComment = useMemo<CommentResponse | null>(() => {
             if (!createMutation.isPending || !createMutation.variables) return null;
             return {
+                // eslint-disable-next-line react-hooks/purity
                 id: `optimistic-${Date.now()}`,
                 postId,
                 authorId: createMutation.variables.authorId ?? currentUserId ?? "",
+                parentId: replyingToId || undefined, // Hỗ trợ optimistic UI cho cả reply
                 content: createMutation.variables.content,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
-        }, [createMutation.isPending, createMutation.variables, postId, currentUserId]);
+        }, [createMutation.isPending, createMutation.variables, postId, currentUserId, replyingToId]);
 
         const serverComments = data?.content ?? cachedComments;
         const totalElements = data?.totalElements ?? cachedTotal;
@@ -88,38 +93,90 @@ export const CommentSection = memo<CommentSectionProps>(
             return [optimisticComment, ...filtered];
         }, [optimisticComment, serverComments]);
 
+        // === PHẦN LOGIC MỚI: TÁCH BÌNH LUẬN 2 CẤP ===
+        const { rootComments, repliesMap } = useMemo(() => {
+            const roots: CommentResponse[] = [];
+            const replies = new Map<string, CommentResponse[]>();
+
+            displayComments.forEach((comment) => {
+                if (!comment.parentId) {
+                    roots.push(comment);
+                } else {
+                    if (!replies.has(comment.parentId)) {
+                        replies.set(comment.parentId, []);
+                    }
+                    replies.get(comment.parentId)!.push(comment);
+                }
+            });
+
+            // Có thể sort lại mảng con theo thứ tự thời gian cũ tới mới (tuỳ ý)
+            replies.forEach(list => list.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+
+            return { rootComments: roots, repliesMap: replies };
+        }, [displayComments]);
+        // ===========================================
+
         const handleSubmit = useCallback((content: string) => {
-            createMutation.mutate({ postId, content, authorId: currentUserId });
-        }, [postId, currentUserId, createMutation]);
+            // Chèn thêm parentId nếu đang trong trạng thái reply
+            createMutation.mutate({ 
+                postId, 
+                content, 
+                authorId: currentUserId,
+                ...(replyingToId && { parentId: replyingToId }) 
+            }, {
+                onSuccess: () => {
+                    setReplyingToId(null); // Xoá trạng thái reply sau khi gửi thành công
+                }
+            });
+        }, [postId, currentUserId, createMutation, replyingToId]);
 
         const handleLoadMore = useCallback(() => setPageSize((prev) => prev + 5), []);
 
         return (
             <div className="relative flex h-full w-full min-h-0 flex-col">
-                <div className="flex-1 overflow-y-auto px-4 lg:p-6 lg:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="flex-1 overflow-y-auto px-4 lg:p-6 lg:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] bg-background">
                     
-                    {/* --- HIỂN THỊ BÀI VIẾT TRÊN MOBILE NGAY TRONG KHUNG CUỘN NÀY --- */}
                     {mobileHeader && (
                         <div className="block lg:hidden mt-4 mb-4 pb-4 border-b border-border">
                             {mobileHeader}
                         </div>
                     )}
 
-                    <div className="space-y-2 pt-4 lg:pt-0">
+                    <div className="space-y-4 pt-4 lg:pt-0 bg-background">
                         {isInitialLoading ? (
                             <CommentSkeleton />
-                        ) : displayComments.length === 0 ? (
+                        ) : rootComments.length === 0 ? (
                             <EmptyState />
                         ) : (
                             <>
-                                {displayComments.map((comment) => (
-                                    <div key={comment.id} className="rounded-2xl bg-card px-4 py-2 transition-colors hover:bg-surface/40">
-                                        <CommentItem
-                                            comment={comment}
-                                            currentUserId={currentUserId}
-                                            postId={postId}
-                                            isOptimistic={comment.id.startsWith("optimistic-")}
-                                        />
+                                {rootComments.map((comment) => (
+                                    <div key={comment.id} className="rounded-2xl transition-colors bg-background">
+                                        {/* BÌNH LUẬN GỐC (CẤP 1) */}
+                                        <div className="px-4 py-2 hover:bg-surface/40 rounded-2xl">
+                                            <CommentItem
+                                                comment={comment}
+                                                currentUserId={currentUserId}
+                                                postId={postId}
+                                                isOptimistic={comment.id.startsWith("optimistic-")}
+                                                // Bạn có thể truyền hàm onReply={setReplyingToId} vào CommentItem để bấm nút Reply
+                                            />
+                                        </div>
+                                        
+                                        {/* BÌNH LUẬN PHẢN HỒI (CẤP 2) */}
+                                        {repliesMap.has(comment.id) && (
+                                            <div className="ml-10 md:ml-12 mt-1 space-y-1 border-l-2 border-slate-100 pl-2">
+                                                {repliesMap.get(comment.id)!.map(reply => (
+                                                    <div key={reply.id} className="px-2 py-2 hover:bg-surface/40 rounded-2xl">
+                                                        <CommentItem
+                                                            comment={reply}
+                                                            currentUserId={currentUserId}
+                                                            postId={postId}
+                                                            isOptimistic={reply.id.startsWith("optimistic-")}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </>
@@ -140,7 +197,7 @@ export const CommentSection = memo<CommentSectionProps>(
                                         Đang tải...
                                     </span>
                                 ) : (
-                                    <span>Xem thêm ({totalElements - serverComments.length})</span>
+                                    <span>Xem thêm bình luận cũ hơn</span>
                                 )}
                             </button>
                         )}
@@ -148,6 +205,12 @@ export const CommentSection = memo<CommentSectionProps>(
                 </div>
 
                 <div className="z-10 shrink-0 border-t border-slate-200 bg-background px-4 pt-4 pb-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:p-4 lg:pt-4 lg:pb-0">
+                    {replyingToId && (
+                        <div className="flex items-center justify-between pb-2 text-sm text-foreground-muted">
+                            <span>Đang trả lời một bình luận...</span>
+                            <button onClick={() => setReplyingToId(null)} className="text-primary hover:underline">Huỷ</button>
+                        </div>
+                    )}
                     <CommentInput
                         onSubmit={handleSubmit}
                         isSubmitting={createMutation.isPending}

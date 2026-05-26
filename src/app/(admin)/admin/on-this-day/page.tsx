@@ -57,7 +57,7 @@ export default function AdminOnThisDayPage() {
   const isMutating = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className="w-full max-w-feed mx-auto px-4 py-8 space-y-6">
+    <div className="w-full max-w-feed mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-muted pb-5">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">

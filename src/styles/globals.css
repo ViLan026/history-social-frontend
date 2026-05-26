@@ -94,14 +94,11 @@
   h5 { font-size: 1.1rem; }
   h6 { font-size: 1rem; }
 
-  /* --- Body text --- */
   p {
     color: var(--foreground);
-    line-height: 1.75;      /* Reading line-height — rộng hơn heading */
-    max-width: 70ch;       /* 70 kí tự trong 1 dòng */
+    line-height: 1.75;     
   }
 
-  /* --- Links --- */
   a {
     color: var(--foreground);
     text-decoration: none;

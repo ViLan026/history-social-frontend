@@ -46,24 +46,8 @@ export default function Header({ onToggleSidebar }: { onToggleSidebar?: () => vo
             role="banner"
         >
             <div className="flex items-center gap-4">
-                {/* Nút Toggle Sidebar cho Admin Layout */}
-                <button
-                    onClick={onToggleSidebar}
-                    className="p-2 rounded-lg text-primary-fg/80 hover:bg-surface/20 hover:text-primary-fg lg:hidden"
-                    aria-label="Toggle Sidebar"
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <line x1="4" x2="20" y1="12" y2="12" />
-                        <line x1="4" x2="20" y1="6" y2="6" />
-                        <line x1="4" x2="20" y1="18" y2="18" />
-                    </svg>
-                </button>
-                
                 <div className="flex items-center gap-2">
                     <BrandLogo />
-                    <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider bg-surface/20 text-primary-fg px-2 py-0.5 rounded">
-                        Admin
-                    </span>
                 </div>
             </div>
 
