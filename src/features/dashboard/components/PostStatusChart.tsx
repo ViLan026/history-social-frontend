@@ -1,3 +1,5 @@
+// features/dashboard/components/PostStatusChart.tsx
+
 'use client';
 
 import {
@@ -18,11 +20,11 @@ type Props = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  PUBLISHED: '#34d399',
-  DRAFT: '#94a3b8',
-  HIDDEN: '#fbbf24',
-  FLAGGED: '#f87171',
-  REJECTED: '#ef4444',
+  PUBLISHED: 'var(--primary)',
+  DRAFT: 'var(--foreground-muted)',
+  HIDDEN: 'var(--border)',
+  FLAGGED: 'var(--border-muted)',
+  REJECTED: 'var(--foreground)',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -51,19 +53,19 @@ export function PostStatusChart({ data }: Props) {
     <DashboardSection title="Trạng thái bài viết">
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={chartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} allowDecimals={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-muted)" />
+          <XAxis dataKey="label" tick={{ fill: 'var(--foreground-muted)', fontSize: 11 }} />
+          <YAxis tick={{ fill: 'var(--foreground-muted)', fontSize: 11 }} allowDecimals={false} />
           <Tooltip
-            contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
-            labelStyle={{ color: '#94a3b8' }}
-            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+            contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 4 }}
+            labelStyle={{ color: 'var(--foreground-muted)' }}
+            cursor={{ fill: 'var(--surface)' }}
           />
           <Bar dataKey="count" radius={[4, 4, 0, 0]} name="Số lượng">
             {chartData.map((entry) => (
               <Cell
                 key={entry.name}
-                fill={STATUS_COLORS[entry.name] ?? '#64748b'}
+                fill={STATUS_COLORS[entry.name] ?? 'var(--border)'}
               />
             ))}
           </Bar>

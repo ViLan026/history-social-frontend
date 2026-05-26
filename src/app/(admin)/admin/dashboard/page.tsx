@@ -1,3 +1,5 @@
+// app/admin/dashboard/page.tsx
+
 'use client';
 
 import { useState } from 'react';
@@ -27,28 +29,19 @@ export default function AdminDashboardPage() {
   const { data, isLoading, isError } = useAdminDashboard(days, 10);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 px-4 py-8 md:px-8">
+    <main >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-            Dashboard quản trị
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Tổng quan hoạt động và kiểm duyệt của hệ thống lịch sử.
-          </p>
-        </div>
-
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b border-border-muted pb-6">
         {/* Days selector */}
-        <div className="flex items-center gap-1 bg-slate-800/70 border border-slate-700/50 rounded-xl p-1">
+        <div className="flex mx-auto items-center gap-1 bg-surface border border-border rounded-lg p-1 neu-inset">
           {DAY_OPTIONS.map((opt) => (
             <button
               key={opt.value}
               onClick={() => setDays(opt.value)}
-              className={`px-4 py-1.5 text-sm rounded-lg font-medium transition-all duration-200 ${
+              className={`px-4 py-1.5 text-sm rounded font-medium transition-all duration-200 ${
                 days === opt.value
-                  ? 'bg-amber-500 text-slate-950 shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-primary text-primary-fg shadow-sm'
+                  : 'text-foreground-muted hover:text-foreground'
               }`}
             >
               {opt.label}
@@ -62,11 +55,11 @@ export default function AdminDashboardPage() {
 
       {/* Error */}
       {isError && !isLoading && (
-        <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-8 text-center">
-          <p className="text-rose-400 font-semibold text-lg mb-1">
+        <div className="rounded-lg border border-border bg-card p-8 text-center max-w-prose mx-auto neu-raised animate-slide-up">
+          <p className="text-foreground font-semibold text-lg mb-1">
             Không thể tải dữ liệu dashboard
           </p>
-          <p className="text-slate-500 text-sm">
+          <p className="text-foreground-muted text-sm">
             Vui lòng thử lại sau hoặc kiểm tra kết nối với server.
           </p>
         </div>
@@ -74,7 +67,7 @@ export default function AdminDashboardPage() {
 
       {/* Content */}
       {data && !isLoading && (
-        <div className="space-y-8">
+        <div className="space-y-8 animate-slide-up">
           {/* Stat Cards */}
           <DashboardStatCards overview={data.overview} />
 
@@ -84,13 +77,13 @@ export default function AdminDashboardPage() {
             <NewPostsChart data={data.newPosts ?? []} />
             <EngagementChart data={data.engagementStats ?? []} />
             <PostStatusChart data={data.postStatusStats ?? []} />
-            <ReportStatusChart data={data.reportStatusStats ?? []} />
-            <ReportReasonChart data={data.reportReasonStats ?? []} />
+            {/* <ReportStatusChart data={data.reportStatusStats ?? []} /> */}
+            {/* <ReportReasonChart data={data.reportReasonStats ?? []} /> */}
           </div>
 
           {/* Tables grid */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            <LatestPendingReportsTable data={data.latestPendingReports ?? []} />
+            {/* <LatestPendingReportsTable data={data.latestPendingReports ?? []} /> */}
             <TopReportedPostsTable data={data.topReportedPosts ?? []} />
             <TopTagsTable data={data.topTags ?? []} />
           </div>

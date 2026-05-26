@@ -61,14 +61,14 @@ export default function MainLayout({
                     <div className="grid md:mx-10 md:grid-cols-[100px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_minmax(0,700px)_320px] min-h-screen">
                         {/* LEFT SIDEBAR - Full (lg+) */}
                         <aside
-                            className="hidden lg:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-background"
+                            className="hidden lg:block sticky top-14 left-auto w-[280px] h-[calc(100vh-3.5rem)] overflow-y-auto no-scrollbar bg-background"
                             aria-label="Navigation"
                         >
                             <div className="p-4 pb-20">{leftSidebar}</div>
                         </aside>
 
                         <aside
-                            className="hidden md:block lg:hidden sticky top-14 h-screen bg-background "
+                            className="hidden md:block lg:hidden sticky top-14 left-auto w-[280px] h-[calc(100vh-3.5rem)] overflow-y-auto no-scrollbar "
                             aria-label="Compact Navigation"
                         >
                             <div>{leftSidebar}</div>

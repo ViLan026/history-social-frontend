@@ -1,3 +1,5 @@
+// features/dashboard/components/NewUsersChart.tsx
+
 'use client';
 
 import {
@@ -32,21 +34,25 @@ export function NewUsersChart({ data }: Props) {
     <DashboardSection title="Người dùng mới">
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={chartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis dataKey="date" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} allowDecimals={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-muted)" />
+          <XAxis dataKey="date" tick={{ fill: 'var(--foreground-muted)', fontSize: 11 }} />
+          <YAxis tick={{ fill: 'var(--foreground-muted)', fontSize: 11 }} allowDecimals={false} />
           <Tooltip
-            contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
-            labelStyle={{ color: '#94a3b8' }}
-            itemStyle={{ color: '#38bdf8' }}
+            contentStyle={{ 
+              background: 'var(--card)', 
+              border: '1px solid var(--border)', 
+              borderRadius: '4px' 
+            }}
+            labelStyle={{ color: 'var(--foreground-muted)' }}
+            itemStyle={{ color: 'var(--primary)' }}
           />
           <Line
             type="monotone"
             dataKey="count"
-            stroke="#38bdf8"
+            stroke="var(--primary)"
             strokeWidth={2}
             dot={false}
-            activeDot={{ r: 4, fill: '#38bdf8' }}
+            activeDot={{ r: 4, fill: 'var(--primary)' }}
             name="Người dùng"
           />
         </LineChart>

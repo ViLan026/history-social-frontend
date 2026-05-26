@@ -1,3 +1,5 @@
+// features/dashboard/components/TopReportedPostsTable.tsx
+
 import { TopReportedPostResponse } from '../dashboard.types';
 import { DashboardSection, EmptyState } from './DashboardSection';
 import { formatDateTime } from '@/lib/utils';
@@ -7,11 +9,11 @@ type Props = {
 };
 
 const STATUS_BADGE: Record<string, string> = {
-  PUBLISHED: 'bg-emerald-500/15 text-emerald-400',
-  DRAFT: 'bg-slate-500/15 text-slate-400',
-  HIDDEN: 'bg-yellow-500/15 text-yellow-400',
-  FLAGGED: 'bg-red-500/15 text-red-400',
-  REJECTED: 'bg-rose-500/15 text-rose-400',
+  PUBLISHED: 'bg-primary/10 text-primary border border-primary/20',
+  DRAFT: 'bg-foreground-muted/10 text-foreground-muted border border-foreground-muted/20',
+  HIDDEN: 'bg-surface text-foreground border border-border',
+  FLAGGED: 'bg-foreground text-primary-fg',
+  REJECTED: 'bg-border text-foreground-muted',
 };
 
 export function TopReportedPostsTable({ data }: Props) {
@@ -28,20 +30,20 @@ export function TopReportedPostsTable({ data }: Props) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-700/50">
-              <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <tr className="border-b border-border-muted/50">
+              <th className="text-left py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider">
                 Tiêu đề
               </th>
-              <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="text-left py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Trạng thái
               </th>
-              <th className="text-right py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="text-right py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Report
               </th>
-              <th className="text-right py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="text-right py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Điểm CL
               </th>
-              <th className="text-right py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="text-right py-2 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Ngày tạo
               </th>
             </tr>
@@ -50,27 +52,27 @@ export function TopReportedPostsTable({ data }: Props) {
             {data.map((row) => (
               <tr
                 key={row.postId}
-                className="border-b border-slate-800/60 hover:bg-slate-800/30 transition-colors"
+                className="border-b border-border-muted/30 hover:bg-surface/50 transition-colors duration-150"
               >
-                <td className="py-2.5 pr-3 text-slate-200 max-w-[180px] truncate" title={row.title}>
+                <td className="py-2.5 pr-3 text-foreground font-serif max-w-[180px] truncate" title={row.title}>
                   {row.title}
                 </td>
                 <td className="py-2.5 pr-3">
                   <span
-                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                      STATUS_BADGE[row.status] ?? 'bg-slate-700 text-slate-300'
+                    className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${
+                      STATUS_BADGE[row.status] ?? 'bg-border/30 text-foreground-muted'
                     }`}
                   >
                     {row.status}
                   </span>
                 </td>
-                <td className="py-2.5 pr-3 text-right font-semibold text-rose-400">
+                <td className="py-2.5 pr-3 text-right font-semibold text-foreground">
                   {row.reportCount}
                 </td>
-                <td className="py-2.5 pr-3 text-right text-slate-300">
+                <td className="py-2.5 pr-3 text-right text-foreground-muted tabular-nums">
                   {row.qualityScore != null ? row.qualityScore.toFixed(2) : '—'}
                 </td>
-                <td className="py-2.5 text-right text-slate-500 whitespace-nowrap">
+                <td className="py-2.5 text-right text-foreground-muted whitespace-nowrap">
                   {formatDateTime(row.createdAt)}
                 </td>
               </tr>

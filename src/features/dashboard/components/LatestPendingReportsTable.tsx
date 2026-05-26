@@ -1,3 +1,5 @@
+// features/dashboard/components/LatestPendingReportsTable.tsx
+
 import { LatestPendingReportResponse } from '../dashboard.types';
 import { DashboardSection, EmptyState } from './DashboardSection';
 import { formatDateTime } from '@/lib/utils';
@@ -18,8 +20,8 @@ const REASON_LABELS: Record<string, string> = {
 };
 
 const TARGET_BADGE: Record<string, string> = {
-  POST: 'bg-violet-500/15 text-violet-400',
-  COMMENT: 'bg-sky-500/15 text-sky-400',
+  POST: 'bg-primary/10 text-primary border border-primary/20',
+  COMMENT: 'bg-foreground-muted/10 text-foreground-muted border border-foreground-muted/20',
 };
 
 export function LatestPendingReportsTable({ data }: Props) {
@@ -36,17 +38,17 @@ export function LatestPendingReportsTable({ data }: Props) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-700/50">
-              <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+            <tr className="border-b border-border-muted/50">
+              <th className="text-left py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Loại
               </th>
-              <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="text-left py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Lý do
               </th>
-              <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="text-left py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider">
                 Mô tả
               </th>
-              <th className="text-right py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <th className="text-right py-2 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Ngày tạo
               </th>
             </tr>
@@ -55,24 +57,24 @@ export function LatestPendingReportsTable({ data }: Props) {
             {data.map((row) => (
               <tr
                 key={row.reportId}
-                className="border-b border-slate-800/60 hover:bg-slate-800/30 transition-colors"
+                className="border-b border-border-muted/30 hover:bg-surface/50 transition-colors duration-150"
               >
                 <td className="py-2.5 pr-3">
                   <span
-                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                      TARGET_BADGE[row.targetType] ?? 'bg-slate-700 text-slate-300'
+                    className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${
+                      TARGET_BADGE[row.targetType] ?? 'bg-border/30 text-foreground-muted'
                     }`}
                   >
                     {row.targetType}
                   </span>
                 </td>
-                <td className="py-2.5 pr-3 text-slate-300 whitespace-nowrap">
+                <td className="py-2.5 pr-3 text-foreground whitespace-nowrap">
                   {REASON_LABELS[row.reasonType] ?? row.reasonType}
                 </td>
-                <td className="py-2.5 pr-3 text-slate-500 max-w-[160px] truncate" title={row.reasonText}>
+                <td className="py-2.5 pr-3 text-foreground-muted max-w-[160px] truncate" title={row.reasonText}>
                   {row.reasonText ?? '—'}
                 </td>
-                <td className="py-2.5 text-right text-slate-500 whitespace-nowrap">
+                <td className="py-2.5 text-right text-foreground-muted whitespace-nowrap">
                   {formatDateTime(row.createdAt)}
                 </td>
               </tr>

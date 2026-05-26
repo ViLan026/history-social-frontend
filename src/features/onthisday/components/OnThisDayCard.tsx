@@ -1,7 +1,7 @@
-import { OnThisDayEvent } from "../onthisday.types";
+import { OnThisDay } from "../onthisday.types";
 
 interface OnThisDayCardProps {
-  event: OnThisDayEvent;
+  event: OnThisDay;
   compact?: boolean;
 }
 
@@ -48,9 +48,9 @@ export default function OnThisDayCard({
             {event.description}
           </h4>
 
-          {!compact && event.note && (
+          {!compact && event.title && (
             <p className="mt-1.5 text-xs text-foreground-muted line-clamp-4 leading-relaxed">
-              {event.note}
+              {event.title}
             </p>
           )}
         </div>

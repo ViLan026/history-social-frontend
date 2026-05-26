@@ -1,3 +1,5 @@
+// features/dashboard/components/ReportReasonChart.tsx
+
 'use client';
 
 import {
@@ -48,21 +50,21 @@ export function ReportReasonChart({ data }: Props) {
           data={chartData}
           margin={{ top: 4, right: 24, left: 8, bottom: 0 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
-          <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 11 }} allowDecimals={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-muted)" horizontal={false} />
+          <XAxis type="number" tick={{ fill: 'var(--foreground-muted)', fontSize: 11 }} allowDecimals={false} />
           <YAxis
             type="category"
             dataKey="label"
             width={120}
-            tick={{ fill: '#94a3b8', fontSize: 11 }}
+            tick={{ fill: 'var(--foreground-muted)', fontSize: 11 }}
           />
           <Tooltip
-            contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
-            labelStyle={{ color: '#94a3b8' }}
-            itemStyle={{ color: '#f87171' }}
-            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+            contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 4 }}
+            labelStyle={{ color: 'var(--foreground-muted)' }}
+            itemStyle={{ color: 'var(--primary)' }}
+            cursor={{ fill: 'var(--surface)' }}
           />
-          <Bar dataKey="count" fill="#f87171" radius={[0, 4, 4, 0]} name="Số báo cáo" />
+          <Bar dataKey="count" fill="var(--primary)" radius={[0, 4, 4, 0]} name="Số báo cáo" />
         </BarChart>
       </ResponsiveContainer>
     </DashboardSection>

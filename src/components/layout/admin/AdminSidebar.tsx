@@ -85,44 +85,46 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
             href={href}
             aria-current={isActive ? "page" : undefined}
             className={`
-              group flex items-center justify-center lg:justify-start gap-3
-              px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
+              group relative flex items-center justify-center lg:justify-start gap-3
+              px-3 py-2.5 rounded-lg
+              text-sm font-medium
+              transition-all duration-150 ease-out
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-              ${
-                isActive
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              }
+              text-foreground
+              hover:bg-[#7f0716]
+              hover:text-[#ffffff]
+              hover:text-primary-fg
+              active:bg-[#5f0510]
+              active:text-[#ffffff]
             `}
           >
-            {/* Icon Box */}
             <span
-              className={`shrink-0 transition-colors duration-150 ${
-                isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
-              }`}
+              className={`
+                shrink-0 transition-colors duration-150
+                ${isActive
+                  ? "text-primary  mx-3"
+                  : "text-foreground group-hover:text-primary-fg"}
+              `}
             >
               {icon}
             </span>
 
-            {/* Label - Ẩn trên tablet, hiện trên màn hình lớn (lg) */}
-            <span className="hidden lg:block overflow-hidden text-ellipsis whitespace-nowrap">
-              {label}
-            </span>
+            <span className="hidden lg:block">{label}</span>
 
-            {/* Active Indicator cho màn hình lớn */}
+            {/* Active dot */}
             {isActive && (
-              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-foreground/80 hidden lg:block" />
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-fg/70 hidden lg:block" />
             )}
           </Link>
         </li>
       </Tooltip.Trigger>
 
-      {/* Tooltip khi Sidebar co nhỏ lại ở chế độ tablet */}
       <Tooltip.Portal>
         <Tooltip.Content
           side="right"
-          sideOffset={10}
-          className="hidden md:block lg:hidden px-3 py-1.5 text-xs font-semibold bg-popover text-popover-foreground border border-border rounded-md shadow-md z-50 animate-in fade-in-50 duration-100"
+          sideOffset={8}
+          // Sử dụng lg:hidden để ẩn tooltip đi khi label đã được hiển thị trên màn hình lớn
+          className="hidden md:block lg:hidden px-3 py-2 text-sm font-medium bg-surface border border-border rounded-lg shadow-lg z-50 bg-white text-black dark:bg-gray-800 dark:text-white"
         >
           {label}
           <Tooltip.Arrow className="fill-border" />
@@ -132,24 +134,15 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
   );
 }
 
-
 export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
     <Tooltip.Provider delayDuration={100}>
       <nav
-        className="w-full h-full flex flex-col gap-4 bg-card px-2 py-4 border-r border-border"
+        className="w-[90%] sticky top-10 flex flex-col gap-6 bg-sidebar-bg"
         aria-label="Admin Navigation"
       >
-        {/* Phần Header nhỏ của Sidebar trên Desktop */}
-        <div className="hidden lg:flex px-3 py-2 flex-col gap-1">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
-            Hệ thống quản trị
-          </p>
-        </div>
-
-        {/* Danh sách Menu */}
         <ul className="flex flex-row md:flex-col justify-around md:justify-start gap-1 w-full" role="list">
           {ADMIN_NAV_ITEMS.map((item) => {
             // Check active chính xác cho hệ thống route /admin
