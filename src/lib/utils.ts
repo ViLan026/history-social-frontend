@@ -124,3 +124,39 @@ export function truncate(text: string, maxLength: number): string {
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+
+const shortDateFormatter = new Intl.DateTimeFormat('vi-VN', {
+  day: '2-digit',
+  month: '2-digit',
+});
+
+const fullDateTimeFormatter = new Intl.DateTimeFormat('vi-VN', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+/**
+ * Format "2026-05-20" -> "20/05"
+ */
+export function formatDateShort(dateStr: string): string {
+  try {
+    return shortDateFormatter.format(new Date(dateStr));
+  } catch {
+    return dateStr;
+  }
+}
+
+/**
+ * Format ISO datetime -> "20/05/2026, 10:00"
+ */
+export function formatDateTime(dateStr: string): string {
+  try {
+    return fullDateTimeFormatter.format(new Date(dateStr));
+  } catch {
+    return dateStr;
+  }
+}

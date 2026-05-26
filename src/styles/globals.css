@@ -1,12 +1,42 @@
-/* ============================================================
-   globals.css
-   Base styles — reset + typography + scrollbar + utilities
-   Import thứ tự: theme.css → globals.css
-   ============================================================ */
 
 @import "tailwindcss";
 @import "./theme.css";
 
+@theme {
+  /* Khai báo màu sắc hệ thống */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-faint: var(--foreground-faint);
+  
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+  
+  --color-card: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-border: var(--border);
+  --color-border-muted: var(--border-muted);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-fg: var(--primary-fg);
+
+  /* Khai báo Border Radius kiểu v4 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  /* Khai báo Animation kiểu v4 */
+  --animate-fade-in: fadeIn 0.2s ease;
+  --animate-slide-up: slideUp 0.25s ease;
+  --animate-slide-left: slideInLeft 0.25s ease;
+  --animate-scale-in: scaleIn 0.2s ease;
+}
 
 @layer base {
   /* RESET / BASE */

@@ -33,7 +33,7 @@ export default function Footer() {
                         Hỗ trợ kỹ thuật
                     </Link>
                     <span className="text-muted-foreground/40 italic hidden md:inline">
-                        "Historia Magistra Vitae Est"
+                        &quot;Historia Magistra Vitae Est&quot;
                     </span>
                 </div>
             </div>

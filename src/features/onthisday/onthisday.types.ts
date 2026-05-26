@@ -1,6 +1,14 @@
-export interface OnThisDayEvent {
+// history-social-frontend\src\features\onthisday\onthisday.types.ts
+
+export interface OnThisDay {
   id: string;
   eventDate: string;
+  title: string;
   description: string;
-  note?: string | null;
+}
+
+export interface OnThisDayRequest {
+  eventDate: string;
+  title: string;
+  description: string;
 }

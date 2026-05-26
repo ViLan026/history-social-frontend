@@ -27,15 +27,6 @@ export default function PostCard({ post, isInModal = false }: PostCardProps) {
                 isInModal ? "p-0 shadow-none" : "p-4 md:p-5 lg:p-6"
             ].join(" ")}
         >
-            {/* {!isInModal && (
-                <Link
-                    // href={`/posts/${post.postId}`}
-                    className="absolute inset-0 z-0"
-                    aria-label={`Đọc bài viết: ${post.title}`}
-                >
-                    <span className="sr-only">Xem chi tiết</span>
-                </Link>
-            )} */}
 
             <div className="relative z-10 space-y-4">
                 <PostHeader post={post} />

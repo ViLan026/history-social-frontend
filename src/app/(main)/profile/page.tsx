@@ -6,7 +6,7 @@ import ProfileTabs from "@/components/layout/ProfileTabs";
 import PostList from "@/features/post/components/PostList";
 import Navigation from "@/components/layout/Navigation";
 import BookmarkList from "@/features/bookmark/components/BookmarkList";
-import ReportList from "@/features/repost/components/RepostList";
+import ReportList from "@/features/report/components/RepostList";
 
 export type ProfileTab = "posts" | "bookmarks" | "reposts";
 

@@ -9,6 +9,7 @@ import AuthArea from "../../features/user/components/AuthArea";
 import BrandLogo from "../ui/BrandLogo";
 
 
+
 interface IconButtonProps {
     onClick: () => void;
     label: string;
@@ -17,6 +18,7 @@ interface IconButtonProps {
 }
 
 function IconButton({ onClick, label, icon, badge }: IconButtonProps) {
+
     return (
         <button
             onClick={onClick}

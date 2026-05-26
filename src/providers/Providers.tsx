@@ -1,16 +1,11 @@
 // providers/Providers.tsx
-// ============================================================
-// Tất cả providers tập trung ở đây — 1 file duy nhất
-// Thứ tự wrap: QueryClient → Theme → (Toaster nếu cần)
-// ============================================================
-
 "use client";
 
 import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import AuthProvider from "./AuthProvider";
+import AppInitializer from "./AppInitializer";
 
 // QueryClient config — tối ưu cho social media feed
 function makeQueryClient() {
@@ -69,7 +64,9 @@ export default function Providers({ children }: ProvidersProps) {
                 disableTransitionOnChange={false} // Cho phép smooth transition
                 storageKey="historia-theme" // localStorage key. đặt tên khác để tráng đụng với các site khác nếu user dùng chung browser
             >
-                <AuthProvider>{children}</AuthProvider>
+                {/* {children} */}
+
+                <AppInitializer>{children}</AppInitializer>
             </ThemeProvider>
 
             <ReactQueryDevtools initialIsOpen={false} />

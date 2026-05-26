@@ -37,9 +37,13 @@ const redirectToLogin = () => {
   if (typeof window !== "undefined") {
     const currentPath = window.location.pathname;
 
-    if (currentPath !== "/login" && currentPath !== "/register") {
+    const publicPaths = ["/", "/onthisday/today", "/login", "/register", "/posts", "/comment", "/follows/suggestions"];
+
+    // Nếu đường dẫn hiện tại nằm trong danh sách công khai thì KHÔNG redirect
+    if (!publicPaths.includes(currentPath)) {
       window.location.href = "/login";
     }
+
   }
 };
 

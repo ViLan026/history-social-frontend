@@ -219,7 +219,7 @@ export default function Footer() {
                         © {currentYear} Historia Archive. Bảo lưu mọi bản quyền.
                     </p>
                     <p className="wh text-[11px] uppercase tracking-widest opacity-40 italic" >
-                        "Historia Magistra Vitae Est"
+                        &quot;Historia Magistra Vitae Est&quot;
                     </p>
                 </div>
             </div>

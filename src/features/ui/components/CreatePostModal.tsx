@@ -53,7 +53,6 @@ function Field({
     );
 }
 
-/** Shared input class */
 const inputClass = `
   w-full rounded-lg px-4 py-2.5
   bg-surface border border-border
@@ -63,7 +62,6 @@ const inputClass = `
   transition-all duration-150
 `;
 
-/** Shared ghost button (secondary action) */
 const ghostBtnClass = `
   rounded-lg px-4 py-2.5 text-sm font-medium
   text-foreground-muted border border-border
@@ -72,10 +70,9 @@ const ghostBtnClass = `
   transition-all duration-150
 `;
 
-/** Primary filled button */
 const primaryBtnClass = `
-  rounded-lg px-5 py-2.5 text-sm font-semibold
-  bg-primary text-primary-fg
+  rounded-lg px-5 py-3 my-3 text-sm font-semibold
+  bg-background text-foreground
   hover:bg-primary-hover
   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
   disabled:opacity-50 disabled:cursor-not-allowed
@@ -282,12 +279,10 @@ export const CreatePostModal: React.FC = () => {
 
     return (
         <>
-            {/* ── Trigger button ── */}
             <button onClick={() => setIsOpen(true)} className={primaryBtnClass}>
                 + Thêm bài viết
             </button>
 
-            {/* ── Modal ── */}
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay/100 backdrop-blur-sm"
                     onClick={(e) => {

@@ -13,14 +13,14 @@ function HomeIcon() {
   );
 }
 
-function TrendingIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-      <polyline points="17 6 23 6 23 12" />
-    </svg>
-  );
-}
+// function TrendingIcon() {
+//   return (
+//     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+//       <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+//       <polyline points="17 6 23 6 23 12" />
+//     </svg>
+//   );
+// }
 
 function HistoryIcon() {
   return (
@@ -32,14 +32,14 @@ function HistoryIcon() {
   );
 }
 
-function BookIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-    </svg>
-  );
-}
+// function BookIcon() {
+//   return (
+//     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+//       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+//       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+//     </svg>
+//   );
+// }
 
 function FollowingIcon() {
   return (
@@ -52,13 +52,13 @@ function FollowingIcon() {
   );
 }
 
-function BookmarkIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-    </svg>
-  );
-}
+// function BookmarkIcon() {
+//   return (
+//     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+//       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+//     </svg>
+//   );
+// }
 
 function UserIcon() {
   return (
@@ -73,7 +73,7 @@ function UserIcon() {
 const NAV_ITEMS = [
   { label: "Trang chủ", href: "/", icon: <HomeIcon /> },
   // { label: "Xu hướng", href: "/trending", icon: <TrendingIcon /> },
-  { label: "Ngày này năm xưa", href: "/in-this-day", icon: <HistoryIcon /> },
+  { label: "Ngày này năm xưa", href: "/on-this-day", icon: <HistoryIcon /> },
   // { label: "Sách", href: "/book-reviews", icon: <BookIcon /> },
   { label: "Theo dõi", href: "/follow", icon: <FollowingIcon /> },
   // { label: "Đã lưu", href: "/bookmarks", icon: <BookmarkIcon /> },
@@ -101,7 +101,7 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
               text-sm font-medium
               transition-all duration-150 ease-out
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-              text-foreground-muted
+              text-foreground
               hover:bg-[#7f0716]
               hover:text-[#ffffff]
               hover:text-primary-fg
@@ -109,13 +109,12 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
               active:text-[#ffffff]
             `}
           >
-            {/* Icon */}
             <span
               className={`
                 shrink-0 transition-colors duration-150
                 ${isActive
-                  ? "text-primary-fg"
-                  : "text-foreground-faint group-hover:text-primary-fg"}
+                  ? "text-primary  mx-3"
+                  : "text-foreground group-hover:text-primary-fg"}
               `}
             >
               {icon}

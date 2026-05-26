@@ -65,7 +65,9 @@ export interface UserSummaryResponse {
   displayName: string | null;
   avatarUrl: string | null;
   status: string;
-  roles: []; // Map theo Set<Role> của backend
+  roles: [];
+  username?: string;
+createdAt?: string;
 }
 
 // Params cho GET /users

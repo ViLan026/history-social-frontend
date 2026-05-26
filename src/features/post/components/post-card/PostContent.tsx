@@ -33,7 +33,7 @@ export default function PostContent({
             <div
                 ref={contentRef}
                 className={cn(
-                    "text-sm md:text-base leading-relaxed text-foreground-muted whitespace-pre-line break-words ",
+                    "text-sm md:text-base leading-relaxed text-foreground whitespace-pre-line break-words ",
                     !isExpanded && !isInModal && "line-clamp-3"
                 )}
             >

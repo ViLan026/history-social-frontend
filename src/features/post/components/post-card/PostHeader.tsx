@@ -34,9 +34,9 @@ export default function PostHeader({ post }: PostHeaderProps) {
             </div> 
 
             {/* Title */}
-            <h2 className="mt-4 text-[22px] leading-tight font-semibold text-foreground pr-4 group-hover:text-primary transition-colors">
+            <h3 className="mt-4 text-[22px] leading-tight font-semibold text-foreground pr-4">
                 {post.title}
-            </h2>
+            </h3>
         </div>
     );
 }

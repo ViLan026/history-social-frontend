@@ -34,7 +34,8 @@ const eslintConfig = defineConfig([
             "src/types/**/*",
             "src/utils/**/*",
             "src/proxy.ts",
-            "src/features/auth/auth.store.ts",
+            "src/features/auth/*",
+            // "src/features/user/components/*",
           ],
         },
 
@@ -42,7 +43,8 @@ const eslintConfig = defineConfig([
           mode: "full",
           type: "feature",
           capture: ["featureName"],
-          pattern: ["src/features/*/**/*"],
+          pattern: ["src/features/*/**/*", "src/features/*/*", "src/features/*/**"],
+          
         },
 
         {

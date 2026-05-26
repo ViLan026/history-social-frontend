@@ -14,10 +14,21 @@ export const API_ENDPOINTS = {
       CHANGE_PASSWORD: (id: string) => `/users/${id}/password`,
       LOCK: (id: string) => `/admin/users/${id}/lock`,
       UNLOCK: (id: string) => `/admin/users/${id}/unlock`,
-      // Endpoint dưới đây của bạn đang nằm trong auth.users
       ME: '/users/me', 
-      // PROFILE: (id: string) => `/users/${id}`,
-      // FOLLOW: (id: string) => `/users/${id}/follow`,
+    },
+
+    ADMIN_DASHBOARD: {
+      OVERVIEW: '/admin/dashboard/overview',
+      POST_STATUS_STATS: '/admin/dashboard/post-status-stats',
+      REPORT_STATUS_STATS: '/admin/dashboard/report-status-stats',
+      REPORT_REASON_STATS: '/admin/dashboard/report-reason-stats',
+      NEW_USERS: '/admin/dashboard/new-users',
+      NEW_POSTS: '/admin/dashboard/new-posts',
+      ENGAGEMENT_STATS: '/admin/dashboard/engagement-stats',
+      TOP_REPORTED_POSTS: '/admin/dashboard/top-reported-posts',
+      LATEST_PENDING_REPORTS: '/admin/dashboard/latest-pending-reports',
+      TOP_TAGS: '/admin/dashboard/top-tags',
+      REACTION_STATS: '/admin/dashboard/reaction-stats',
     },
     
     ROLES: {
@@ -77,6 +88,13 @@ export const API_ENDPOINTS = {
     ADMIN_REPORTS: {
         PENDING: '/admin/reports/pending',
         REVIEW: (id: string) => `/admin/reports/${id}/review`,
+    },
+
+    ADMIN_ON_THIS_DAY: {
+      ADMIN_GET_ALL: '/admin/onthisday/days',
+      ADMIN_CREATE: '/admin/onthisday',
+      ADMIN_UPDATE: (id: string) => `/admin/onthisday/${id}`,
+      ADMIN_DELETE: (id: string) => `/admin/onthisday/${id}`,
     }
 
 

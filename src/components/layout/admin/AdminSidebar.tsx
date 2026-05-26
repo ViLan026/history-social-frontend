@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as Tooltip from "@radix-ui/react-tooltip";
 
-// ─── ICONS COMPONENT (Sử dụng các icon chuyên dụng cho Admin) ─────────────────
 
 function DashboardIcon() {
   return (
@@ -61,14 +60,13 @@ function HistoryIcon() {
   );
 }
 
-// ─── CONFIGURATION DÀNH CHO ADMIN ───────────────────────────────────────────
 
 const ADMIN_NAV_ITEMS = [
   { label: "Tổng quan", href: "/admin/dashboard", icon: <DashboardIcon /> },
   { label: "Quản lý Báo cáo", href: "/admin/reports", icon: <ReportsIcon /> },
   { label: "Quản lý Bài viết", href: "/admin/posts", icon: <PostsIcon /> },
   { label: "Quản lý Người dùng", href: "/admin/users", icon: <UsersIcon /> },
-  { label: "Ngày này năm xưa", href: "/admin/in-this-day", icon: <HistoryIcon /> },
+  { label: "Ngày này năm xưa", href: "/admin/on-this-day", icon: <HistoryIcon /> },
 ] as const;
 
 interface NavItemProps {
@@ -134,7 +132,6 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
   );
 }
 
-// ─── MAIN COMPONENT ─────────────────────────────────────────────────────────
 
 export default function AdminSidebar() {
   const pathname = usePathname();

@@ -18,12 +18,12 @@ export default function PostList({ authorId }: PostListProps) {
     const isAuthMode = !isAuthorMode && isAuthenticated; // Đã login + Không có authorId => Trang chủ cá nhân hóa
     const isPublicMode = !isAuthorMode && !isAuthenticated; // Chưa login + Không có authorId => Trang chủ công khai
 
-    // 3. Khai báo cả 3 hook với điều kiện enabled tương ứng
+    // Khai báo cả 3 hook với điều kiện enabled tương ứng
     const  authFeed = useInfiniteFeed(isAuthMode);
     const publicFeed = useInfiniteFeedHome(isPublicMode);
     const authorFeed = useInfinitePostsByAuthor(authorId || "", isAuthorMode); // Truyền thêm điều kiện bật/tắt ở tham số thứ 2
 
-    // 4. Lựa chọn feed chính xác dựa trên chế độ hiện tại
+    // Lựa chọn feed chính xác dựa trên chế độ hiện tại
     let currentFeed = publicFeed;
     if (isAuthMode) currentFeed = authFeed;
     if (isAuthorMode) currentFeed = authorFeed;

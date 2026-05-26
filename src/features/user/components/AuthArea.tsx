@@ -58,7 +58,7 @@ export default function AuthArea() {
 
             {isOpen && (
                 <div
-                    className="absolute right-0 mt-2 w-56 bg-background border border-border rounded-xl shadow-lg py-1.5 z-50 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200"
+                    className="neu absolute right-0 mt-2 w-56 bg-[var(--background)] border border-border rounded-xl shadow-lg py-1.5 z-50 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200"
                 >
                     <div className="px-4 py-2 border-b border-border mb-1">
                         <p className="text-sm font-semibold text-foreground truncate">{displayName}</p>
