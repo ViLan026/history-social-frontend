@@ -3,8 +3,8 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useAuthStore } from "@/features/auth/auth.store";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/admin/AdminHeader";
+import Footer from "@/components/layout/admin/AdminFooter";
 import GlobalModals from "@/features/ui/components/GlobalModals";
 
 function LoadingScreen() {

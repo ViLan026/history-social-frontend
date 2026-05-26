@@ -12,12 +12,12 @@ export const API_ENDPOINTS = {
       GET_BY_ID: (id: string) => `/users/${id}`,
       UPDATE: (id: string) => `/users/${id}`,
       CHANGE_PASSWORD: (id: string) => `/users/${id}/password`,
-      LOCK: (id: string) => `/users/${id}/lock`,
-      UNLOCK: (id: string) => `/users/${id}/unlock`,
+      LOCK: (id: string) => `/admin/users/${id}/lock`,
+      UNLOCK: (id: string) => `/admin/users/${id}/unlock`,
       // Endpoint dưới đây của bạn đang nằm trong auth.users
       ME: '/users/me', 
-      PROFILE: (id: string) => `/users/${id}`,
-      FOLLOW: (id: string) => `/users/${id}/follow`,
+      // PROFILE: (id: string) => `/users/${id}`,
+      // FOLLOW: (id: string) => `/users/${id}/follow`,
     },
     
     ROLES: {
@@ -70,9 +70,14 @@ export const API_ENDPOINTS = {
     },
     
     REPORTS: {
-    BASE: '/reports',
-    ME: '/reports/me',
-  },
+      BASE: '/reports',
+      ME: '/reports/me',
+    },
+
+    ADMIN_REPORTS: {
+        PENDING: '/admin/reports/pending',
+        REVIEW: (id: string) => `/admin/reports/${id}/review`,
+    }
 
 
 };

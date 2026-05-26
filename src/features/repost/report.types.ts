@@ -54,12 +54,22 @@ export interface MyReportResponse {
     isMyContentReported?: boolean; 
 }
 
-// Interface phân trang chung (nếu bạn chưa có ở file global)
-export interface PageResponse<T> {
-    content: T[];
-    pageNumber: number;
-    pageSize: number;
-    totalElements: number;
-    totalPages: number;
-    last: boolean;
+
+export interface TargetPreviewResponse {
+    id: string;
+    content: string;
+    authorId: string;
+    authorName: string;
+    isDeleted: boolean;
+    isHiddenByAdmin: boolean;
+    isHiddenByAuthor: boolean;
+}
+
+export interface ModerationReportResponse {
+    report: ReportResponse;
+    targetPreview: TargetPreviewResponse;
+}
+
+export interface ReviewReportRequest {
+    status: ReportStatus; // Chỉ gửi PENDING, RESOLVED, hoặc DISMISSED
 }
