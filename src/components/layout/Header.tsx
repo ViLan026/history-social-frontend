@@ -70,7 +70,7 @@ export default function Header() {
 
             <div className="flex items-center gap-1 sm:gap-2">
                 <ThemeToggle />
-
+{/* 
                 <IconButton
                     onClick={() => router.push("/notifications")}
                     label="Thông báo"
@@ -91,7 +91,7 @@ export default function Header() {
                             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                         </svg>
                     }
-                />
+                /> */}
 
                 {/* Divider */}
                 <span

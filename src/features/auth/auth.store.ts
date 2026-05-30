@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+// eslint-disable-next-line boundaries/element-types
 import { useUserStore } from '../user/user.store';
 
 interface AuthState {

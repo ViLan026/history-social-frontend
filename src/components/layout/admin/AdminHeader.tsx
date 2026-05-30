@@ -54,7 +54,7 @@ export default function Header({ onToggleSidebar }: { onToggleSidebar?: () => vo
             <div className="flex items-center gap-2">
                 <ThemeToggle />
 
-                <IconButton
+                {/* <IconButton
                     onClick={() => router.push("/admin/reports")}
                     label="Danh sách báo cáo vi phạm"
                     badge={reportPendingCount}
@@ -74,7 +74,7 @@ export default function Header({ onToggleSidebar }: { onToggleSidebar?: () => vo
                             <line x1="4" x2="4" y1="22" y2="15" />
                         </svg>
                     }
-                />
+                /> */}
 
                 {/* Divider */}
                 <span className="w-px h-5 bg-border-muted/30 mx-1" aria-hidden="true" />

@@ -80,9 +80,8 @@ export default function PostDetailModal() {
                     <button
                         type="button"
                         onClick={closePostDetail}
-                        aria-label="Đóng chi tiết bài viết"
-                        /* Sử dụng text-primary-fg cho dấu ✕ và tận dụng bg-surface/20 biến đổi mượt mà khi hover */
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full text-primary-fg hover:bg-surface/20 active:bg-surface/40 transition-colors duration-150"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-full"
+                        style={{ color: "var(--primary-fg)" }}
                     >
                         ✕
                     </button>

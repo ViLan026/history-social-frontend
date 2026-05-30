@@ -5,6 +5,7 @@ import { useInfiniteFeed, useInfiniteFeedHome,  useInfinitePostsByAuthor} from "
 import PostCard from "./post-card/PostCard";
 import PostListSkeleton from "./PostListSkeleton";
 import { useAuthStore } from "@/features/auth/auth.store";
+// import { useCurrentUser } from "@/features/user/useUser";
 
 interface PostListProps {
     authorId?: string;
@@ -12,6 +13,9 @@ interface PostListProps {
 
 export default function PostList({ authorId }: PostListProps) {
     const { isAuthenticated } = useAuthStore();
+    // const { data: currentUser } = useCurrentUser();
+    // if(isAuthenticated)
+    //     authorId = currentUser?.id; // Nếu đã login thì lấy authorId từ user info để hiển thị feed cá nhân
 
     // !! được dịch từ phải sang trái với biến authorId có giá trị thị !authorId sẽ là false, sau đó !false sẽ là true và ngược lại
     const isAuthorMode = !!authorId; // Có authorId => Chế độ xem trang cá nhân

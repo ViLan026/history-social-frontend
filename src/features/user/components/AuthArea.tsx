@@ -36,7 +36,7 @@ export default function AuthArea() {
         return (
             <Link
                 href="/login"
-                className="hidden sm:inline-flex items-center justify-center h-9 px-5 rounded-full text-sm font-medium text-primary border border-primary/40 hover:bg-primary-subtle transition-all"
+                className="hidden sm:inline-flex items-center justify-center h-9 px-5 rounded-full text-sm font-medium text-primary border border-primary/40 bg-primary-subtle transition-all"
             >
                 Đăng nhập
             </Link>

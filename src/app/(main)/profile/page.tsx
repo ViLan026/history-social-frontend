@@ -6,7 +6,10 @@ import ProfileTabs from "@/components/layout/ProfileTabs";
 import PostList from "@/features/post/components/PostList";
 import Navigation from "@/components/layout/Navigation";
 import BookmarkList from "@/features/bookmark/components/BookmarkList";
+import { useCurrentUser } from "@/features/user/useUser";
 import ReportList from "@/features/report/components/RepostList";
+import { useAuthStore } from "@/features/auth/auth.store";
+// import { id } from "date-fns/locale/id";
 
 export type ProfileTab = "posts" | "bookmarks" | "reposts";
 
@@ -19,6 +22,9 @@ interface ProfilePageProps {
 export default function ProfilePage({ searchParams }: ProfilePageProps) {
     // 1. Unpack searchParams trong Client Component
     const [activeTab, setActiveTab] = useState<ProfileTab>("posts");
+    const { isAuthenticated } = useAuthStore();
+    const { data: currentUser } = useCurrentUser();
+    const id = isAuthenticated ? currentUser?.id : undefined;
 
     useEffect(() => {
         searchParams.then((params) => {
@@ -102,13 +108,16 @@ export default function ProfilePage({ searchParams }: ProfilePageProps) {
                         <div className="flex-1 w-full flex justify-center px-4 pt-16 md:pt-4 pb-6">
                             <div className="w-full space-y-4">
                                 <ProfileInfo />
-                                
+
                                 <div className="sticky top-14 z-20 bg-surface-raised">
                                     <ProfileTabs />
                                 </div>
 
                                 <Suspense fallback={<ContentSkeleton />}>
-                                    <ProfileContent activeTab={activeTab} />
+                                    <ProfileContent
+                                        activeTab={activeTab}
+                                        id={id}
+                                    />
                                 </Suspense>
                             </div>
                         </div>
@@ -121,21 +130,27 @@ export default function ProfilePage({ searchParams }: ProfilePageProps) {
 
 interface ProfileContentProps {
     activeTab: ProfileTab;
+    id?: string;
 }
 
-function ProfileContent({ activeTab }: ProfileContentProps) {
+function ProfileContent({ activeTab, id }: ProfileContentProps) {
     return (
         <div className="w-full mx-auto">
             {activeTab === "posts" && (
                 <div>
-                    <PostList />
+                    {/* Chỉ render PostList khi đã có id của tác giả */}
+                    {id ? <PostList authorId={id} /> : <ContentSkeleton />}
                 </div>
             )}
             {activeTab === "bookmarks" && (
-                <div className="p-4 text-foreground/70"><BookmarkList /></div>
+                <div className="p-4 text-foreground/70">
+                    <BookmarkList />
+                </div>
             )}
             {activeTab === "reposts" && (
-                <div className="p-4 text-foreground/70"><ReportList /></div>
+                <div className="p-4 text-foreground/70">
+                    <ReportList />
+                </div>
             )}
         </div>
     );
