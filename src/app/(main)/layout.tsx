@@ -8,7 +8,7 @@ import Footer from "@/components/layout/Footer";
 import GlobalModals from "@/features/ui/components/GlobalModals";
 
 
-export default function MainLayout({ children }: { children: ReactNode }) {
+export default function MainRouteLayout({ children }: { children: ReactNode }) {
     // const router = useRouter();
     // const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 

@@ -10,22 +10,30 @@ import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
 
 export const postService = {
   // 1. Tạo bài viết
-  createPost: async (request: PostCreationRequest, files?: File[]): Promise<PostResponse> => {
-    const formData = new FormData();
-    const postBlob = new Blob([JSON.stringify(request)], { type: 'application/json' });
-    formData.append('post', postBlob);
+createPost: async (
+  request: PostCreationRequest,
+  files?: File[]
+): Promise<PostResponse> => {
+  const formData = new FormData();
 
-    if (files && files.length > 0) {
-      files.forEach((file) => formData.append('files', file));
-    }
+  formData.append(
+    "post",
+    new Blob([JSON.stringify(request)], {
+      type: "application/json",
+    })
+  );
 
-    const response = await axiosInstance.post<ApiResponse<PostResponse>>(
-      API_ENDPOINTS.POSTS.BASE, 
-      formData
-    );
-    return response.data.data;
-  },
+  files?.forEach((file) => {
+    formData.append("files", file);
+  });
 
+  const response = await axiosInstance.post<ApiResponse<PostResponse>>(
+    API_ENDPOINTS.POSTS.BASE,
+    formData
+  );
+
+  return response.data.data;
+},
   // 2. Xem chi tiết bài viết
   getPostById: async (id: string): Promise<FeedPostResponse> => {
     const response = await axiosInstance.get<ApiResponse<FeedPostResponse>>(

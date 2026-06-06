@@ -63,9 +63,9 @@ export default function AdminUserTable({
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Người dùng
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {/* <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Username
-              </th>
+              </th> */}
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Trạng thái
               </th>
@@ -105,11 +105,11 @@ export default function AdminUserTable({
                     </div>
                   </td>
 
-                  <td className="px-4 py-4 text-sm text-foreground">
+                  {/* <td className="px-4 py-4 text-sm text-foreground">
                     <span className="text-muted-foreground">
                       Không có trong UserSummary
                     </span>
-                  </td>
+                  </td> */}
 
                   <td className="px-4 py-4">
                     <span

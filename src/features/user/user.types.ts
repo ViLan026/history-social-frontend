@@ -27,6 +27,8 @@ export interface ProfileResponse {
   username: string;
   avatarUrl: string | null;
   bio: string | null;
+  followerCount: number
+  followingCount: number
 }
 
 export interface UserResponse {
@@ -67,7 +69,7 @@ export interface UserSummaryResponse {
   status: string;
   roles: [];
   username?: string;
-createdAt?: string;
+  createdAt?: string;
 }
 
 // Params cho GET /users

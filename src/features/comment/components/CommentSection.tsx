@@ -47,7 +47,8 @@ export const CommentSection = memo<CommentSectionProps>(
     const { data, isLoading, isFetching } = useCommentsByPost(postId, params);
     const createMutation = useCreateComment();
 
-    const serverComments = data?.content ?? [];
+    // const serverComments = data?.content ?? [];
+    const serverComments = useMemo(() => data?.content ?? [], [data?.content]);
     const totalElements = data?.totalElements ?? 0;
 
     const isInitialLoading = isLoading && serverComments.length === 0;

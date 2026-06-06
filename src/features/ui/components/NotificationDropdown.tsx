@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -10,7 +9,7 @@ interface NotificationDropdownProps {
 }
 
 export default function NotificationDropdown({
-    admin = false,
+    admin = false
 }: NotificationDropdownProps) {
     const closeNotification = useUIStore((state) => state.closeNotification);
 
@@ -37,7 +36,7 @@ export default function NotificationDropdown({
                 </button>
             </div>
 
-            <NotificationList page={0} size={8} compact />
+            <NotificationList size={8} compact showLoadMore={false} />
 
             <div className="border-t border-border-muted px-4 py-3 text-center">
                 <Link

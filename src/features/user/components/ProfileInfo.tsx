@@ -13,6 +13,12 @@ interface ProfileInfoProps {
     isOwner?: boolean;
 }
 
+interface ProfileStatsProps {
+    followerCount?: number;
+    followingCount?: number;
+    className?: string;
+}
+
 export default function ProfileInfo({
     user,
     isOwner = true,
@@ -26,13 +32,16 @@ export default function ProfileInfo({
 
     const profileUser = user ?? currentUser;
 
-    if (!profileUser) {
+    if (!profileUser?.profile) {
         return null;
     }
 
     const { profile } = profileUser;
+
     const displayName = profile.displayName || profile.username || "Người dùng";
     const avatarUrl = profile.avatarUrl || null;
+    const followerCount = profile.followerCount ?? 0;
+    const followingCount = profile.followingCount ?? 0;
 
     return (
         <div className="bg-surface">
@@ -98,11 +107,19 @@ export default function ProfileInfo({
                             )}
                         </div>
 
-                        <ProfileStats className="hidden sm:flex" />
+                        <ProfileStats
+                            followerCount={followerCount}
+                            followingCount={followingCount}
+                            className="hidden sm:flex"
+                        />
                     </div>
                 </div>
 
-                <ProfileStats className="sm:hidden mb-4" />
+                <ProfileStats
+                    followerCount={followerCount}
+                    followingCount={followingCount}
+                    className="sm:hidden mb-4"
+                />
 
                 {profile.bio && (
                     <div className="mt-4">
@@ -128,11 +145,14 @@ export default function ProfileInfo({
     );
 }
 
-function ProfileStats({ className = "" }: { className?: string }) {
+function ProfileStats({
+    followerCount = 0,
+    followingCount = 0,
+    className = "",
+}: ProfileStatsProps) {
     const stats = [
-        { label: "Posts", value: "120" },
-        { label: "Followers", value: "1.2k" },
-        { label: "Following", value: "850" },
+        { label: "Followers", value: followerCount },
+        { label: "Following", value: followingCount },
     ];
 
     return (
@@ -140,6 +160,7 @@ function ProfileStats({ className = "" }: { className?: string }) {
             {stats.map((stat) => (
                 <button
                     key={stat.label}
+                    type="button"
                     className="group flex items-center gap-1.5 hover:opacity-80 transition-opacity"
                 >
                     <span className="font-semibold text-foreground">
@@ -165,7 +186,7 @@ function ProfileInfoSkeleton() {
                         <div className="h-7 w-48 bg-surface-muted rounded animate-pulse" />
                         <div className="h-4 w-32 bg-surface-muted rounded animate-pulse" />
                         <div className="flex gap-6 mt-4">
-                            {[1, 2, 3].map((i) => (
+                            {[1, 2].map((i) => (
                                 <div
                                     key={i}
                                     className="h-4 w-24 bg-surface-muted rounded animate-pulse"

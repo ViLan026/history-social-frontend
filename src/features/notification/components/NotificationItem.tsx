@@ -81,7 +81,7 @@ export default function NotificationItem({ notification }: NotificationItemProps
     const router = useRouter();
     const closeNotification = useUIStore((state) => state.closeNotification);
     const markAsReadMutation = useMarkNotificationAsRead();
-
+    const displayName = notification.displayName?.trim() || "Người dùng"
     const handleClick = () => {
         if (!notification.read) {
             markAsReadMutation.mutate(notification.id);
@@ -108,7 +108,7 @@ export default function NotificationItem({ notification }: NotificationItemProps
         >
             <div className="flex items-start gap-3">
                 <div className="relative mt-1 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary text-primary-fg">
-                    <Avatar avatarUrl={notification.avatarUrl} displayName={notification.displayName} />
+                    <Avatar avatarUrl={notification.avatarUrl} displayName={displayName} />
                 </div>
 
                 <div className="min-w-0 flex-1">

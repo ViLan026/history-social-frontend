@@ -23,7 +23,7 @@ export default function NotificationsPage() {
         >
             <div className="max-w-feed mx-auto px-4 py-2 md:pt-5 lg:pt-7">
                 <section className="overflow-hidden rounded-2xl border border-border bg-card neu-raised">
-                    <NotificationList page={0} size={20} />
+                    <NotificationList size={20} showLoadMore /> 
                 </section>
             </div>
         </MainLayout>
