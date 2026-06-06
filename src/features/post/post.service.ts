@@ -4,7 +4,12 @@ import {
   PostCreationRequest, 
   PostUpdateRequest, 
   PostResponse, 
-  FeedPostResponse
+  FeedPostResponse,
+    AdminPostDetailResponse,
+  AdminPostResponse,
+  AdminUpdatePostStatusRequest,
+  PostStatus,
+
 } from '@/features/post/post.types';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
 
@@ -92,6 +97,39 @@ createPost: async (
       API_ENDPOINTS.POSTS.UPDATE(id), 
       formData
     );
+    return response.data.data;
+  },
+
+
+
+    getAdminPosts: async (
+    params?: PaginationParams & { status?: PostStatus }
+  ): Promise<PageResponse<AdminPostResponse>> => {
+    const response = await axiosInstance.get<
+      ApiResponse<PageResponse<AdminPostResponse>>
+    >(API_ENDPOINTS.ADMIN_POSTS.BASE, { params });
+
+    return response.data.data;
+  },
+
+  getAdminPostDetail: async (
+    id: string
+  ): Promise<AdminPostDetailResponse> => {
+    const response = await axiosInstance.get<
+      ApiResponse<AdminPostDetailResponse>
+    >(API_ENDPOINTS.ADMIN_POSTS.GET_BY_ID(id));
+
+    return response.data.data;
+  },
+
+  updateAdminPostStatus: async (
+    id: string,
+    request: AdminUpdatePostStatusRequest
+  ): Promise<AdminPostDetailResponse> => {
+    const response = await axiosInstance.patch<
+      ApiResponse<AdminPostDetailResponse>
+    >(API_ENDPOINTS.ADMIN_POSTS.UPDATE_STATUS(id), request);
+
     return response.data.data;
   },
 };

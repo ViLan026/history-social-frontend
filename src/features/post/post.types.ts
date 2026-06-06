@@ -88,3 +88,74 @@ export interface FeedPostResponse extends PostResponse {
   reactionCount: number;
   commentCount: number;
 }
+
+
+
+
+
+
+
+
+
+export interface FactCheckSummaryResponse {
+  supportedCount: number;
+  refutedCount: number;
+  notEnoughEvidenceCount: number;
+}
+
+export interface PostFactCheckClaimResponse {
+  id: string;
+  claimText: string;
+  label: "SUPPORTED" | "REFUTED" | "NOT_ENOUGH_EVIDENCE";
+  explanation?: string;
+  evidence?: unknown;
+  displayOrder: number;
+}
+
+export interface AdminPostResponse {
+  id: string;
+  title: string;
+  contentPreview: string;
+
+  authorId: string;
+  authorName: string;
+
+  status: PostStatus;
+
+  commentCount: number;
+  reactionCount: number;
+  bookmarkCount: number;
+  reportCount: number;
+
+  factCheckSummary: FactCheckSummaryResponse;
+
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface AdminPostDetailResponse {
+  id: string;
+  title: string;
+  content: string;
+
+  authorId: string;
+  authorName: string;
+
+  status: PostStatus;
+
+  commentCount: number;
+  reactionCount: number;
+  bookmarkCount: number;
+  reportCount: number;
+
+  factCheckClaims: PostFactCheckClaimResponse[];
+  factCheckSummary: FactCheckSummaryResponse;
+
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
+}
+
+export interface AdminUpdatePostStatusRequest {
+  status: PostStatus;
+}

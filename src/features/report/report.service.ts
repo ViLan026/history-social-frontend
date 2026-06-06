@@ -7,7 +7,8 @@ import {
   ReportResponse, 
   MyReportResponse, 
   ModerationReportResponse,
-  ReviewReportRequest
+  ReviewReportRequest,
+  ReportTargetType
 } from "./report.types";
 
 export const reportService = {
@@ -32,13 +33,16 @@ export const reportService = {
   
   // admin 
   // Lấy danh sách các báo cáo đang chờ xử lý
-    getPendingReports: async (page: number = 0, size: number = 20): Promise<PageResponse<ModerationReportResponse>> => {
+    getPendingReports: async (
+        page: number = 0,
+        size: number = 20,
+        targetType?: ReportTargetType
+    ): Promise<PageResponse<ModerationReportResponse>> => {
         const response = await axiosInstance.get<ApiResponse<PageResponse<ModerationReportResponse>>>(
             API_ENDPOINTS.ADMIN_REPORTS.PENDING,
-            {
-                params: { page, size }
-            }
+            { params: {page,  size, targetType} }
         );
+
         return response.data.data;
     },
 

@@ -10,10 +10,10 @@ import { NewUsersChart } from '@/features/dashboard/components/NewUsersChart';
 import { NewPostsChart } from '@/features/dashboard/components/NewPostsChart';
 import { EngagementChart } from '@/features/dashboard/components/EngagementChart';
 import { PostStatusChart } from '@/features/dashboard/components/PostStatusChart';
-import { ReportStatusChart } from '@/features/dashboard/components/ReportStatusChart';
-import { ReportReasonChart } from '@/features/dashboard/components/ReportReasonChart';
+// import { ReportStatusChart } from '@/features/dashboard/components/ReportStatusChart';
+// import { ReportReasonChart } from '@/features/dashboard/components/ReportReasonChart';
 import { TopReportedPostsTable } from '@/features/dashboard/components/TopReportedPostsTable';
-import { LatestPendingReportsTable } from '@/features/dashboard/components/LatestPendingReportsTable';
+// import { LatestPendingReportsTable } from '@/features/dashboard/components/LatestPendingReportsTable';
 import { TopTagsTable } from '@/features/dashboard/components/TopTagsTable';
 
 const DAY_OPTIONS = [

@@ -16,6 +16,12 @@ interface PostStore {
   
     // Search UI
   keyword: string;
+
+  isAdminPostDrawerOpen: boolean;
+  selectedAdminPostId: string | null;
+
+  openAdminPostDrawer: (postId: string) => void;
+  closeAdminPostDrawer: () => void;
   
   // Actions
   setPage: (page: number) => void;
@@ -35,6 +41,7 @@ interface PostStore {
 }
 
 export const usePostStore = create<PostStore>((set) => ({
+  
   // Initial state
   currentPage: 0, // Spring Boot Pageable starts at 0
   pageSize: 10,
@@ -83,5 +90,20 @@ export const usePostStore = create<PostStore>((set) => ({
       isEditPostModalOpen: false,
       selectedPostId: null,
     }),
-  
+
+    isAdminPostDrawerOpen: false,
+    selectedAdminPostId: null,
+
+    openAdminPostDrawer: (postId) =>
+  set({
+    isAdminPostDrawerOpen: true,
+    selectedAdminPostId: postId,
+  }),
+
+closeAdminPostDrawer: () =>
+  set({
+    isAdminPostDrawerOpen: false,
+    selectedAdminPostId: null,
+  }),
+      
 }));

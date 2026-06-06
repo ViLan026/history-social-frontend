@@ -1,8 +1,31 @@
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PaginationParams } from '@/types/api';
-import { PostCreationRequest, PostUpdateRequest } from '@/features/post/post.types';
+import { PostCreationRequest, PostStatus, PostUpdateRequest } from '@/features/post/post.types';
 import { postService } from './post.service';
 import { toast } from 'sonner';
+
+// Query Keys
+export const postKeys = {
+  all: ['posts'] as const,
+  lists: () => [...postKeys.all, 'list'] as const,
+  list: (params?: PaginationParams) => [...postKeys.lists(), params] as const,
+  infiniteFeed: () => [...postKeys.all, 'need-auth'] as const,
+  infiniteFeedHome: () => [...postKeys.all, 'public-home'] as const,
+  detail: (id: string) => [...postKeys.all, 'detail', id] as const,
+  byAuthor: (authorId: string, params?: PaginationParams) => 
+    [...postKeys.all, 'author', authorId, params] as const,
+  search: (keyword: string, params?: PaginationParams) =>
+    [...postKeys.all, 'search', keyword, params] as const,
+  adminPosts: (params?: PaginationParams & { status?: PostStatus }) =>
+    [...postKeys.all, "admin", "list", params] as const,
+
+  adminPostDetail: (id: string) =>
+    [...postKeys.all, "admin", "detail", id] as const,
+    
+};
+
+
+
 
 // Infinite Scroll Feed
 export const useInfiniteFeed = (isEnabled: boolean) => {
@@ -50,19 +73,6 @@ export const useInfinitePostsByAuthor = (authorId: string, isEnabled: boolean) =
   });
 };
 
-// Query Keys
-export const postKeys = {
-  all: ['posts'] as const,
-  lists: () => [...postKeys.all, 'list'] as const,
-  list: (params?: PaginationParams) => [...postKeys.lists(), params] as const,
-  infiniteFeed: () => [...postKeys.all, 'need-auth'] as const,
-  infiniteFeedHome: () => [...postKeys.all, 'public-home'] as const,
-  detail: (id: string) => [...postKeys.all, 'detail', id] as const,
-  byAuthor: (authorId: string, params?: PaginationParams) => 
-    [...postKeys.all, 'author', authorId, params] as const,
-  search: (keyword: string, params?: PaginationParams) =>
-    [...postKeys.all, 'search', keyword, params] as const,
-};
 
 // Lấy danh sách post
 export const usePosts = (params?: PaginationParams) => {
@@ -73,15 +83,6 @@ export const usePosts = (params?: PaginationParams) => {
     gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
   });
 };
-
-// export const useFeed = (params?: PaginationParams) => {
-//   return useQuery({
-//     queryKey: postKeys.list(params),
-//     queryFn: () => postService.getFeed(params),
-//     staleTime: 1000 * 60 * 5, // 5 minutes
-//     gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
-//   });
-// };
 
 // Lấy chi tiết post
 export const usePost = (id: string, enabled = true) => {
@@ -159,18 +160,51 @@ export const useUpdatePost = () => {
   });
 };
 
-//  Hook to delete a post (placeholder - implement based on your backend)
-// export const useDeletePost = () => {
-//   const queryClient = useQueryClient();
-  
-//   return useMutation({
-//     mutationFn: (id: string) => {
-//       // Implement delete service call
-//       throw new Error('Delete post not implemented');
-//     },
-    
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
-//     },
-//   });
-// };
+export const useAdminPosts = (
+  params?: PaginationParams & { status?: PostStatus }
+) => {
+  return useQuery({
+    queryKey: postKeys.adminPosts(params),
+    queryFn: () => postService.getAdminPosts(params),
+    staleTime: 1000 * 60 * 3,
+  });
+};
+
+export const useAdminPostDetail = (id: string | null, enabled = true) => {
+  return useQuery({
+    queryKey: postKeys.adminPostDetail(id || ""),
+    queryFn: () => postService.getAdminPostDetail(id as string),
+    enabled: !!id && enabled,
+  });
+};
+
+export const useUpdateAdminPostStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      status,
+    }: {
+      id: string;
+      status: PostStatus;
+    }) => postService.updateAdminPostStatus(id, { status }),
+
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [...postKeys.all, "admin"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: postKeys.adminPostDetail(data.id),
+      });
+
+      toast.success("Đã cập nhật trạng thái bài viết");
+    },
+
+    onError: (error) => {
+      console.error("Cập nhật trạng thái bài viết thất bại:", error);
+      toast.error("Không thể cập nhật trạng thái bài viết");
+    },
+  });
+};

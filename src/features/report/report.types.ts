@@ -1,20 +1,17 @@
-// @/features/report/report.types.ts
+export type ReportTargetType = "POST" | "COMMENT";
 
-export type ReportTargetType = 'POST' | 'COMMENT';
+export type ReportReasonType =
+    | "MISINFORMATION"
+    | "FAKE_HISTORY"
+    | "HATE_SPEECH"
+    | "VIOLENCE"
+    | "HARASSMENT"
+    | "SPAM"
+    | "INAPPROPRIATE"
+    | "OTHER";
 
-export type ReportReasonType = 
-    | 'MISINFORMATION'  // Thông tin sai lệch
-    | 'FAKE_HISTORY'    // Xuyên tạc lịch sử
-    | 'HATE_SPEECH'     // Nội dung thù ghét
-    | 'VIOLENCE'        // Nội dung bạo lực
-    | 'HARASSMENT'      // Quấy rối
-    | 'SPAM'            // Spam
-    | 'INAPPROPRIATE'   // Nội dung không phù hợp
-    | 'OTHER';          // Khác
+export type ReportStatus = "PENDING" | "RESOLVED" | "DISMISSED";
 
-export type ReportStatus = 'PENDING' | 'RESOLVED' | 'DISMISSED';
-
-// Request để gửi báo cáo mới
 export interface CreateReportRequest {
     targetType: ReportTargetType;
     targetId: string;
@@ -22,7 +19,6 @@ export interface CreateReportRequest {
     reasonText?: string;
 }
 
-// Phản hồi khi tạo báo cáo thành công
 export interface ReportResponse {
     id: string;
     reporterId: string;
@@ -37,7 +33,6 @@ export interface ReportResponse {
     updatedAt?: string;
 }
 
-// DTO hiển thị trong danh sách lịch sử báo cáo
 export interface MyReportResponse {
     id: string;
     targetType: ReportTargetType;
@@ -46,23 +41,39 @@ export interface MyReportResponse {
     reasonText?: string;
     status: ReportStatus;
     createdAt: string;
-    
-    // Thông tin về target
     targetExists: boolean;
-    targetStatus?: string; 
-    targetContentPreview?: string; 
-    isMyContentReported?: boolean; 
+    targetStatus?: string;
+    targetContentPreview?: string;
+    isMyContentReported?: boolean;
 }
 
+export interface PostFactCheckClaimResponse {
+    id: string;
+    claimText: string;
+    label: "SUPPORTED" | "REFUTED" | "NOT_ENOUGH_EVIDENCE";
+    explanation?: string;
+    evidence?: unknown;
+    displayOrder: number;
+}
+
+export interface HateSpeechResultResponse {
+    label: "HATE" | "CLEAN";
+    score?: number;
+}
 
 export interface TargetPreviewResponse {
     id: string;
+    title?: string;
     content: string;
     authorId: string;
     authorName: string;
+    targetStatus?: string;
+    reportCount?: number;
     isDeleted: boolean;
     isHiddenByAdmin: boolean;
     isHiddenByAuthor: boolean;
+    factCheckClaims?: PostFactCheckClaimResponse[];
+    hateSpeechResult?: HateSpeechResultResponse;
 }
 
 export interface ModerationReportResponse {
@@ -71,5 +82,5 @@ export interface ModerationReportResponse {
 }
 
 export interface ReviewReportRequest {
-    status: ReportStatus; // Chỉ gửi PENDING, RESOLVED, hoặc DISMISSED
+    status: ReportStatus;
 }

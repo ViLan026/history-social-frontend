@@ -1,38 +1,48 @@
-// @/features/report/components/admin/ReportActionButtons.tsx
 "use client";
 
 import React from "react";
 import { useReviewReport } from "../../useReport";
-import { ReportStatus } from "../../report.types";
+import { ReportStatus, ReportTargetType } from "../../report.types";
 
 interface Props {
     reportId: string;
+    targetType: ReportTargetType;
 }
 
-export default function ReportActionButtons({ reportId }: Props) {
+export default function ReportActionButtons({ reportId, targetType }: Props) {
     const { mutate: reviewReport, isPending } = useReviewReport();
 
     const handleReview = (status: ReportStatus) => {
-        if (confirm(`Bạn chắc chắn muốn đánh dấu báo cáo này là ${status}?`)) {
+        const message =
+            status === "RESOLVED"
+                ? targetType === "POST"
+                    ? "Xác nhận vi phạm và chuyển bài viết sang trạng thái REJECTED?"
+                    : "Xác nhận vi phạm và xóa/ẩn bình luận này?"
+                : "Bỏ qua báo cáo này?";
+
+        if (confirm(message)) {
             reviewReport({ id: reportId, request: { status } });
         }
     };
 
     return (
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
             <button
+                type="button"
                 onClick={() => handleReview("DISMISSED")}
                 disabled={isPending}
-                className="flex-1 py-2 px-4 rounded-lg border border-border text-foreground hover:bg-muted font-medium transition-colors disabled:opacity-50"
+                className="flex-1 py-2.5 px-4 rounded-lg border border-border text-foreground hover:bg-muted font-medium transition-colors disabled:opacity-50"
             >
-                Bỏ qua (Sai phạm không hợp lệ)
+                Bỏ qua báo cáo
             </button>
+
             <button
+                type="button"
                 onClick={() => handleReview("RESOLVED")}
                 disabled={isPending}
-                className="flex-1 py-2 px-4 rounded-lg bg-destructive border border-border text-foreground hover:bg-destructive/90 font-medium transition-colors disabled:opacity-50"
+                className="flex-1 py-2.5 px-4 rounded-lg bg-destructive text-white hover:bg-destructive/90 font-medium transition-colors disabled:opacity-50"
             >
-                Xác nhận vi phạm (Xóa/Ẩn nội dung)
+                Xác nhận vi phạm
             </button>
         </div>
     );

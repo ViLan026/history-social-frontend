@@ -69,7 +69,7 @@ export default function AdminMainLayout({
                 </aside>
 
                 <main
-                    className="flex-1 pt-4 md:pt-6 min-w-0 w-full bg-background md:ml-[110px] lg:ml-[270px]"
+                    className="flex-1 pt-6 md:pt-8 min-w-0 w-full bg-background md:ml-[110px] lg:ml-[270px]"
                     aria-label="Admin Main Content"
                 >
                     <div
@@ -80,7 +80,7 @@ export default function AdminMainLayout({
                     </div>
 
                     {/* Vùng đệm nội dung */}
-                    <div className="pt-12 md:pt-0">{children}</div>
+                    <div className="pt-8 md:pt-0">{children}</div>
                 </main>
             </div>
         </div>
