@@ -95,7 +95,12 @@ export const API_ENDPOINTS = {
       ADMIN_CREATE: '/admin/onthisday',
       ADMIN_UPDATE: (id: string) => `/admin/onthisday/${id}`,
       ADMIN_DELETE: (id: string) => `/admin/onthisday/${id}`,
-    }
+    },
 
-
+    NOTIFICATIONS: {
+            BASE: "/notifications",
+            UNREAD_COUNT: "/notifications/unread-count",
+            MARK_READ: (notificationId: string) =>
+                `/notifications/${notificationId}/read`,
+        },
 };

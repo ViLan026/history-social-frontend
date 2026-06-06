@@ -1,8 +1,6 @@
 // components/post/post-card/PostCard.tsx
 "use client";
 
-import React from "react";
-import Link from "next/link";
 import { FeedPostResponse } from "@/features/post/post.types";
 import PostHeader from "./PostHeader";
 import PostContent from "./PostContent";

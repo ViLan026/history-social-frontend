@@ -60,7 +60,7 @@ export default function PostDetailModal() {
             <button
                 type="button"
                 onClick={closePostDetail}
-                className="hidden md:flex absolute right-4 top-4 z-[60] h-10 w-10 items-center justify-center rounded-full bg-primary-fg text-primary-fg shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 hover:bg-primary-hover hover:scale-110 active:scale-95 xl:right-8 xl:top-8 xl:h-12 xl:w-12 xl:text-xl"
+                className="hidden md:flex absolute right-4 top-4 z-[60] h-10 w-10 items-center justify-center rounded-full bg-primary-fg text-primary-fg shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 bg-primary-hover hover:scale-110 active:scale-95 xl:right-8 xl:top-8 xl:h-12 xl:w-12 xl:text-xl"
                 aria-label="Đóng"
             >
                 ✕

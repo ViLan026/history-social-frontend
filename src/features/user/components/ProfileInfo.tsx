@@ -1,3 +1,4 @@
+// src/features/user/components/ProfileInfo.tsx
 "use client";
 
 import { Settings } from "lucide-react";
@@ -5,27 +6,37 @@ import Image from "next/image";
 import Button from "@/components/ui/Button";
 import { useCurrentUser } from "@/features/user/useUser";
 import { useUIStore } from "@/features/ui/ui.store";
+import { UserResponse } from "@/features/user/user.types";
 
-export default function ProfileInfo() {
+interface ProfileInfoProps {
+    user?: UserResponse;
+    isOwner?: boolean;
+}
+
+export default function ProfileInfo({
+    user,
+    isOwner = true,
+}: ProfileInfoProps) {
     const { data: currentUser, isLoading } = useCurrentUser();
     const openEditProfile = useUIStore((state) => state.openEditProfile);
 
-    if (isLoading) {
+    if (!user && isLoading) {
         return <ProfileInfoSkeleton />;
     }
 
-    if (!currentUser) {
+    const profileUser = user ?? currentUser;
+
+    if (!profileUser) {
         return null;
     }
 
-    const { profile } = currentUser;
-    const displayName = profile.displayName || profile.username;
-    const avatarUrl = profile.avatarUrl || null; // Fallback avatar
+    const { profile } = profileUser;
+    const displayName = profile.displayName || profile.username || "Người dùng";
+    const avatarUrl = profile.avatarUrl || null;
 
     return (
-        <div className="bg-surface">    
-            <div className=" mx-auto px-4  py-6">
-                {/* Avatar & Name Section */}
+        <div className="bg-surface">
+            <div className="mx-auto px-4 py-6">
                 <div className="flex items-start gap-6 mb-6">
                     <div className="relative w-20 h-20 md:w-[150px] md:h-[150px] rounded-full overflow-hidden bg-surface flex-shrink-0 ring-1 ring-border">
                         {avatarUrl ? (
@@ -37,61 +48,62 @@ export default function ProfileInfo() {
                                 className="object-cover"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-primary-active text-primary-fg font-bold text-3xl md:text-5xl select-none">
-                                {displayName.charAt(0).toUpperCase() || "N"}
+                            <div className="w-full h-full flex items-center justify-center bg-primary text-primary-fg font-bold text-3xl md:text-5xl select-none">
+                                {displayName.charAt(0).toUpperCase()}
                             </div>
                         )}
                     </div>
 
-                    {/* User Info & Actions */}
                     <div className="flex-1 min-w-0">
-                        {/* Name & Actions Row */}
                         <div className="flex items-center justify-between gap-4 mb-3">
                             <div className="min-w-0">
                                 <h1 className="text-2xl font-bold text-foreground mb-1 truncate">
                                     {displayName}
                                 </h1>
-                                <p className="text-sm text-foreground-muted">
-                                    @{profile.username}
-                                </p>
+
+                                {profile.username && (
+                                    <p className="text-sm text-foreground-muted">
+                                        @{profile.username}
+                                    </p>
+                                )}
                             </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-2 flex-shrink-0">
-                                <Button
-                                    variant="secondary"
-                                    onClick={openEditProfile}
-                                    className="hidden sm:flex"
-                                >
-                                    Edit Profile
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    onClick={openEditProfile}
-                                    className="sm:hidden p-2"
-                                    aria-label="Edit Profile"
-                                >
-                                    <Settings className="w-5 h-5" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="p-2 hidden sm:flex"
-                                    aria-label="Settings"
-                                >
-                                    <Settings className="w-5 h-5" />
-                                </Button>
-                            </div>
+                            {isOwner && (
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={openEditProfile}
+                                        className="hidden sm:flex"
+                                    >
+                                        Edit Profile
+                                    </Button>
+
+                                    <Button
+                                        variant="ghost"
+                                        onClick={openEditProfile}
+                                        className="sm:hidden p-2"
+                                        aria-label="Edit Profile"
+                                    >
+                                        <Settings className="w-5 h-5" />
+                                    </Button>
+
+                                    <Button
+                                        variant="ghost"
+                                        className="p-2 hidden sm:flex"
+                                        aria-label="Settings"
+                                    >
+                                        <Settings className="w-5 h-5" />
+                                    </Button>
+                                </div>
+                            )}
                         </div>
 
-                        {/* Stats Section - Desktop */}
                         <ProfileStats className="hidden sm:flex" />
                     </div>
                 </div>
 
-                {/* Stats Section - Mobile */}
                 <ProfileStats className="sm:hidden mb-4" />
 
-                {/* Bio Section */}
                 {profile.bio && (
                     <div className="mt-4">
                         <p className="text-foreground whitespace-pre-wrap leading-relaxed">
@@ -100,36 +112,32 @@ export default function ProfileInfo() {
                     </div>
                 )}
 
-                {/* Edit Profile Button - Mobile Only */}
-                <div className="sm:hidden mt-4">
-                    <Button
-                        variant="secondary"
-                        onClick={openEditProfile}
-                        className="w-full"
-                    >
-                        Edit Profile
-                    </Button>
-                </div>
+                {isOwner && (
+                    <div className="sm:hidden mt-4">
+                        <Button
+                            variant="secondary"
+                            onClick={openEditProfile}
+                            className="w-full"
+                        >
+                            Edit Profile
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
 
-/**
- * ProfileStats Component
- * Hiển thị thống kê Posts, Followers, Following
- */
 function ProfileStats({ className = "" }: { className?: string }) {
-    // TODO: Fetch real stats from API
     const stats = [
         { label: "Posts", value: "120" },
         { label: "Followers", value: "1.2k" },
-        { label: "Following", value: "850" }
+        { label: "Following", value: "850" },
     ];
 
     return (
         <div className={`flex items-center gap-6 ${className}`}>
-            {stats.map((stat, index) => (
+            {stats.map((stat) => (
                 <button
                     key={stat.label}
                     className="group flex items-center gap-1.5 hover:opacity-80 transition-opacity"
@@ -146,19 +154,13 @@ function ProfileStats({ className = "" }: { className?: string }) {
     );
 }
 
-/**
- * ProfileInfoSkeleton
- * Loading state cho ProfileInfo
- */
 function ProfileInfoSkeleton() {
     return (
         <div className="bg-surface border-b border-border">
             <div className="max-w-feed mx-auto px-4 py-6">
                 <div className="flex items-start gap-6 mb-6">
-                    {/* Avatar Skeleton */}
                     <div className="w-24 h-24 rounded-full bg-surface-muted animate-pulse" />
 
-                    {/* Info Skeleton */}
                     <div className="flex-1 space-y-3">
                         <div className="h-7 w-48 bg-surface-muted rounded animate-pulse" />
                         <div className="h-4 w-32 bg-surface-muted rounded animate-pulse" />

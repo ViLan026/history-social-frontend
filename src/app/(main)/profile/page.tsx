@@ -1,15 +1,16 @@
-"use client"; // Chuyển sang Client Component để xử lý logic ẩn hiện menu khi cuộn chuột giống MainLayout
+// src/app/(main)/profile/page.tsx
 
-import { Suspense, useState, useEffect } from "react";
+"use client";
+
+import { Suspense, useEffect, useState } from "react";
+import ProfileLayout from "@/features/user/components/ProfileLayout";
 import ProfileInfo from "@/features/user/components/ProfileInfo";
 import ProfileTabs from "@/components/layout/ProfileTabs";
 import PostList from "@/features/post/components/PostList";
-import Navigation from "@/components/layout/Navigation";
 import BookmarkList from "@/features/bookmark/components/BookmarkList";
-import { useCurrentUser } from "@/features/user/useUser";
 import ReportList from "@/features/report/components/RepostList";
+import { useCurrentUser } from "@/features/user/useUser";
 import { useAuthStore } from "@/features/auth/auth.store";
-// import { id } from "date-fns/locale/id";
 
 export type ProfileTab = "posts" | "bookmarks" | "reposts";
 
@@ -20,8 +21,8 @@ interface ProfilePageProps {
 }
 
 export default function ProfilePage({ searchParams }: ProfilePageProps) {
-    // 1. Unpack searchParams trong Client Component
     const [activeTab, setActiveTab] = useState<ProfileTab>("posts");
+
     const { isAuthenticated } = useAuthStore();
     const { data: currentUser } = useCurrentUser();
     const id = isAuthenticated ? currentUser?.id : undefined;
@@ -36,95 +37,20 @@ export default function ProfilePage({ searchParams }: ProfilePageProps) {
         });
     }, [searchParams]);
 
-    // 2. Logic ẩn/hiện Mobile Menu sao chép chính xác từ MainLayout
-    const [showMobileMenu, setShowMobileMenu] = useState(true);
-
-    useEffect(() => {
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-
-        const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const currentScrollY = window.scrollY;
-                    const diff = currentScrollY - lastScrollY;
-
-                    if (currentScrollY < 20) {
-                        setShowMobileMenu(true);
-                    } else if (diff > 5) {
-                        setShowMobileMenu(false);
-                    } else if (diff < -5) {
-                        setShowMobileMenu(true);
-                    }
-
-                    lastScrollY = currentScrollY;
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
     return (
-        <div className="min-h-dvh bg-background">
-            <div className="mx-auto w-full max-w-[1280px]">
-                <div className="grid md:mx-10 md:grid-cols-[100px_1fr] lg:grid-cols-[280px_1fr] min-h-screen">
-                    <aside
-                        className="hidden lg:block sticky top-14 h-screen overflow-y-auto no-scrollbar bg-background"
-                        aria-label="Navigation"
-                    >
-                        <div className="p-4 pb-20">
-                            <Navigation />
-                        </div>
-                    </aside>
-                    <aside
-                        className="hidden md:block lg:hidden sticky top-14 h-screen bg-background"
-                        aria-label="Compact Navigation"
-                    >
-                        <div>
-                            <Navigation />
-                        </div>
-                    </aside>
+        <ProfileLayout>
+            <div className="w-full space-y-4">
+                <ProfileInfo />
 
-                    <main
-                        className="w-full min-h-screen flex flex-col bg-background"
-                        aria-label="Profile content"
-                    >
-                        <div
-                            className={`
-                                md:hidden fixed top-14 left-0 right-0 z-40
-                                flex items-center justify-between
-                                px-4 h-12 
-                                transition-transform duration-300 ease-in-out
-                                ${showMobileMenu ? "translate-y-0" : "-translate-y-full"}
-                            `}
-                        >
-                            <Navigation />
-                        </div>
-
-                        <div className="flex-1 w-full flex justify-center px-4 pt-16 md:pt-4 pb-6">
-                            <div className="w-full space-y-4">
-                                <ProfileInfo />
-
-                                <div className="sticky top-14 z-20 bg-surface-raised">
-                                    <ProfileTabs />
-                                </div>
-
-                                <Suspense fallback={<ContentSkeleton />}>
-                                    <ProfileContent
-                                        activeTab={activeTab}
-                                        id={id}
-                                    />
-                                </Suspense>
-                            </div>
-                        </div>
-                    </main>
+                <div className="sticky top-14 z-20 bg-surface-raised">
+                    <ProfileTabs />
                 </div>
+
+                <Suspense fallback={<ContentSkeleton />}>
+                    <ProfileContent activeTab={activeTab} id={id} />
+                </Suspense>
             </div>
-        </div>
+        </ProfileLayout>
     );
 }
 
@@ -138,15 +64,16 @@ function ProfileContent({ activeTab, id }: ProfileContentProps) {
         <div className="w-full mx-auto">
             {activeTab === "posts" && (
                 <div>
-                    {/* Chỉ render PostList khi đã có id của tác giả */}
                     {id ? <PostList authorId={id} /> : <ContentSkeleton />}
                 </div>
             )}
+
             {activeTab === "bookmarks" && (
                 <div className="p-4 text-foreground/70">
                     <BookmarkList />
                 </div>
             )}
+
             {activeTab === "reposts" && (
                 <div className="p-4 text-foreground/70">
                     <ReportList />
@@ -155,12 +82,13 @@ function ProfileContent({ activeTab, id }: ProfileContentProps) {
         </div>
     );
 }
+
 function ContentSkeleton() {
     return (
         <div className="w-full space-y-4 pointer-events-none select-none">
             {[1, 2, 3].map((i) => (
                 <div
-                    key={`skeleton-item-${i}`} // Đặt key tường minh để React giải phóng DOM sạch sẽ
+                    key={`skeleton-item-${i}`}
                     className="bg-surface border border-border rounded-2xl p-6 space-y-4"
                 >
                     <div className="flex items-center gap-3">
@@ -170,6 +98,7 @@ function ContentSkeleton() {
                             <div className="h-3 w-24 bg-muted rounded animate-pulse" />
                         </div>
                     </div>
+
                     <div className="space-y-2">
                         <div className="h-4 w-full bg-muted rounded animate-pulse" />
                         <div className="h-4 w-4/5 bg-muted rounded animate-pulse" />

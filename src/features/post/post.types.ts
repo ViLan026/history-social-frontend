@@ -72,11 +72,12 @@ export interface PostSummaryResponse {
   postId: string; // UUID
   content: string;
   title: string;
-  viewCount: number;
+  // viewCount: number;
   status: PostStatus;
   tags: TagResponse[]; // Set<TagResponse>
   createdAt: string; // LocalDateTime
 }
+
 export interface FeedPostResponse extends PostResponse {
   // Bỏ các trường userId, displayName ở đây vì chúng nằm trong author
   author: {

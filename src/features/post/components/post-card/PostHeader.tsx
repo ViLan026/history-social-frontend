@@ -3,6 +3,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { FeedPostResponse } from "@/features/post/post.types";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
+import Link from "next/dist/client/link";
 
 interface PostHeaderProps {
     post: FeedPostResponse;
@@ -21,17 +22,18 @@ export default function PostHeader({ post }: PostHeaderProps) {
         <div>
             {/* Author Info */}
             <div className="flex items-center gap-3">
-                <Avatar avatarUrl={avatarUrl} displayName={authorName} />
-
+                <Link href={`/profile/${post.author?.userId}`}>
+                    <Avatar avatarUrl={avatarUrl} displayName={authorName} />
+                </Link>
                 <div>
                     <span className="font-semibold leading-none pr-2">
                         {authorName}
-                    </span> 
+                    </span>
                     <span className="opacity-80 blur-[0.3px] text-xs text-foreground-faint text-blur-sm">
-                        {formattedTime} trước 
+                        {formattedTime} trước
                     </span>
                 </div>
-            </div> 
+            </div>
 
             {/* Title */}
             <h3 className="mt-4 text-[22px] leading-tight font-semibold text-foreground pr-4">

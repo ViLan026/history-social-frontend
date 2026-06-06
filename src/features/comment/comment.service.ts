@@ -6,7 +6,6 @@ import { CommentRequest, CommentResponse } from '@/features/comment/comment.type
 export const commentService = {
   // Tạo bình luận mới
   createComment: async (request: CommentRequest): Promise<CommentResponse> => {
-    // Controller của bạn trả về thẳng ApiResponse từ commentService, nên mình vẫn map .data.data như chuẩn chung
     const response = await axiosInstance.post<ApiResponse<CommentResponse>>(
       API_ENDPOINTS.COMMENTS.BASE,
       request

@@ -53,7 +53,7 @@ export const useLogout = () => {
       
       queryClient.clear(); // Xóa sạch bộ nhớ đệm React Query để tránh lộ dữ liệu cũ
       
-      router.replace('/login'); //  Đẩy về trang đăng nhập
+      router.replace('/'); //  Đẩy về trang đăng nhập
       router.refresh();
     },
     onError: (error) => {

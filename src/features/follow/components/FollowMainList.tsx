@@ -18,8 +18,8 @@ export default function FollowMainList() {
   const currentUserId = currentUser?.id || "";
 
   const suggestionsQuery = useFollowSuggestions(suggestionLimit);
-  const followersQuery = useFollowers(currentUserId, { page, size: 8 });
-  const followingQuery = useFollowingList(currentUserId, { page, size: 8 });
+  const followersQuery = useFollowers(currentUserId, { page, size: 10 });
+  const followingQuery = useFollowingList(currentUserId, { page, size: 10 });
 
   const isLoading = suggestionsQuery.isLoading || followersQuery.isLoading || followingQuery.isLoading;
   const isError = suggestionsQuery.isError || followersQuery.isError || followingQuery.isError;

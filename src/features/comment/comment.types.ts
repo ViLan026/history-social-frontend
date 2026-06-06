@@ -1,6 +1,13 @@
+// export interface CommentRequest {
+//   postId: string;
+//   content: string;
+// }
+
+
 export interface CommentRequest {
   postId: string;
   content: string;
+  parentId?: string;
 }
 
 export interface CommentResponse {
@@ -11,6 +18,6 @@ export interface CommentResponse {
   authorAvatarUrl: string; 
   parentId?: string; 
   content: string;
-  createdAt: string; 
+  createdAt: string;  
   updatedAt: string; 
 }

@@ -7,6 +7,7 @@ import {
   IntrospectResponse,
 } from '@/features/auth/auth.types';
 
+// eslint-disable-next-line boundaries/element-types
 import { UserResponse } from '@/features/user/user.types';
 
 export const authService = {

@@ -20,14 +20,14 @@ export interface AuthenticationResponse {
   authenticated: boolean;
 }
 
-export interface LogoutRequest {}
+// export interface LogoutRequest {}
 
-export interface IntrospectRequest {}
+// export interface IntrospectRequest {}
 
 export interface IntrospectResponse {
   valid: boolean;
   message?: string;
 }
 
-export interface RefreshRequest {}
+// export interface RefreshRequest {}
 

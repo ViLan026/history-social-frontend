@@ -29,7 +29,6 @@ export default function ProfileTab({
         currentUser?.profile.avatarUrl || null
     );
 
-    // ==================== FORM STATE (tích hợp useProfileForm) ====================
     const [profileForm, setProfileForm] = useState<ProfileFormData>({
         username: currentUser?.profile.username || "",
         displayName: currentUser?.profile.displayName || "",

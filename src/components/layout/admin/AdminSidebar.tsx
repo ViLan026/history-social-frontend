@@ -60,6 +60,12 @@ function HistoryIcon() {
   );
 }
 
+function NotificationIcon(){
+  return (                        
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /> <path d="M13.73 21a2 2 0 0 1-3.46 0" /> </svg>)
+}
+
 
 const ADMIN_NAV_ITEMS = [
   { label: "Tổng quan", href: "/admin/dashboard", icon: <DashboardIcon /> },
@@ -67,6 +73,7 @@ const ADMIN_NAV_ITEMS = [
   { label: "Quản lý Bài viết", href: "/admin/posts", icon: <PostsIcon /> },
   { label: "Quản lý Người dùng", href: "/admin/users", icon: <UsersIcon /> },
   { label: "Ngày này năm xưa", href: "/admin/on-this-day", icon: <HistoryIcon /> },
+  { label: "Thông báo", href: "/admin/notifications", icon: <NotificationIcon /> },
 ] as const;
 
 interface NavItemProps {
