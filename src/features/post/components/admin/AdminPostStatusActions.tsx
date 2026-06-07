@@ -1,23 +1,48 @@
+// features/post/components/admin/AdminPostStatusActions.tsx
 "use client";
 
 import { PostStatus } from "../../post.types";
 import { useUpdateAdminPostStatus } from "../../usePost";
 
-interface Props {
+interface AdminPostStatusActionsProps {
     postId: string;
     currentStatus: PostStatus;
 }
 
+interface StatusAction {
+    label: string;
+    status: PostStatus;
+    className: string;
+}
+
+const STATUS_ACTIONS: StatusAction[] = [
+    {
+        label: "Công khai lại",
+        status: PostStatus.PUBLISHED,
+        className: "border border-border bg-surface text-foreground hover:bg-background",
+    },
+    {
+        label: "Gắn cờ",
+        status: PostStatus.FLAGGED,
+        className: "border border-border bg-surface text-foreground hover:bg-background",
+    },
+    {
+        label: "Từ chối bài viết",
+        status: PostStatus.REJECTED,
+        className: "bg-primary text-primary-fg hover:opacity-90",
+    },
+];
+
 export default function AdminPostStatusActions({
     postId,
     currentStatus,
-}: Props) {
+}: AdminPostStatusActionsProps) {
     const { mutate: updateStatus, isPending } = useUpdateAdminPostStatus();
 
     const handleUpdateStatus = (status: PostStatus) => {
-        if (status === currentStatus) return;
+        if (status === currentStatus || isPending) return;
 
-        const confirmed = confirm(
+        const confirmed = window.confirm(
             `Bạn chắc chắn muốn đổi trạng thái bài viết sang ${status}?`
         );
 
@@ -27,33 +52,32 @@ export default function AdminPostStatusActions({
     };
 
     return (
-        <div className="flex flex-col sm:flex-row gap-3">
-            <button
-                type="button"
-                disabled={isPending || currentStatus === PostStatus.PUBLISHED}
-                onClick={() => handleUpdateStatus(PostStatus.PUBLISHED)}
-                className="flex-1 px-4 py-2 rounded-lg border border-border hover:bg-muted disabled:opacity-50"
-            >
-                Công khai lại
-            </button>
+        <section className="rounded-xl border border-border bg-card p-4 neu-raised animate-fade-in">
+            <div className="mb-4 space-y-1">
+                <h3 className="text-sm font-semibold text-foreground">
+                    Thao tác quản trị
+                </h3>
+                <p className="text-sm text-foreground-muted">
+                    Cập nhật trạng thái kiểm duyệt của bài viết.
+                </p>
+            </div>
 
-            <button
-                type="button"
-                disabled={isPending || currentStatus === PostStatus.FLAGGED}
-                onClick={() => handleUpdateStatus(PostStatus.FLAGGED)}
-                className="flex-1 px-4 py-2 rounded-lg border border-amber-500/30 text-amber-600 hover:bg-amber-500/10 disabled:opacity-50"
-            >
-                Gắn cờ
-            </button>
-
-            <button
-                type="button"
-                disabled={isPending || currentStatus === PostStatus.REJECTED}
-                onClick={() => handleUpdateStatus(PostStatus.REJECTED)}
-                className="flex-1 px-4 py-2 rounded-lg bg-destructive text-white hover:bg-destructive/90 disabled:opacity-50"
-            >
-                Từ chối bài viết
-            </button>
-        </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {STATUS_ACTIONS.map((action) => (
+                    <button
+                        key={action.status}
+                        type="button"
+                        disabled={isPending || currentStatus === action.status}
+                        onClick={() => handleUpdateStatus(action.status)}
+                        className={[
+                            "w-full rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50",
+                            action.className,
+                        ].join(" ")}
+                    >
+                        {action.label}
+                    </button>
+                ))}
+            </div>
+        </section>
     );
 }

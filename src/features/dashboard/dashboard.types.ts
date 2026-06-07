@@ -46,7 +46,7 @@ export type TopReportedPostResponse = {
   authorId: string;
   status: string;
   reportCount: number;
-  qualityScore: number;
+  // qualityScore: number;
   createdAt: string;
 };
 

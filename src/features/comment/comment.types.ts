@@ -20,4 +20,7 @@ export interface CommentResponse {
   content: string;
   createdAt: string;  
   updatedAt: string; 
+  isVisible: boolean;
+  hiddenReason?: string;
+
 }

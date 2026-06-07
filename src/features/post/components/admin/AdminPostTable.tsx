@@ -101,7 +101,7 @@ export default function AdminPostTable() {
                             <th className="px-6 py-4 font-medium">
                                 Bài viết
                             </th>
-                            <th className="px-6 py-4 font-medium">Tác giả</th>
+                            {/* <th className="px-6 py-4 font-medium">Tác giả</th> */}
                             <th className="px-6 py-4 font-medium">
                                 Trạng thái
                             </th>
@@ -148,14 +148,14 @@ export default function AdminPostTable() {
                                         </div>
                                     </td>
 
-                                    <td className="px-6 py-4">
+                                    {/* <td className="px-6 py-4">
                                         <div className="font-medium">
                                             {post.authorName || "Không rõ"}
                                         </div>
                                         <div className="text-xs text-foreground-muted break-all">
                                             {post.authorId}
                                         </div>
-                                    </td>
+                                    </td> */}
 
                                     <td className="px-6 py-4">
                                         <span

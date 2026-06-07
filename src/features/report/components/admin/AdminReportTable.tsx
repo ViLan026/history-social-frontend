@@ -85,7 +85,7 @@ export default function AdminReportTable() {
                     <thead className="bg-muted text-foreground-muted uppercase text-xs">
                         <tr>
                             <th className="px-6 py-4 font-medium">Lý do</th>
-                            <th className="px-6 py-4 font-medium">Người đăng</th>
+                            {/* <th className="px-6 py-4 font-medium">Người đăng</th> */}
                             <th className="px-6 py-4 font-medium">Nội dung</th>
                             <th className="px-6 py-4 font-medium">Trạng thái nội dung</th>
                             <th className="px-6 py-4 font-medium">Ngày gửi</th>
@@ -118,14 +118,14 @@ export default function AdminReportTable() {
                                         </div> */}
                                     </td>
 
-                                    <td className="px-6 py-4">
+                                    {/* <td className="px-6 py-4">
                                         <div className="font-medium">
                                             {item.targetPreview.authorName || "Không rõ"}
                                         </div>
                                         <div className="text-xs text-foreground-muted break-all">
                                             {item.targetPreview.authorId}
                                         </div>
-                                    </td>
+                                    </td> */}
 
                                     <td className="px-6 py-4 max-w-[320px]">
                                         {item.targetPreview.title && (
