@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { usePostStore } from "../../post.store";
 import { useAdminPostDetail } from "../../usePost";
 import { PostFactCheckClaimResponse, PostStatus } from "../../post.types";
@@ -41,55 +41,162 @@ function getClaimLabel(label: PostFactCheckClaimResponse["label"]) {
     }
 }
 
-function renderEvidence(evidence: unknown): React.ReactNode {
-    if (evidence === undefined || evidence === null) return null;
+function getEvidenceCount(evidence: unknown) {
+    if (Array.isArray(evidence)) return evidence.length;
+    if (evidence === undefined || evidence === null) return 0;
+    return 1;
+}
 
-    if (typeof evidence === "string") {
+function isEvidenceObject(value: unknown): value is {
+    chunk_id?: string;
+    score?: number;
+    book_name?: string;
+    pages?: number[];
+    text?: string;
+    footnotes?: unknown;
+} {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function formatScore(score?: number) {
+    if (typeof score !== "number") return null;
+    return score.toFixed(3);
+}
+
+function hasNonEmptyFootnotes(footnotes: unknown) {
+    if (footnotes === undefined || footnotes === null) return false;
+
+    if (typeof footnotes === "string") {
+        return footnotes.trim().length > 0;
+    }
+
+    if (Array.isArray(footnotes)) {
+        return footnotes.length > 0;
+    }
+
+    if (typeof footnotes === "object") {
+        return Object.keys(footnotes).length > 0;
+    }
+
+    return true;
+}
+
+function renderEvidenceItem(item: unknown, index: number) {
+    if (typeof item === "string") {
         return (
-            <p className="text-xs text-foreground-muted whitespace-pre-wrap">
-                {evidence}
-            </p>
+            <div className="rounded-xl border border-border bg-card p-4 text-sm">
+                <p className="mb-2 text-xs font-semibold text-foreground-muted">
+                    Bằng chứng {index + 1}
+                </p>
+                <p className="whitespace-pre-wrap text-foreground-muted">
+                    {item}
+                </p>
+            </div>
         );
     }
 
-    if (typeof evidence === "number" || typeof evidence === "boolean") {
+    if (typeof item === "number" || typeof item === "boolean") {
         return (
-            <p className="text-xs text-foreground-muted">
-                {String(evidence)}
-            </p>
+            <div className="rounded-xl border border-border bg-card p-4 text-sm text-foreground-muted">
+                {String(item)}
+            </div>
         );
     }
 
-    if (Array.isArray(evidence)) {
+    if (isEvidenceObject(item)) {
+        const score = formatScore(item.score);
+
         return (
-            <div className="space-y-2">
-                {evidence.map((item, index) => (
-                    <pre
-                        key={index}
-                        className="text-xs bg-muted/60 p-3 rounded-lg overflow-x-auto whitespace-pre-wrap"
-                    >
-                        {typeof item === "string"
-                            ? item
-                            : JSON.stringify(item, null, 2)}
-                    </pre>
-                ))}
+            <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-foreground-muted">
+                    <span className="font-semibold text-foreground">
+                        Bằng chứng {index + 1}
+                    </span>
+
+                    {item.book_name && (
+                        <span className="rounded-full border border-border px-2 py-0.5">
+                            {item.book_name}
+                        </span>
+                    )}
+
+                    {item.pages && item.pages.length > 0 && (
+                        <span className="rounded-full border border-border px-2 py-0.5">
+                            Trang {item.pages.join(", ")}
+                        </span>
+                    )}
+
+                    {score && (
+                        <span className="rounded-full border border-border px-2 py-0.5">
+                            Score {score}
+                        </span>
+                    )}
+                </div>
+
+                {item.text && (
+                    <p className="text-sm whitespace-pre-wrap text-foreground-muted">
+                        {item.text}
+                    </p>
+                )}
+
+                {hasNonEmptyFootnotes(item.footnotes) && (
+                    <details className="text-xs">
+                        <summary className="cursor-pointer text-primary font-medium">
+                            Xem chú thích
+                        </summary>
+                        <pre className="mt-2 rounded-lg bg-muted/60 p-3 overflow-x-auto whitespace-pre-wrap">
+                            {JSON.stringify(item.footnotes, null, 2)}
+                        </pre>
+                    </details>
+                )}
             </div>
         );
     }
 
     return (
         <pre className="text-xs bg-muted/60 p-3 rounded-lg overflow-x-auto whitespace-pre-wrap">
-            {JSON.stringify(evidence, null, 2)}
+            {JSON.stringify(item, null, 2)}
         </pre>
     );
 }
 
+function ClaimEvidence({ evidence }: { evidence: unknown }) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    if (evidence === undefined || evidence === null) {
+        return null;
+    }
+
+    const evidenceItems = Array.isArray(evidence) ? evidence : [evidence];
+    const evidenceCount = getEvidenceCount(evidence);
+
+    return (
+        <div className="space-y-2">
+            <button
+                type="button"
+                onClick={() => setIsOpen((prev) => !prev)}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground hover:bg-muted transition-colors"
+            >
+                <span>{isOpen ? "Ẩn bằng chứng" : "Xem bằng chứng"}</span>
+                <span className="text-foreground-muted">({evidenceCount})</span>
+                <span>{isOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {isOpen && (
+                <div className="space-y-3 pt-1">
+                    {evidenceItems.map((item, index) => (
+                        <React.Fragment key={index}>
+                            {renderEvidenceItem(item, index)}
+                        </React.Fragment>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function AdminPostDrawer() {
-    const {
-        isAdminPostDrawerOpen,
-        selectedAdminPostId,
-        closeAdminPostDrawer,
-    } = usePostStore();
+    const { isAdminPostDrawerOpen, selectedAdminPostId, closeAdminPostDrawer } =
+        usePostStore();
 
     const { data: post, isLoading } = useAdminPostDetail(
         selectedAdminPostId,
@@ -119,7 +226,8 @@ export default function AdminPostDrawer() {
                             Chi tiết bài viết
                         </h2>
                         <p className="text-sm text-foreground-muted">
-                            Xem nội dung, kết quả kiểm chứng và xử lý trạng thái.
+                            Xem nội dung, kết quả kiểm chứng và xử lý trạng
+                            thái.
                         </p>
                     </div>
 
@@ -228,11 +336,11 @@ export default function AdminPostDrawer() {
                                 </h3>
 
                                 <div className="bg-muted/20 p-4 rounded-xl border border-border space-y-3">
-                                    <h4 className="font-bold text-lg break-words">
+                                    <h4 className="font-bold text-lg">
                                         {post.title}
                                     </h4>
 
-                                    <p className="text-sm whitespace-pre-wrap break-words">
+                                    <p className="text-sm whitespace-pre-wrap">
                                         {post.content}
                                     </p>
                                 </div>
@@ -261,10 +369,7 @@ export default function AdminPostDrawer() {
                                             Bị bác bỏ
                                         </p>
                                         <p className="text-xl font-bold text-destructive">
-                                            {
-                                                post.factCheckSummary
-                                                    .refutedCount
-                                            }
+                                            {post.factCheckSummary.refutedCount}
                                         </p>
                                     </div>
 
@@ -289,7 +394,8 @@ export default function AdminPostDrawer() {
 
                                 {post.factCheckClaims.length === 0 ? (
                                     <div className="p-4 rounded-xl border border-border bg-muted/20 text-sm text-foreground-muted">
-                                        Chưa có dữ liệu kiểm chứng cho bài viết này.
+                                        Chưa có dữ liệu kiểm chứng cho bài viết
+                                        này.
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
@@ -306,7 +412,7 @@ export default function AdminPostDrawer() {
                                                     className="p-4 rounded-xl border border-border bg-muted/20 space-y-3"
                                                 >
                                                     <div className="flex items-start justify-between gap-3">
-                                                        <p className="font-medium text-sm break-words">
+                                                        <p className="font-medium text-sm">
                                                             {claim.claimText}
                                                         </p>
 
@@ -318,24 +424,16 @@ export default function AdminPostDrawer() {
                                                     </div>
 
                                                     {claim.explanation && (
-                                                        <p className="text-sm text-foreground-muted whitespace-pre-wrap break-words">
+                                                        <p className="text-sm text-foreground-muted whitespace-pre-wrap">
                                                             {claim.explanation}
                                                         </p>
                                                     )}
 
-                                                    {claim.evidence !==
-                                                        undefined &&
-                                                        claim.evidence !==
-                                                            null && (
-                                                            <div className="space-y-2">
-                                                                <p className="text-xs font-semibold text-foreground-muted uppercase">
-                                                                    Bằng chứng
-                                                                </p>
-                                                                {renderEvidence(
-                                                                    claim.evidence
-                                                                )}
-                                                            </div>
-                                                        )}
+                                                    <ClaimEvidence
+                                                        evidence={
+                                                            claim.evidence
+                                                        }
+                                                    />
                                                 </div>
                                             ))}
                                     </div>

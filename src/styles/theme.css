@@ -1,7 +1,7 @@
 :root,
 [data-theme="dark"],
 .dark {
-  /* SURFACES (nền tối mặc định, nhẹ hơi xanh navy như bản gốc) */
+  /* SURFACES (nền tối mặc định, nhẹ hơi xanh navy ) */
   --background:       #14171C; /* Đẩy lên navy cực thẫm thay vì đen tuyền 0% */
   --surface:          oklch(0.14 0.018 255);       
   --surface-raised:   oklch(0.17 0.018 255);    

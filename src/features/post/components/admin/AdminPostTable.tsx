@@ -109,7 +109,7 @@ export default function AdminPostTable() {
                                 Kiểm chứng
                             </th>
                             <th className="px-6 py-4 font-medium">Báo cáo</th>
-                            <th className="px-6 py-4 font-medium">Ngày tạo</th>
+                            {/* <th className="px-6 py-4 font-medium">Ngày tạo</th> */}
                             <th className="px-6 py-4 text-right">Thao tác</th>
                         </tr>
                     </thead>
@@ -203,9 +203,9 @@ export default function AdminPostTable() {
                                         {post.reportCount}
                                     </td>
 
-                                    <td className="px-6 py-4 text-foreground-muted">
+                                    {/* <td className="px-6 py-4 text-foreground-muted">
                                         {formatDate(post.createdAt)}
-                                    </td>
+                                    </td> */}
 
                                     <td className="px-6 py-4 text-right">
                                         <button

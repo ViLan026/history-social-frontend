@@ -104,6 +104,7 @@ export const API_ENDPOINTS = {
 		BASE: "/admin/posts",
 		GET_BY_ID: (id: string) => `/admin/posts/${id}`,
 		UPDATE_STATUS: (id: string) => `/admin/posts/${id}/status`,
+		RECHECK_FACT_CHECK: (id: string) => `/admin/posts/${id}/fact-check/recheck`,
 	},
 
 	NOTIFICATIONS: {

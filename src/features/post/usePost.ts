@@ -208,3 +208,30 @@ export const useUpdateAdminPostStatus = () => {
     },
   });
 };
+
+
+
+export const useRecheckAdminPostFactCheck = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => postService.recheckAdminPostFactCheck(id),
+
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [...postKeys.all, "admin"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: postKeys.adminPostDetail(data.id),
+      });
+
+      toast.success("Đã kiểm chứng lại bài viết");
+    },
+
+    onError: (error) => {
+      console.error("Kiểm chứng lại bài viết thất bại:", error);
+      toast.error("Không thể kiểm chứng lại bài viết");
+    },
+  });
+};
