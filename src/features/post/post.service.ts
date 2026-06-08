@@ -1,14 +1,16 @@
 import { axiosInstance } from '@/lib/axios';
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { 
-  PostCreationRequest, 
-  PostUpdateRequest, 
-  PostResponse, 
-  FeedPostResponse,
+    PostCreationRequest, 
+    PostUpdateRequest, 
+    PostResponse, 
+    FeedPostResponse,
     AdminPostDetailResponse,
-  AdminPostResponse,
-  AdminUpdatePostStatusRequest,
-  PostStatus,
+    AdminPostResponse,
+    AdminUpdatePostStatusRequest,
+    PostStatus,
+    PostFactCheckPreviewResponse,
+    PostFactCheckDetailResponse,
 
 } from '@/features/post/post.types';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
@@ -100,49 +102,45 @@ export const postService = {
         return response.data.data;
     },
 
-
-
-        getAdminPosts: async (
-        params?: PaginationParams & { status?: PostStatus }
-    ): Promise<PageResponse<AdminPostResponse>> => {
+    getAdminPosts: async ( params?: PaginationParams & { status?: PostStatus } ): Promise<PageResponse<AdminPostResponse>> => {
         const response = await axiosInstance.get<
-        ApiResponse<PageResponse<AdminPostResponse>>
-        >(API_ENDPOINTS.ADMIN_POSTS.BASE, { params });
+        ApiResponse<PageResponse<AdminPostResponse>>>(API_ENDPOINTS.ADMIN_POSTS.BASE, { params });
 
         return response.data.data;
     },
 
-    getAdminPostDetail: async (
-        id: string
-    ): Promise<AdminPostDetailResponse> => {
-        const response = await axiosInstance.get<
-        ApiResponse<AdminPostDetailResponse>
-        >(API_ENDPOINTS.ADMIN_POSTS.GET_BY_ID(id));
+    getAdminPostDetail: async (id: string): Promise<AdminPostDetailResponse> => { 
+        const response = await axiosInstance.get< ApiResponse<AdminPostDetailResponse> >(
+            API_ENDPOINTS.ADMIN_POSTS.GET_BY_ID(id));
 
         return response.data.data;
     },
 
-    updateAdminPostStatus: async (
-        id: string,
-        request: AdminUpdatePostStatusRequest
-    ): Promise<AdminPostDetailResponse> => {
-        const response = await axiosInstance.patch<
-        ApiResponse<AdminPostDetailResponse>
-        >(API_ENDPOINTS.ADMIN_POSTS.UPDATE_STATUS(id), request);
+    updateAdminPostStatus: async ( id: string, request: AdminUpdatePostStatusRequest): Promise<AdminPostDetailResponse> => {
+        const response = await axiosInstance.patch< ApiResponse<AdminPostDetailResponse>>(
+            API_ENDPOINTS.ADMIN_POSTS.UPDATE_STATUS(id), request);
 
         return response.data.data;
     },
 
-    recheckAdminPostFactCheck: async (
-    id: string
-    ): Promise<AdminPostDetailResponse> => {
-        const response = await axiosInstance.post<
-        ApiResponse<AdminPostDetailResponse>
-        >(API_ENDPOINTS.ADMIN_POSTS.RECHECK_FACT_CHECK(id));
+    recheckAdminPostFactCheck: async (id: string): Promise<AdminPostDetailResponse> => {
+        const response = await axiosInstance.post< ApiResponse<AdminPostDetailResponse>>(
+            API_ENDPOINTS.ADMIN_POSTS.RECHECK_FACT_CHECK(id));
+        return response.data.data;
+    },
+
+    getFactCheckPreview: async (  postId: string): Promise<PostFactCheckPreviewResponse> => {
+        const response = await axiosInstance.get<ApiResponse<PostFactCheckPreviewResponse>>(
+            API_ENDPOINTS.POSTS.FACT_CHECK_PREVIEW(postId));
 
         return response.data.data;
     },
 
+    getFactCheckDetail: async (  postId: string): Promise<PostFactCheckDetailResponse> => {
+        const response = await axiosInstance.get<  ApiResponse<PostFactCheckDetailResponse>>(
+            API_ENDPOINTS.POSTS.FACT_CHECK_DETAIL(postId));
 
+        return response.data.data;
+    },
 
 };

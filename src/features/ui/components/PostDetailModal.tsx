@@ -5,6 +5,8 @@ import { useUIStore } from "@/features/ui/ui.store";
 import PostCard from "../../post/components/post-card/PostCard";
 import { CommentSection } from "@/features/comment/components/CommentSection";
 import { useCurrentUser } from "@/features/user/useUser";
+import { usePostFactCheckDetail } from "@/features/post/usePost";
+import FactCheckSection from "@/features/post/components/fact-check/FactCheckSection";
 
 export default function PostDetailModal() {
     const { postDetailModal, closePostDetail } = useUIStore();
@@ -12,8 +14,14 @@ export default function PostDetailModal() {
     const selectedPost = postDetailModal.data;
 
     const { data: currentUser } = useCurrentUser();
-    
+
     const currentUserId = currentUser?.id;
+
+    const { data: factCheckDetail, isLoading: isLoadingFactCheck } =
+        usePostFactCheckDetail(
+            selectedPost?.postId ?? null,
+            isPostDetailOpen && !!selectedPost?.hasFactCheck
+        );
 
     useEffect(() => {
         if (isPostDetailOpen) {
@@ -53,9 +61,9 @@ export default function PostDetailModal() {
     );
 
     return (
-        <div 
+        <div
             className="fixed inset-x-0 bottom-0 top-14 z-50 flex items-center justify-center p-0 md:p-4 bg-surface-overlay/100 backdrop-blur-sm"
-            onClick={closePostDetail} 
+            onClick={closePostDetail}
         >
             <button
                 type="button"
@@ -73,7 +81,7 @@ export default function PostDetailModal() {
                     "md:h-auto md:max-h-[85dvh] md:max-w-2xl md:rounded-2xl",
                     "lg:h-auto not-first:lg:h-[85dvh] lg:max-w-6xl xl:max-w-7xl lg:flex-row lg:rounded-3xl"
                 ].join(" ")}
-                onClick={(e) => e.stopPropagation()} 
+                onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex md:hidden shrink-0 items-center justify-between border-b border-border bg-primary px-4 py-3 z-20">
                     {/* <h3 className="font-semibold text-foreground">Bài viết</h3> */}
@@ -87,18 +95,36 @@ export default function PostDetailModal() {
                     </button>
                 </div>
 
-                <div className="flex h-full w-full flex-col lg:flex-row min-h-0 overflow-hidden md:p-6 p-0">
-                    <section className="hidden bg-background lg:block shrink-0 w-full overflow-y-auto lg:w-[55%] xl:w-[60%] lg:h-full lg:flex-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                        {postContent}
-                    </section>
+                <div className="flex h-full w-full flex-col overflow-y-auto md:p-6 p-0">
+                    <div className="flex w-full flex-col lg:flex-row min-h-[70vh] overflow-hidden">
+                        <section className="hidden bg-background lg:block shrink-0 w-full overflow-y-auto lg:w-[55%] xl:w-[60%] lg:h-full lg:flex-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                            {postContent}
+                        </section>
 
-                    <aside className="flex flex-1 flex-col min-h-0 w-full bg-background lg:h-full lg:w-[45%] xl:w-[40%]">
-                        <CommentSection
-                            postId={selectedPost.postId}
-                            currentUserId={currentUserId}
-                            mobileHeader={postContent}
-                        />
-                    </aside>
+                        <aside className="flex flex-1 flex-col min-h-0 w-full bg-background lg:h-full lg:w-[45%] xl:w-[40%]">
+                            <CommentSection
+                                postId={selectedPost.postId}
+                                currentUserId={currentUserId}
+                                mobileHeader={postContent}
+                            />
+                        </aside>
+                    </div>
+
+                    {selectedPost.hasFactCheck && (
+                        <div className="mt-4 px-2 pb-6 md:px-0">
+                            {isLoadingFactCheck ? (
+                                <div className="rounded-2xl border border-border bg-card p-6 text-center text-sm text-foreground-muted animate-pulse">
+                                    Đang tải kết quả đối chiếu nguồn lịch sử...
+                                </div>
+                            ) : (
+                                <FactCheckSection
+                                    summary={factCheckDetail?.summary}
+                                    claims={factCheckDetail?.claims ?? []}
+                                    showEvidence
+                                />
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

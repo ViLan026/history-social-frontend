@@ -12,15 +12,12 @@ export const postKeys = {
   infiniteFeed: () => [...postKeys.all, 'need-auth'] as const,
   infiniteFeedHome: () => [...postKeys.all, 'public-home'] as const,
   detail: (id: string) => [...postKeys.all, 'detail', id] as const,
-  byAuthor: (authorId: string, params?: PaginationParams) => 
-    [...postKeys.all, 'author', authorId, params] as const,
-  search: (keyword: string, params?: PaginationParams) =>
-    [...postKeys.all, 'search', keyword, params] as const,
-  adminPosts: (params?: PaginationParams & { status?: PostStatus }) =>
-    [...postKeys.all, "admin", "list", params] as const,
-
-  adminPostDetail: (id: string) =>
-    [...postKeys.all, "admin", "detail", id] as const,
+  byAuthor: (authorId: string, params?: PaginationParams) => [...postKeys.all, 'author', authorId, params] as const,
+  search: (keyword: string, params?: PaginationParams) => [...postKeys.all, 'search', keyword, params] as const,
+  adminPosts: (params?: PaginationParams & { status?: PostStatus }) =>[...postKeys.all, "admin", "list", params] as const,
+  adminPostDetail: (id: string) =>[...postKeys.all, "admin", "detail", id] as const,
+  factCheckPreview: (postId: string) => [...postKeys.all, "fact-check", "preview", postId] as const,
+  factCheckDetail: (postId: string) => [...postKeys.all, "fact-check", "detail", postId] as const,
     
 };
 
@@ -234,4 +231,29 @@ export const useRecheckAdminPostFactCheck = () => {
       toast.error("Không thể kiểm chứng lại bài viết");
     },
   });
+};
+
+
+export const usePostFactCheckPreview = (
+    postId: string | null,
+    enabled = true
+) => {
+    return useQuery({
+        queryKey: postKeys.factCheckPreview(postId || ""),
+        queryFn: () => postService.getFactCheckPreview(postId as string),
+        enabled: !!postId && enabled,
+        staleTime: 1000 * 60 * 5,
+    });
+};
+
+export const usePostFactCheckDetail = (
+    postId: string | null,
+    enabled = true
+) => {
+    return useQuery({
+        queryKey: postKeys.factCheckDetail(postId || ""),
+        queryFn: () => postService.getFactCheckDetail(postId as string),
+        enabled: !!postId && enabled,
+        staleTime: 1000 * 60 * 5,
+    });
 };

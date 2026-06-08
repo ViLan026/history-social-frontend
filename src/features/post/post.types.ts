@@ -87,8 +87,8 @@ export interface FeedPostResponse extends PostResponse {
   };
   reactionCount: number;
   commentCount: number;
-}
-
+  hasFactCheck?: boolean;
+} 
 
 
 
@@ -158,4 +158,26 @@ export interface AdminPostDetailResponse {
 
 export interface AdminUpdatePostStatusRequest {
   status: PostStatus;
+}
+
+
+
+
+export interface PostFactCheckPreviewResponse {
+  postId: string;
+  claims: PostFactCheckClaimPreviewResponse[];
+}
+
+export interface PostFactCheckClaimPreviewResponse {
+  id: string;
+  claimText: string;
+  label: "SUPPORTED" | "REFUTED" | "NOT_ENOUGH_EVIDENCE";
+  explanation?: string;
+  displayOrder: number;
+}
+
+export interface PostFactCheckDetailResponse {
+  postId: string;
+  summary: FactCheckSummaryResponse;
+  claims: PostFactCheckClaimResponse[];
 }

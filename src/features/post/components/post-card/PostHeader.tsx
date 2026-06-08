@@ -4,6 +4,7 @@ import { FeedPostResponse } from "@/features/post/post.types";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
 import Link from "next/dist/client/link";
+import FactCheckBadge from "../fact-check/FactCheckBadge";
 
 interface PostHeaderProps {
     post: FeedPostResponse;
@@ -32,6 +33,11 @@ export default function PostHeader({ post }: PostHeaderProps) {
                     <span className="opacity-80 blur-[0.3px] text-xs text-foreground-faint text-blur-sm">
                         {formattedTime} trước
                     </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    {post.hasFactCheck && (
+                        <FactCheckBadge postId={post.postId} />
+                    )}
                 </div>
             </div>
 

@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { FeedPostResponse } from "@/features/post/post.types";
 import { useUIStore } from "@/features/ui/ui.store";
 import { useToggleBookmark } from "@/features/bookmark/useBookmark";
-import ReactionButton from "@/features/reaction/components/ReactionButton"; // 1. Import Component vừa làm
+import ReactionButton from "@/features/reaction/components/ReactionButton"; 
+
 
 interface PostFooterProps {
     post: FeedPostResponse;

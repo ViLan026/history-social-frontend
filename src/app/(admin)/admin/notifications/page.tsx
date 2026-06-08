@@ -1,7 +1,7 @@
 // src/app/(admin)/admin/notifications/page.tsx
 
 import { Metadata } from "next";
-import NotificationList from "@/features/notification/components/NotificationList";
+import AdminNotificationsClient from "./AdminNotificationsClient";
 
 export const metadata: Metadata = {
     title: "Thông báo quản trị | Admin Dashboard",
@@ -10,13 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminNotificationsPage() {
-    return (
-        <div className="space-y-6 max-w-[1200px] mx-auto">
-            <main className="pt-2 md:pt-5 lg:pt-7">
-                <section className="overflow-hidden rounded-2xl border border-border bg-card neu-raised">
-                    <NotificationList size={20} showLoadMore />
-                </section>
-            </main>
-        </div>
-    );
+    return <AdminNotificationsClient />;
 }

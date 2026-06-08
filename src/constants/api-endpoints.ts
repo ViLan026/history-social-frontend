@@ -31,6 +31,8 @@ export const API_ENDPOINTS = {
 		UPDATE: (id: string) => `/posts/${id}`,       // Trùng URL với GET nhưng khác Method (PUT)
 		GET_BY_AUTHOR: (authorId: string) => `/posts/author/${authorId}`,
 		SEARCH: '/posts/search',
+		FACT_CHECK_PREVIEW: (id: string) => `/posts/${id}/fact-check/preview`,
+		FACT_CHECK_DETAIL: (id: string) => `/posts/${id}/fact-check/detail`,
 	},
 
 	BOOKMARKS: {
@@ -113,4 +115,6 @@ export const API_ENDPOINTS = {
 			MARK_READ: (notificationId: string) =>
 				`/notifications/${notificationId}/read`,
 		},
+
+		
 };
