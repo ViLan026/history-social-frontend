@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { FeedPostResponse } from "@/features/post/post.types";
+import { ReportTargetType } from "../report/report.types";
 
 interface ModalState<T = null> {
     isOpen: boolean;
@@ -32,7 +33,22 @@ interface UIState {
     closeNotification: () => void;
 
     closeAllModals: () => void;
-}
+
+    reportModal: ModalState<{
+        targetId: string;
+            targetType: ReportTargetType;
+        }>;
+
+    openReport: (targetId: string, targetType: ReportTargetType) => void;
+    closeReport: () => void;
+
+    factCheckPreviewModal: ModalState<{
+        postId: string;
+    }>;
+
+    openFactCheckPreview: (postId: string) => void;
+    closeFactCheckPreview: () => void;
+    }
 
 const initialModalState = {
     isOpen: false,
@@ -44,6 +60,8 @@ export const useUIStore = create<UIState>((set) => ({
     editProfileModal: initialModalState,
     followListModal: initialModalState,
     notificationModal: initialModalState,
+    reportModal: initialModalState,
+    factCheckPreviewModal: initialModalState,
 
     openPostDetail: (post) =>
         set({
@@ -106,5 +124,36 @@ export const useUIStore = create<UIState>((set) => ({
             editProfileModal: initialModalState,
             followListModal: initialModalState,
             notificationModal: initialModalState,
+            reportModal: initialModalState,
+        }),
+
+    openReport: (targetId, targetType) =>
+    set({
+        reportModal: {
+            isOpen: true,
+            data: {
+                targetId,
+                targetType,
+            },
+        },
+    }),
+
+    closeReport: () =>
+        set({
+            reportModal: initialModalState,
+        }),
+
+
+    openFactCheckPreview: (postId) =>
+        set({
+            factCheckPreviewModal: {
+                isOpen: true,
+                data: { postId },
+            },
+        }),
+
+    closeFactCheckPreview: () =>
+        set({
+            factCheckPreviewModal: initialModalState,
         }),
 }));

@@ -40,9 +40,6 @@ export function TopReportedPostsTable({ data }: Props) {
               <th className="text-right py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Report
               </th>
-              <th className="text-right py-2 pr-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
-                Điểm chất lượng 
-              </th>
               <th className="text-right py-2 text-xs font-semibold text-foreground-muted uppercase tracking-wider whitespace-nowrap">
                 Ngày tạo
               </th>
@@ -68,9 +65,6 @@ export function TopReportedPostsTable({ data }: Props) {
                 </td>
                 <td className="py-2.5 pr-3 text-right font-semibold text-foreground">
                   {row.reportCount}
-                </td>
-                <td className="py-2.5 pr-3 text-right text-foreground-muted tabular-nums">
-                  {row.qualityScore != null ? row.qualityScore.toFixed(2) : '—'}
                 </td>
                 <td className="py-2.5 text-right text-foreground-muted whitespace-nowrap">
                   {formatDateTime(row.createdAt)}

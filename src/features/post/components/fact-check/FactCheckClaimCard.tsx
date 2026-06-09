@@ -1,6 +1,6 @@
 import {
     PostFactCheckClaimPreviewResponse,
-    PostFactCheckClaimResponse,
+    PostFactCheckClaimResponse
 } from "../../post.types";
 import FactCheckEvidence from "./FactCheckEvidence";
 import FactCheckLabelBadge from "./FactCheckLabelBadge";
@@ -12,15 +12,13 @@ interface Props {
     showEvidence?: boolean;
 }
 
-function hasEvidence(
-    claim: Claim
-): claim is PostFactCheckClaimResponse {
+function hasEvidence(claim: Claim): claim is PostFactCheckClaimResponse {
     return "evidence" in claim;
 }
 
 export default function FactCheckClaimCard({
     claim,
-    showEvidence = false,
+    showEvidence = false
 }: Props) {
     return (
         <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4">

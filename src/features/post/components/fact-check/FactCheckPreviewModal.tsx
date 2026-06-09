@@ -3,22 +3,24 @@
 import { useEffect } from "react";
 import { usePostFactCheckPreview } from "../../usePost";
 import FactCheckSection from "./FactCheckSection";
+import { useUIStore } from "@/features/ui/ui.store";
+import Button from "@/components/ui/Button";
 
-interface Props {
-    postId: string | null;
-    open: boolean;
-    onClose: () => void;
-}
+export default function FactCheckPreviewModal() {
+    const factCheckPreviewModal = useUIStore(
+        (state) => state.factCheckPreviewModal
+    );
+    const closeFactCheckPreview = useUIStore(
+        (state) => state.closeFactCheckPreview
+    );
 
-export default function FactCheckPreviewModal({
-    postId,
-    open,
-    onClose,
-}: Props) {
-    const { data, isLoading } = usePostFactCheckPreview(postId, open);
+    const isOpen = factCheckPreviewModal.isOpen;
+    const postId = factCheckPreviewModal.data?.postId ?? null;
+
+    const { data, isLoading } = usePostFactCheckPreview(postId, isOpen);
 
         useEffect(() => {
-        if (open) {
+        if (isOpen) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
@@ -26,33 +28,35 @@ export default function FactCheckPreviewModal({
         return () => {
             document.body.style.overflow = "";
         };
-    }, [open]);
+    }, [isOpen]);
 
     useEffect(() => {
-        if (!open) return;
+        if (!isOpen) return;
 
         const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === "Escape") onClose();
+            if (event.key === "Escape") {
+                closeFactCheckPreview();
+            }
         };
 
         window.addEventListener("keydown", handleEsc);
         return () => window.removeEventListener("keydown", handleEsc);
-    }, [open, onClose]);
+    }, [isOpen, closeFactCheckPreview]);
 
-    if (!open) return null;
+    if (!isOpen || !postId) return null;
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
-            onClick={onClose}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+            onClick={closeFactCheckPreview}
         >
             <div
-                className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-background p-4 shadow-2xl border border-border"
-                onClick={(e) => e.stopPropagation()}
+                className="flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl"
+                onClick={(event) => event.stopPropagation()}
             >
-                <div className="mb-4 flex items-start justify-between gap-3">
+                <div className="flex shrink-0 items-start justify-between gap-3 border-b border-border px-5 py-4">
                     <div>
-                        <h2 className="text-lg font-bold">
+                        <h2 className="text-lg font-bold text-foreground">
                             Đối chiếu nguồn lịch sử
                         </h2>
                         <p className="text-sm text-foreground-muted">
@@ -60,27 +64,30 @@ export default function FactCheckPreviewModal({
                         </p>
                     </div>
 
-                    <button
+                    <Button
                         type="button"
-                        onClick={onClose}
-                        className="rounded-full p-2 hover:bg-muted"
+                        variant="ghost"
+                        onClick={closeFactCheckPreview}
+                        className="h-8 w-8 rounded-full p-0"
                     >
                         ✕
-                    </button>
+                    </Button>
                 </div>
 
-                {isLoading ? (
-                    <div className="py-10 text-center text-sm text-foreground-muted animate-pulse">
-                        Đang tải kết quả đối chiếu...
-                    </div>
-                ) : (
-                    <FactCheckSection
-                        claims={data?.claims ?? []}
-                        showEvidence={false}
-                        compact
-                        title="Kết quả đối chiếu"
-                    />
-                )}
+                <div className="overflow-y-auto p-5">
+                    {isLoading ? (
+                        <div className="animate-pulse py-10 text-center text-sm text-foreground-muted">
+                            Đang tải kết quả đối chiếu...
+                        </div>
+                    ) : (
+                        <FactCheckSection
+                            claims={data?.claims ?? []}
+                            showEvidence={false}
+                            compact
+                            title="Kết quả đối chiếu"
+                        />
+                    )}
+                </div>
             </div>
         </div>
     );

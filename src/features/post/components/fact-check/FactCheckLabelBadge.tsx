@@ -28,7 +28,11 @@ function getLabelClass(label: FactCheckLabel) {
     }
 }
 
-export default function FactCheckLabelBadge({ label }: { label: FactCheckLabel }) {
+export default function FactCheckLabelBadge({
+    label
+}: {
+    label: FactCheckLabel;
+}) {
     return (
         <span
             className={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-medium ${getLabelClass(

@@ -5,7 +5,9 @@ export type NotificationType =
     | "LIKE"
     | "REPORT"
     | "POST"
-    | "SYSTEM";
+    | "SYSTEM"
+    | "HSD"
+    | "FACT_CHECK";
 
 export interface NotificationResponse {
     id: string;

@@ -1,7 +1,7 @@
 import {
     FactCheckSummaryResponse,
     PostFactCheckClaimResponse,
-    PostFactCheckClaimPreviewResponse,
+    PostFactCheckClaimPreviewResponse
 } from "../../post.types";
 import FactCheckClaimCard from "./FactCheckClaimCard";
 import FactCheckSummary from "./FactCheckSummary";
@@ -21,7 +21,7 @@ export default function FactCheckSection({
     showEvidence = false,
     title = "Đối chiếu nguồn lịch sử",
     description = "Kết quả được tạo tự động từ hệ thống hỗ trợ kiểm chứng. Người đọc nên xem thêm nguồn tham khảo.",
-    compact = false,
+    compact = false
 }: Props) {
     const sortedClaims = claims
         .slice()

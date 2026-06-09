@@ -1,5 +1,5 @@
 // features/post/components/Feed.tsx
-import CreatePostModal from "../../ui/components/CreatePostModal";
+import CreatePostModal from "./create-post/CreatePostModal";
 import PostList from "./PostList";
 
 export default function Feed() {

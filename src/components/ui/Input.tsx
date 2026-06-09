@@ -1,4 +1,4 @@
-// ================= FILE: src/components/ui/Input.tsx =================
+// src/components/ui/Input.tsx 
 import React, { forwardRef, type InputHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 

@@ -11,7 +11,7 @@ const STATUS_TABS: { label: string; value?: PostStatus }[] = [
     { label: "Công khai", value: PostStatus.PUBLISHED },
     { label: "Gắn cờ", value: PostStatus.FLAGGED },
     { label: "Từ chối", value: PostStatus.REJECTED },
-    { label: "Đã ẩn", value: PostStatus.HIDDEN },
+    { label: "Đã ẩn", value: PostStatus.HIDDEN }
 ];
 
 function formatDate(value?: string) {
@@ -59,7 +59,7 @@ export default function AdminPostTable() {
         page,
         size: 20,
         sort: "createdAt,desc",
-        status: activeStatus,
+        status: activeStatus
     });
 
     const openAdminPostDrawer = usePostStore(
@@ -98,9 +98,7 @@ export default function AdminPostTable() {
                 <table className="w-full text-left text-sm text-foreground">
                     <thead className="bg-muted text-foreground-muted uppercase text-xs">
                         <tr>
-                            <th className="px-6 py-4 font-medium">
-                                Bài viết
-                            </th>
+                            <th className="px-6 py-4 font-medium">Bài viết</th>
                             {/* <th className="px-6 py-4 font-medium">Tác giả</th> */}
                             <th className="px-6 py-4 font-medium">
                                 Trạng thái
@@ -243,9 +241,7 @@ export default function AdminPostTable() {
                     <button
                         type="button"
                         onClick={() =>
-                            setPage((p) =>
-                                Math.min(data.totalPages - 1, p + 1)
-                            )
+                            setPage((p) => Math.min(data.totalPages - 1, p + 1))
                         }
                         disabled={page >= data.totalPages - 1}
                         className="px-4 py-2 border border-border rounded-lg bg-card hover:bg-muted disabled:opacity-50"

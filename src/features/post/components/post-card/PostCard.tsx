@@ -13,7 +13,6 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post, isInModal = false }: PostCardProps) {
-
     return (
         <article
             className={[
@@ -25,7 +24,6 @@ export default function PostCard({ post, isInModal = false }: PostCardProps) {
                 isInModal ? "p-0 shadow-none" : "p-4 md:p-5 lg:p-6"
             ].join(" ")}
         >
-
             <div className="relative z-10 space-y-4">
                 <PostHeader post={post} />
                 <PostContent post={post} isInModal={isInModal} />

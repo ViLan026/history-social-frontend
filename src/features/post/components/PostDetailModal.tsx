@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useUIStore } from "@/features/ui/ui.store";
-import PostCard from "../../post/components/post-card/PostCard";
+import PostCard from "./post-card/PostCard";
 import { CommentSection } from "@/features/comment/components/CommentSection";
 import { useCurrentUser } from "@/features/user/useUser";
 import { usePostFactCheckDetail } from "@/features/post/usePost";

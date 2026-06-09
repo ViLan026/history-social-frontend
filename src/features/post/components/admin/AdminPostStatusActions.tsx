@@ -42,10 +42,8 @@ const BASE_BUTTON_CLASS =
 const BUTTON_VARIANTS: Record<StatusAction["variant"] | "primary", string> = {
     outline:
         "border border-border bg-background text-foreground hover:border-primary hover:text-primary",
-    danger:
-        "border border-red-200 bg-red-50 text-red-700 hover:bg-red-100",
-    primary:
-        "border border-primary bg-primary text-primary-fg hover:opacity-90"
+    danger: "border border-red-200 bg-red-50 text-red-700 hover:bg-red-100",
+    primary: "border border-primary bg-primary text-primary-fg hover:opacity-90"
 };
 
 function buttonClass(variant: StatusAction["variant"] | "primary") {

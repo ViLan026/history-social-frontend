@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import { FeedPostResponse } from "@/features/post/post.types";
 import { useUIStore } from "@/features/ui/ui.store";
 import { useToggleBookmark } from "@/features/bookmark/useBookmark";
-import ReactionButton from "@/features/reaction/components/ReactionButton"; 
-
+import ReactionButton from "@/features/reaction/components/ReactionButton";
 
 interface PostFooterProps {
     post: FeedPostResponse;
@@ -62,7 +61,9 @@ export default function PostFooter({
                             >
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                             </svg>
-                            <span className="text-xs font-semibold">{post.commentCount}</span>
+                            <span className="text-xs font-semibold">
+                                {post.commentCount}
+                            </span>
                         </button>
                     )}
                 </div>

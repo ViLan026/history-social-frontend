@@ -11,7 +11,6 @@ interface PostContentProps {
     isInModal?: boolean;
 }
 
-
 export default function PostContent({
     post,
     isInModal = false

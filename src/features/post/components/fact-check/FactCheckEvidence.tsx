@@ -114,7 +114,7 @@ export default function FactCheckEvidence({ evidence }: { evidence?: unknown }) 
                 <span className="text-foreground-muted">
                     ({evidenceItems.length})
                 </span>
-                <span>{isOpen ? "▲" : "▼"}</span>
+                <span>{isOpen ? "►" : "▼"}</span>
             </button>
 
             {isOpen && (

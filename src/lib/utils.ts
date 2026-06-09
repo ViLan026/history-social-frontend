@@ -14,9 +14,7 @@ export function cn(...inputs: ClassValue[]): string {
   }
 }
 
-/**
- * Format thời gian (relative: "2 hours ago")
- */
+// Format thời gian (relative: "2 hours ago")
 export function formatRelativeTime(date: Date | string | number): string {
   try {
     const target = new Date(date);
@@ -79,9 +77,7 @@ export function formatDate(
   }
 }
 
-/**
- * Format số lượng (1000 -> 1K, 1_000_000 -> 1M)
- */
+// Format số lượng (1000 -> 1K, 1_000_000 -> 1M)
 export function formatNumber(value: number): string {
   try {
     if (typeof value !== "number" || isNaN(value)) return "0";
@@ -102,23 +98,21 @@ export function formatNumber(value: number): string {
   }
 }
 
-/**
- * Truncate text (giới hạn ký tự)
- */
-export function truncate(text: string, maxLength: number): string {
-  try {
-    if (!text) return "";
-    if (text.length <= maxLength) return text;
+// /**
+//  * Truncate text (giới hạn ký tự)
+//  */
+// export function truncate(text: string, maxLength: number): string {
+//   try {
+//     if (!text) return "";
+//     if (text.length <= maxLength) return text;
 
-    return text.slice(0, maxLength) + "...";
-  } catch {
-    return "";
-  }
-}
+//     return text.slice(0, maxLength) + "...";
+//   } catch {
+//     return "";
+//   }
+// }
 
-/**
- * Sleep utility (dùng cho retry / delay)
- */
+// Sleep utility (dùng cho retry / delay)
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -137,9 +131,7 @@ const fullDateTimeFormatter = new Intl.DateTimeFormat('vi-VN', {
   minute: '2-digit',
 });
 
-/**
- * Format "2026-05-20" -> "20/05"
- */
+//  Format "2026-05-20" -> "20/05"
 export function formatDateShort(dateStr: string): string {
   try {
     return shortDateFormatter.format(new Date(dateStr));
@@ -148,9 +140,8 @@ export function formatDateShort(dateStr: string): string {
   }
 }
 
-/**
- * Format ISO datetime -> "20/05/2026, 10:00"
- */
+
+// -"20/05/2026, 10:00"
 export function formatDateTime(dateStr: string): string {
   try {
     return fullDateTimeFormatter.format(new Date(dateStr));

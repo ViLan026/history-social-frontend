@@ -1,4 +1,3 @@
-// components/comment/CommentItem.tsx
 "use client";
 
 import React, { memo, useCallback } from "react";
@@ -9,6 +8,7 @@ import Avatar from "@/components/ui/Avatar";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
 import Link from "next/link";
+import ReportMenuButton from "@/features/report/components/ReportMenuButton";
 
 interface CommentItemProps {
     comment: CommentResponse;
@@ -24,7 +24,7 @@ export const CommentItem = memo<CommentItemProps>(
 
         const formattedTime = formatDistanceToNow(new Date(comment.createdAt), {
             addSuffix: false,
-            locale: vi,
+            locale: vi
         });
 
         const isOwner = !!currentUserId && currentUserId === comment.authorId;
@@ -39,18 +39,16 @@ export const CommentItem = memo<CommentItemProps>(
             deleteComment({ commentId: comment.id, postId });
         }, [comment.id, postId, isDeleting, isHiddenByHsd, deleteComment]);
 
-
         if (isHiddenByHsd && !isOwner) {
             return null;
         }
 
-
         return (
             <div
                 className={cn(
-                    "group flex items-start gap-2.5 transition-opacity duration-300 bg-background",
+                    "group flex items-start gap-2.5 bg-background transition-opacity duration-300",
                     isOptimistic && "opacity-60",
-                    isDeleting && "opacity-40 pointer-events-none",
+                    isDeleting && "pointer-events-none opacity-40",
                     isHiddenByHsd && "opacity-60"
                 )}
             >
@@ -64,15 +62,25 @@ export const CommentItem = memo<CommentItemProps>(
                 <div className="min-w-0 flex-1">
                     <div
                         className={cn(
-                            "rounded-xl rounded-tl-sm px-3.5 py-2.5 border",
+                            "rounded-xl rounded-tl-sm border px-3.5 py-2.5",
                             isHiddenByHsd
-                                ? "bg-destructive/5 border-destructive/20"
-                                : "bg-surface border-border-muted"
+                                ? "border-destructive/20 bg-destructive/5"
+                                : "border-border-muted bg-surface"
                         )}
                     >
-                        <span className="mb-0.5 block text-xs font-semibold text-foreground-muted">
-                            {authorName}
-                        </span>
+                        <div className="mb-1 flex items-center justify-between gap-2">
+                            <span className="min-w-0 truncate text-xs font-semibold text-foreground-muted">
+                                {authorName}
+                            </span>
+
+                            {!isOwner && !isOptimistic && (
+                                <ReportMenuButton
+                                    targetId={comment.id}
+                                    targetType="COMMENT"
+                                    showLabel={false}
+                                />
+                            )}
+                        </div>
 
                         {isHiddenByHsd ? (
                             <div className="space-y-2">
@@ -81,12 +89,12 @@ export const CommentItem = memo<CommentItemProps>(
                                     tiêu chuẩn cộng đồng.
                                 </p>
 
-                                <p className="break-words text-sm leading-relaxed text-foreground-muted ">
+                                <p className="text-sm leading-relaxed text-foreground-muted">
                                     {comment.content}
                                 </p>
                             </div>
                         ) : (
-                            <p className="break-words text-sm leading-relaxed text-foreground whitespace-pre-wrap">
+                            <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
                                 {comment.content}
                             </p>
                         )}
@@ -105,13 +113,14 @@ export const CommentItem = memo<CommentItemProps>(
                                 onClick={handleDelete}
                                 disabled={isDeleting}
                                 className="
+                                    rounded-sm
                                     text-[11px] text-destructive/60
+                                    opacity-0 transition-all duration-150
                                     hover:text-destructive
+                                    focus:opacity-100
                                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
                                     disabled:cursor-not-allowed
-                                    opacity-0 group-hover:opacity-100 focus:opacity-100
-                                    transition-all duration-150
-                                    rounded-sm
+                                    group-hover:opacity-100
                                 "
                             >
                                 {isDeleting ? "Đang xóa..." : "Xóa"}
@@ -121,7 +130,7 @@ export const CommentItem = memo<CommentItemProps>(
                 </div>
             </div>
         );
-    }
+    } 
 );
 
 CommentItem.displayName = "CommentItem";
