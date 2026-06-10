@@ -11,6 +11,8 @@ import {
     PostStatus,
     PostFactCheckPreviewResponse,
     PostFactCheckDetailResponse,
+    UpdatePostStatusRequest,
+    UpdatePostStatusResponse,
 
 } from '@/features/post/post.types';
 import { ApiResponse, PageResponse, PaginationParams } from '@/types/api';
@@ -73,6 +75,19 @@ export const postService = {
         API_ENDPOINTS.POSTS.GET_BY_AUTHOR(authorId), 
         { params }
         );
+        return response.data.data;
+    },
+
+
+    getMyPosts: async ( params?: PaginationParams): Promise<PageResponse<FeedPostResponse>> => {
+        const response = await axiosInstance.get<ApiResponse<PageResponse<FeedPostResponse>>>(API_ENDPOINTS.POSTS.ME, { params });
+
+        return response.data.data;
+    },
+
+    updateMyPostStatus: async ( id: string, request: UpdatePostStatusRequest): Promise<UpdatePostStatusResponse> => {
+        const response = await axiosInstance.patch< ApiResponse<UpdatePostStatusResponse>>(API_ENDPOINTS.POSTS.UPDATE_MY_STATUS(id), request);
+
         return response.data.data;
     },
 
@@ -142,5 +157,7 @@ export const postService = {
 
         return response.data.data;
     },
+
+
 
 };

@@ -64,7 +64,7 @@ function ProfileContent({ activeTab, id }: ProfileContentProps) {
         <div className="w-full mx-auto">
             {activeTab === "posts" && (
                 <div>
-                    {id ? <PostList authorId={id} /> : <ContentSkeleton />}
+                    {id ? <PostList mode="me" showOwnerActions /> : <ContentSkeleton />}
                 </div>
             )}
 

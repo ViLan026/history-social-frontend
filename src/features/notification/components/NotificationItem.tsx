@@ -1,12 +1,13 @@
-//src\features\notification\components\NotificationItem.tsx
-
 "use client";
 
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import Avatar from "@/components/ui/Avatar";
+import { useUIStore } from "@/features/ui/ui.store";
+import { useOpenPostDetail } from "@/features/post/usePost";
 import { NotificationResponse } from "../notification.types";
 import { useMarkNotificationAsRead } from "../useNotification";
-import { useUIStore } from "@/features/ui/ui.store";
-import Avatar from "@/components/ui/Avatar";
 
 interface NotificationItemProps {
     notification: NotificationResponse;
@@ -25,6 +26,10 @@ function getNotificationLabel(type: NotificationResponse["type"]) {
             return "Báo cáo";
         case "POST":
             return "Bài viết";
+        case "HSD":
+            return "Kiểm duyệt bình luận";
+        case "FACT_CHECK":
+            return "Đối chiếu nguồn";
         case "SYSTEM":
         default:
             return "Hệ thống";
@@ -34,67 +39,76 @@ function getNotificationLabel(type: NotificationResponse["type"]) {
 function formatNotificationTime(value: string) {
     const date = new Date(value);
 
-    if (Number.isNaN(date.getTime())) {
-        return "";
-    }
+    if (Number.isNaN(date.getTime())) return "";
 
     return date.toLocaleString("vi-VN", {
         hour: "2-digit",
-        // minute: "2-digit",
+        minute: "2-digit",
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
     });
 }
 
-function getNotificationHref(notification: NotificationResponse) {
-    switch (notification.type) {
-        case "COMMENT":
-        case "REPLY":
-            if (notification.postId && notification.commentId) {
-                return `/posts/${notification.postId}?commentId=${notification.commentId}`;
-            }
-
-            if (notification.postId) {
-                return `/posts/${notification.postId}`;
-            }
-
-            return null;
-
-        case "REACTION":
-
-        case "POST":
-            return notification.postId
-                ? `/posts/${notification.postId}`
-                : null;
-
-        case "REPORT":
-            return notification.reportId
-                ? `/admin/reports?reportId=${notification.reportId}`
-                : "/admin/reports";
-
-        case "SYSTEM":
-        default:
-            return null;
-    }
+function shouldOpenPostDetail(type: NotificationResponse["type"]) {
+    return [
+        "COMMENT",
+        "REPLY",
+        "REACTION",
+        "LIKE",
+        "POST",
+        "HSD",
+        "FACT_CHECK",
+    ].includes(type);
 }
 
-export default function NotificationItem({ notification }: NotificationItemProps) {
+export default function NotificationItem({
+    notification,
+}: NotificationItemProps) {
     const router = useRouter();
+
     const closeNotification = useUIStore((state) => state.closeNotification);
+    const openPostDetailById = useOpenPostDetail();
+
     const markAsReadMutation = useMarkNotificationAsRead();
-    const displayName = notification.displayName?.trim() || "Người dùng"
-    const handleClick = () => {
+
+    const displayName = notification.displayName?.trim() || "Người dùng";
+    const postId = notification.postId ?? notification.referenceId;
+
+    const handleClick = async () => {
         if (!notification.read) {
             markAsReadMutation.mutate(notification.id);
         }
 
+        if (shouldOpenPostDetail(notification.type)) {
+            if (!postId) {
+                closeNotification();
+                return;
+            }
+
+            try {
+                await openPostDetailById(postId, {
+                    forceRefresh: notification.type === "FACT_CHECK",
+                    refreshFactCheck: notification.type === "FACT_CHECK",
+                });
+
+                closeNotification();
+            } catch (error) {
+                console.error("Không thể mở chi tiết bài viết:", error);
+                toast.error("Không thể mở chi tiết bài viết");
+            }
+
+            return;
+        }
+
         closeNotification();
 
-        const href = getNotificationHref(notification);
- 
-        if (href) {
-            router.push(href);
+        if (notification.type === "REPORT") {
+            router.push(
+                notification.reportId
+                    ? `/admin/reports?reportId=${notification.reportId}`
+                    : "/admin/reports"
+            );
         }
     };
 
@@ -103,14 +117,17 @@ export default function NotificationItem({ notification }: NotificationItemProps
             type="button"
             onClick={handleClick}
             className={[
-                "w-full text-left px-4 py-3 border-b border-border-muted transition-colors",
+                "w-full border-b border-border-muted px-4 py-3 text-left transition-colors",
                 "hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 notification.read ? "bg-card" : "bg-surface-raised",
             ].join(" ")}
         >
             <div className="flex items-start gap-3">
                 <div className="relative mt-1 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary text-primary-fg">
-                    <Avatar avatarUrl={notification.avatarUrl} displayName={displayName} />
+                    <Avatar
+                        avatarUrl={notification.avatarUrl}
+                        displayName={displayName}
+                    />
                 </div>
 
                 <div className="min-w-0 flex-1">

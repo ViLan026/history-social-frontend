@@ -1,36 +1,54 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useInfiniteFeed, useInfiniteFeedHome,  useInfinitePostsByAuthor} from "@/features/post/usePost";
+import {
+    useInfiniteFeed,
+    useInfiniteFeedHome,
+    useInfiniteMyPosts,
+    useInfinitePostsByAuthor,
+} from "@/features/post/usePost";
 import PostCard from "./post-card/PostCard";
 import PostListSkeleton from "./PostListSkeleton";
 import { useAuthStore } from "@/features/auth/auth.store";
-// import { useCurrentUser } from "@/features/user/useUser";
+
+type PostListMode = "feed" | "author" | "me";
 
 interface PostListProps {
     authorId?: string;
+    mode?: PostListMode;
+    showOwnerActions?: boolean;
 }
 
-export default function PostList({ authorId }: PostListProps) {
+export default function PostList({
+    authorId,
+    mode,
+    showOwnerActions = false,
+}: PostListProps) {
     const { isAuthenticated } = useAuthStore();
-    // const { data: currentUser } = useCurrentUser();
-    // if(isAuthenticated)
-    //     authorId = currentUser?.id; // Nếu đã login thì lấy authorId từ user info để hiển thị feed cá nhân
 
-    // !! được dịch từ phải sang trái với biến authorId có giá trị thị !authorId sẽ là false, sau đó !false sẽ là true và ngược lại
-    const isAuthorMode = !!authorId; // Có authorId => Chế độ xem trang cá nhân
-    const isAuthMode = !isAuthorMode && isAuthenticated; // Đã login + Không có authorId => Trang chủ cá nhân hóa
-    const isPublicMode = !isAuthorMode && !isAuthenticated; // Chưa login + Không có authorId => Trang chủ công khai
+    const isMeMode = mode === "me";
+    const isAuthorMode = !isMeMode && !!authorId;
+    const isAuthMode = !isMeMode && !isAuthorMode && isAuthenticated;
+    const isPublicMode = !isMeMode && !isAuthorMode && !isAuthenticated;
 
-    // Khai báo cả 3 hook với điều kiện enabled tương ứng
-    const  authFeed = useInfiniteFeed(isAuthMode);
+    const myPosts = useInfiniteMyPosts(isMeMode && isAuthenticated);
+    const authFeed = useInfiniteFeed(isAuthMode);
     const publicFeed = useInfiniteFeedHome(isPublicMode);
-    const authorFeed = useInfinitePostsByAuthor(authorId || "", isAuthorMode); // Truyền thêm điều kiện bật/tắt ở tham số thứ 2
+    const authorFeed = useInfinitePostsByAuthor(authorId || "", isAuthorMode);
 
-    // Lựa chọn feed chính xác dựa trên chế độ hiện tại
     let currentFeed = publicFeed;
-    if (isAuthMode) currentFeed = authFeed;
-    if (isAuthorMode) currentFeed = authorFeed;
+
+    if (isAuthMode) {
+        currentFeed = authFeed;
+    }
+
+    if (isAuthorMode) {
+        currentFeed = authorFeed;
+    }
+
+    if (isMeMode) {
+        currentFeed = myPosts;
+    }
 
     const {
         data,
@@ -38,7 +56,7 @@ export default function PostList({ authorId }: PostListProps) {
         hasNextPage,
         isFetchingNextPage,
         isLoading,
-        isError
+        isError,
     } = currentFeed;
 
     const observerTarget = useRef<HTMLDivElement>(null);
@@ -78,17 +96,30 @@ export default function PostList({ authorId }: PostListProps) {
         );
     }
 
-    // Gộp tất cả bài viết từ các trang được tải về
     const rawPosts = data?.pages.flatMap((page) => page.content) ?? [];
 
     const posts = Array.from(
         new Map(rawPosts.map((post) => [post.postId, post])).values()
     );
 
+    if (posts.length === 0) {
+        return (
+            <div className="rounded-lg md:rounded-xl bg-card p-6 md:p-8 text-center border border-border">
+                <p className="text-sm md:text-base text-foreground-muted">
+                    Chưa có bài viết nào.
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-4 md:space-y-5 bg-background">
             {posts.map((post) => (
-                <PostCard post={post} key={post.postId} />
+                <PostCard
+                    post={post}
+                    key={post.postId}
+                    showOwnerActions={showOwnerActions}
+                />
             ))}
 
             <div

@@ -186,8 +186,7 @@ export default function CreatePostForm({ onClose }: CreatePostFormProps) {
                 <div className="space-y-3">
                     {fields.length === 0 && (
                         <p className="py-2 text-center text-xs text-foreground-faint">
-                            {" "}
-                            Chưa có nguồn nào. Nhấn "+ Thêm nguồn" để thêm.{" "}
+                            {'Chưa có nguồn nào. Nhấn "+ Thêm nguồn" để thêm.'}
                         </p>
                     )}
 

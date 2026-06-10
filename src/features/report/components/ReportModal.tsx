@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { useSubmitReport } from "../useReport";
@@ -29,6 +29,17 @@ export default function ReportModal() {
 
     const targetId = reportModal.data?.targetId;
     const targetType = reportModal.data?.targetType;
+
+    useEffect(() => {
+        if (reportModal.isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [reportModal.isOpen]);
 
     if (!reportModal.isOpen || !targetId || !targetType) return null;
 

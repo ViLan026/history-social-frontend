@@ -3,6 +3,7 @@ import { PaginationParams } from '@/types/api';
 import { PostCreationRequest, PostStatus, PostUpdateRequest } from '@/features/post/post.types';
 import { postService } from './post.service';
 import { toast } from 'sonner';
+import { useUIStore } from "@/features/ui/ui.store";
 
 // Query Keys
 export const postKeys = {
@@ -13,6 +14,7 @@ export const postKeys = {
   infiniteFeedHome: () => [...postKeys.all, 'public-home'] as const,
   detail: (id: string) => [...postKeys.all, 'detail', id] as const,
   byAuthor: (authorId: string, params?: PaginationParams) => [...postKeys.all, 'author', authorId, params] as const,
+  myPosts: () => [...postKeys.all, "me"] as const,
   search: (keyword: string, params?: PaginationParams) => [...postKeys.all, 'search', keyword, params] as const,
   adminPosts: (params?: PaginationParams & { status?: PostStatus }) =>[...postKeys.all, "admin", "list", params] as const,
   adminPostDetail: (id: string) =>[...postKeys.all, "admin", "detail", id] as const,
@@ -21,8 +23,42 @@ export const postKeys = {
     
 };
 
+export const useOpenPostDetail = () => {
+    const queryClient = useQueryClient();
+    const openPostDetail = useUIStore((state) => state.openPostDetail);
 
+    return async (
+        postId: string,
+        options?: {
+            forceRefresh?: boolean;
+            refreshFactCheck?: boolean;
+        }
+    ) => {
+        if (options?.forceRefresh) {
+            await queryClient.invalidateQueries({
+                queryKey: postKeys.detail(postId),
+            });
+        }
 
+        if (options?.refreshFactCheck) {
+            await queryClient.invalidateQueries({
+                queryKey: postKeys.factCheckDetail(postId),
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: postKeys.factCheckPreview(postId),
+            });
+        }
+
+        const post = await queryClient.fetchQuery({
+            queryKey: postKeys.detail(postId),
+            queryFn: () => postService.getPostById(postId),
+            staleTime: options?.forceRefresh ? 0 : 1000 * 60 * 5,
+        });
+
+        openPostDetail(post);
+    };
+};
 
 // Infinite Scroll Feed
 export const useInfiniteFeed = (isEnabled: boolean) => {
@@ -68,6 +104,65 @@ export const useInfinitePostsByAuthor = (authorId: string, isEnabled: boolean) =
     enabled: !!authorId && isEnabled,
     staleTime: 1000 * 60 * 5,
   });
+};
+
+// list post của người đang đăng nhập 
+export const useInfiniteMyPosts = (isEnabled: boolean) => {
+    return useInfiniteQuery({
+        queryKey: postKeys.myPosts(),
+        queryFn: ({ pageParam = 0 }) =>
+            postService.getMyPosts({
+                page: pageParam,
+                size: 15,
+                sort: "createdAt,desc",
+            }),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage) =>
+            lastPage.last ? undefined : lastPage.currentPage + 1,
+        enabled: isEnabled,
+        staleTime: 1000 * 60 * 3,
+        gcTime: 1000 * 60 * 10,
+    });
+};
+
+// chỉnh sửa bài viết 
+export const useUpdateMyPostStatus = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({
+            id,
+            status,
+        }: {
+            id: string;
+            status: PostStatus;
+        }) => postService.updateMyPostStatus(id, { status }),
+
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: postKeys.myPosts(),
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: postKeys.infiniteFeed(),
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: postKeys.infiniteFeedHome(),
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: postKeys.detail(data.postId),
+            });
+
+            toast.success("Đã cập nhật trạng thái bài viết");
+        },
+
+        onError: (error) => {
+            console.error("Cập nhật trạng thái bài viết thất bại:", error);
+            toast.error("Không thể cập nhật trạng thái bài viết");
+        },
+    });
 };
 
 

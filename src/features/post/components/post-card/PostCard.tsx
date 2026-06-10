@@ -10,9 +10,10 @@ import PostFooter from "./PostFooter";
 interface PostCardProps {
     post: FeedPostResponse;
     isInModal?: boolean;
+    showOwnerActions?: boolean;
 }
 
-export default function PostCard({ post, isInModal = false }: PostCardProps) {
+export default function PostCard({ post, isInModal = false,  showOwnerActions = false }: PostCardProps) {
     return (
         <article
             className={[
@@ -25,7 +26,7 @@ export default function PostCard({ post, isInModal = false }: PostCardProps) {
             ].join(" ")}
         >
             <div className="relative z-10 space-y-4">
-                <PostHeader post={post} />
+                <PostHeader post={post} showOwnerActions={showOwnerActions} />
                 <PostContent post={post} isInModal={isInModal} />
                 <PostTags tags={post.tags} />
 

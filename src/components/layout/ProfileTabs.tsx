@@ -1,3 +1,5 @@
+// src\components\layout\ProfileTabs.tsx
+
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

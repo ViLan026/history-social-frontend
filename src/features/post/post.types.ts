@@ -181,3 +181,14 @@ export interface PostFactCheckDetailResponse {
   summary: FactCheckSummaryResponse;
   claims: PostFactCheckClaimResponse[];
 }
+
+
+
+export interface UpdatePostStatusRequest {
+    status: PostStatus;
+}
+
+export interface UpdatePostStatusResponse {
+    postId: string;
+    status: PostStatus;
+}

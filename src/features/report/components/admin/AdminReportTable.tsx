@@ -1,14 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
-import { usePendingReports } from "../../useReport";
+import { useAdminReports } from "../../useReport";
 import { useReportStore } from "../../report.store";
-import { ReportReasonType, ReportTargetType } from "../../report.types";
+import {
+    ReportReasonType,
+    ReportTargetType,
+    ReportStatus
+} from "../../report.types";
 import AdminReportDrawer from "./AdminReportDrawer";
 
 const REPORT_TABS: { label: string; value: ReportTargetType }[] = [
     { label: "Bài viết", value: "POST" },
-    { label: "Bình luận", value: "COMMENT" },
+    { label: "Bình luận", value: "COMMENT" }
+];
+
+const STATUS_OPTIONS: { label: string; value: ReportStatus | "" }[] = [
+    { label: "Tất cả trạng thái", value: "" },
+    { label: "Đang chờ", value: "PENDING" },
+    { label: "Đã xử lý", value: "RESOLVED" },
+    { label: "Đã bỏ qua", value: "DISMISSED" }
 ];
 
 const reasonLabels: Record<ReportReasonType, string> = {
@@ -19,7 +30,13 @@ const reasonLabels: Record<ReportReasonType, string> = {
     HARASSMENT: "Quấy rối",
     SPAM: "Spam",
     INAPPROPRIATE: "Không phù hợp",
-    OTHER: "Khác",
+    OTHER: "Khác"
+};
+
+const reportStatusLabels: Record<ReportStatus, string> = {
+    PENDING: "Đang chờ",
+    RESOLVED: "Đã xử lý",
+    DISMISSED: "Đã bỏ qua"
 };
 
 function formatDate(value?: string) {
@@ -46,15 +63,28 @@ function getTargetStatusLabel(status?: string) {
     }
 }
 
+function getEmptyMessage(targetType: ReportTargetType, status: ReportStatus | "") {
+    const targetLabel = targetType === "POST" ? "bài viết" : "bình luận";
+
+    if (!status) {
+        return `Hiện tại không có báo cáo ${targetLabel}.`;
+    }
+
+    return `Hiện tại không có báo cáo ${targetLabel} ở trạng thái "${reportStatusLabels[status]}".`;
+}
+
 export default function AdminReportTable() {
     const [activeTab, setActiveTab] = useState<ReportTargetType>("POST");
-    const [postPage, setPostPage] = useState(0);
-    const [commentPage, setCommentPage] = useState(0);
+    const [status, setStatus] = useState<ReportStatus | "">("");
+    const [page, setPage] = useState(0);
 
-    const currentPage = activeTab === "POST" ? postPage : commentPage;
-    const setCurrentPage = activeTab === "POST" ? setPostPage : setCommentPage;
+    const { data, isLoading } = useAdminReports(
+        page,
+        20,
+        activeTab,
+        status || undefined
+    );
 
-    const { data, isLoading } = usePendingReports(currentPage, 20, activeTab);
     const openAdminDrawer = useReportStore((state) => state.openAdminDrawer);
 
     const reports = data?.content ?? [];
@@ -62,32 +92,61 @@ export default function AdminReportTable() {
     return (
         <div className="space-y-4">
             <div className="sticky top-0 z-20 bg-background pt-2">
-                <div className="flex items-center gap-2 border-b border-border bg-background">
-                    {REPORT_TABS.map((tab) => (
-                        <button
-                            key={tab.value}
-                            type="button"
-                            onClick={() => setActiveTab(tab.value)}
-                            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                                activeTab === tab.value
-                                    ? "border-primary text-primary"
-                                    : "border-transparent text-foreground-muted hover:text-foreground"
-                            }`}
+                <div className="flex flex-col gap-3 border-b border-border bg-background pb-3 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-2">
+                        {REPORT_TABS.map((tab) => (
+                            <button
+                                key={tab.value}
+                                type="button"
+                                onClick={() => {
+                                    setActiveTab(tab.value);
+                                    setPage(0);
+                                }}
+                                className={`border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+                                    activeTab === tab.value
+                                        ? "border-primary text-primary"
+                                        : "border-transparent text-foreground-muted hover:text-foreground"
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="w-full md:w-64">
+                        <select
+                            value={status}
+                            onChange={(event) => {
+                                setStatus(event.target.value as ReportStatus | "");
+                                setPage(0);
+                            }}
+                            className="h-11 w-full rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground outline-none transition-colors focus:border-primary"
                         >
-                            {tab.label}
-                        </button>
-                    ))}
+                            {STATUS_OPTIONS.map((option) => (
+                                <option
+                                    key={option.value || "ALL"}
+                                    value={option.value}
+                                >
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div className="rounded-xl border border-border overflow-hidden bg-card">
+            <div className="overflow-hidden rounded-xl border border-border bg-card">
                 <table className="w-full text-left text-sm text-foreground">
-                    <thead className="bg-muted text-foreground-muted uppercase text-xs">
+                    <thead className="bg-muted text-xs uppercase text-foreground-muted">
                         <tr>
                             <th className="px-6 py-4 font-medium">Lý do</th>
-                            {/* <th className="px-6 py-4 font-medium">Người đăng</th> */}
                             <th className="px-6 py-4 font-medium">Nội dung</th>
-                            <th className="px-6 py-4 font-medium">Trạng thái nội dung</th>
+                            <th className="px-6 py-4 font-medium">
+                                Trạng thái báo cáo
+                            </th>
+                            <th className="px-6 py-4 font-medium">
+                                Trạng thái nội dung
+                            </th>
                             <th className="px-6 py-4 font-medium">Ngày gửi</th>
                             <th className="px-6 py-4 text-right">Thao tác</th>
                         </tr>
@@ -96,51 +155,57 @@ export default function AdminReportTable() {
                     <tbody className="divide-y divide-border/50">
                         {isLoading ? (
                             <tr>
-                                <td colSpan={6} className="px-6 py-8 text-center animate-pulse">
+                                <td
+                                    colSpan={6}
+                                    className="px-6 py-8 text-center animate-pulse"
+                                >
                                     Đang tải danh sách báo cáo...
                                 </td>
                             </tr>
                         ) : reports.length === 0 ? (
                             <tr>
-                                <td colSpan={6} className="px-6 py-8 text-center text-foreground-muted">
-                                    Hiện tại không có báo cáo {activeTab === "POST" ? "bài viết" : "bình luận"} nào cần duyệt.
+                                <td
+                                    colSpan={6}
+                                    className="px-6 py-8 text-center text-foreground-muted"
+                                >
+                                    {getEmptyMessage(activeTab, status)}
                                 </td>
                             </tr>
                         ) : (
                             reports.map((item) => (
-                                <tr key={item.report.id} className="hover:bg-muted/50 transition-colors">
+                                <tr
+                                    key={item.report.id}
+                                    className="transition-colors hover:bg-muted/50"
+                                >
                                     <td className="px-6 py-4">
                                         <div className="font-semibold text-destructive">
                                             {reasonLabels[item.report.reasonType]}
                                         </div>
-                                        {/* <div className="text-xs text-foreground-muted">
-                                            {item.report.targetType}
-                                        </div> */}
                                     </td>
 
-                                    {/* <td className="px-6 py-4">
-                                        <div className="font-medium">
-                                            {item.targetPreview.authorName || "Không rõ"}
-                                        </div>
-                                        <div className="text-xs text-foreground-muted break-all">
-                                            {item.targetPreview.authorId}
-                                        </div>
-                                    </td> */}
-
-                                    <td className="px-6 py-4 max-w-[320px]">
+                                    <td className="max-w-[320px] px-6 py-4">
                                         {item.targetPreview.title && (
-                                            <div className="font-semibold line-clamp-1">
+                                            <div className="line-clamp-1 font-semibold">
                                                 {item.targetPreview.title}
                                             </div>
                                         )}
-                                        <div className="text-foreground-muted line-clamp-2">
+
+                                        <div className="line-clamp-2 text-foreground-muted">
                                             {item.targetPreview.content}
                                         </div>
                                     </td>
 
                                     <td className="px-6 py-4">
-                                        <span className="border border-border px-2.5 py-1 rounded-full text-xs font-medium">
-                                            {getTargetStatusLabel(item.targetPreview.targetStatus)}
+                                        <span className="rounded-full border border-border px-2.5 py-1 text-xs font-medium">
+                                            {reportStatusLabels[item.report.status]}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-6 py-4">
+                                        <span className="rounded-full border border-border px-2.5 py-1 text-xs font-medium">
+                                            {getTargetStatusLabel(
+                                                item.targetPreview.targetStatus
+                                            )}
                                         </span>
                                     </td>
 
@@ -152,7 +217,7 @@ export default function AdminReportTable() {
                                         <button
                                             type="button"
                                             onClick={() => openAdminDrawer(item)}
-                                            className="text-primary hover:underline font-medium text-sm"
+                                            className="text-sm font-medium text-primary hover:underline"
                                         >
                                             Xem & xử lý
                                         </button>
@@ -165,25 +230,27 @@ export default function AdminReportTable() {
             </div>
 
             {data && data.totalPages > 1 && (
-                <div className="flex gap-2 justify-center pt-4">
+                <div className="flex justify-center gap-2 pt-4">
                     <button
                         type="button"
-                        onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
-                        disabled={currentPage === 0}
-                        className="px-4 py-2 border border-border rounded-lg bg-card hover:bg-muted disabled:opacity-50"
+                        onClick={() => setPage((p) => Math.max(0, p - 1))}
+                        disabled={page === 0}
+                        className="rounded-lg border border-border bg-card px-4 py-2 hover:bg-muted disabled:opacity-50"
                     >
                         Trước
                     </button>
 
                     <span className="px-4 py-2 text-sm font-medium">
-                        Trang {currentPage + 1} / {data.totalPages}
+                        Trang {page + 1} / {data.totalPages}
                     </span>
 
                     <button
                         type="button"
-                        onClick={() => setCurrentPage((p) => Math.min(data.totalPages - 1, p + 1))}
-                        disabled={currentPage >= data.totalPages - 1}
-                        className="px-4 py-2 border border-border rounded-lg bg-card hover:bg-muted disabled:opacity-50"
+                        onClick={() =>
+                            setPage((p) => Math.min(data.totalPages - 1, p + 1))
+                        }
+                        disabled={page >= data.totalPages - 1}
+                        className="rounded-lg border border-border bg-card px-4 py-2 hover:bg-muted disabled:opacity-50"
                     >
                         Sau
                     </button>

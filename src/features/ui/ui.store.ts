@@ -125,6 +125,7 @@ export const useUIStore = create<UIState>((set) => ({
             followListModal: initialModalState,
             notificationModal: initialModalState,
             reportModal: initialModalState,
+            factCheckPreviewModal: initialModalState,
         }),
 
     openReport: (targetId, targetType) =>

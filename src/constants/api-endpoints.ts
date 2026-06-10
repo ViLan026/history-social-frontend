@@ -33,6 +33,8 @@ export const API_ENDPOINTS = {
 		SEARCH: '/posts/search',
 		FACT_CHECK_PREVIEW: (id: string) => `/posts/${id}/fact-check/preview`,
 		FACT_CHECK_DETAIL: (id: string) => `/posts/${id}/fact-check/detail`,
+		ME: "/posts/me",
+		UPDATE_MY_STATUS: (id: string) => `/posts/${id}/status`,
 	},
 
 	BOOKMARKS: {
@@ -90,7 +92,7 @@ export const API_ENDPOINTS = {
 	},
 
 	ADMIN_REPORTS: {
-		PENDING: '/admin/reports/pending',
+		BASE: '/admin/reports',
 		REVIEW: (id: string) => `/admin/reports/${id}/review`,
 	},
 

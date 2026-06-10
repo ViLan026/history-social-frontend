@@ -5,12 +5,17 @@ import { vi } from "date-fns/locale";
 import Link from "next/link";
 import FactCheckBadge from "../fact-check/FactCheckBadge";
 import ReportMenuButton from "@/features/report/components/ReportMenuButton";
+import PostOwnerStatusActions from "./PostOwnerStatusActions";
 
 interface PostHeaderProps {
     post: FeedPostResponse;
+    showOwnerActions?: boolean;
 }
 
-export default function PostHeader({ post }: PostHeaderProps) {
+export default function PostHeader({
+    post,
+    showOwnerActions = false
+}: PostHeaderProps) {
     const formattedTime = formatDistanceToNow(new Date(post.createdAt), {
         addSuffix: false,
         locale: vi
@@ -55,11 +60,15 @@ export default function PostHeader({ post }: PostHeaderProps) {
                     </div>
                 </div>
 
-                <ReportMenuButton
-                    targetId={post.postId}
-                    targetType="POST"
-                    showLabel
-                />
+                <div className="flex shrink-0 items-center gap-2">
+                    {showOwnerActions && <PostOwnerStatusActions post={post} />}
+
+                    <ReportMenuButton
+                        targetId={post.postId}
+                        targetType="POST"
+                        showLabel
+                    />
+                </div>
             </div>
 
             <h3 className="mt-4 pr-4 text-[22px] font-semibold leading-tight text-foreground">

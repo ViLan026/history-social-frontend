@@ -1,15 +1,15 @@
 // @/features/report/useReport.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { reportService } from './report.service';
-import { CreateReportRequest, ReportTargetType, ReviewReportRequest } from './report.types';
+import { CreateReportRequest, ReportStatus, ReportTargetType, ReviewReportRequest } from './report.types';
 import { useReportStore } from './report.store';
 
 // Keys chuẩn hóa cho React Query
 export const REPORT_QUERY_KEYS = {
     all: ['reports'] as const,
     myReports: (page: number, size: number) => [...REPORT_QUERY_KEYS.all, 'me', page, size] as const,
-    adminPending: (page: number, size: number, targetType?: ReportTargetType) =>
-        [...REPORT_QUERY_KEYS.all, 'admin', 'pending', targetType, page, size] as const,
+    adminReports: (page: number, size: number, targetType?: ReportTargetType, status?: ReportStatus) =>
+        [...REPORT_QUERY_KEYS.all, 'admin', targetType ?? "ALL", status ?? "ALL", page, size] as const,
 };
 
 export const useSubmitReport = () => {
@@ -40,15 +40,16 @@ export const useMyReports = (page: number = 0, size: number = 20) => {
 
 // hook cho admin 
 
-export const usePendingReports = (
-    page: number = 0,
-    size: number = 20,
-    targetType?: ReportTargetType
+export const useAdminReports = (
+  page = 0,
+  size = 20,
+  targetType?: ReportTargetType,
+  status?: ReportStatus
 ) => {
-    return useQuery({
-        queryKey: REPORT_QUERY_KEYS.adminPending(page, size, targetType),
-        queryFn: () => reportService.getPendingReports(page, size, targetType),
-    });
+  return useQuery({
+    queryKey: REPORT_QUERY_KEYS.adminReports(page, size, targetType, status),
+    queryFn: () => reportService.getAdminReports(page, size, targetType, status),
+  });
 };
 
 export const useReviewReport = () => {
