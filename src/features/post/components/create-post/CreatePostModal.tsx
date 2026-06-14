@@ -41,13 +41,14 @@ export default function CreatePostModal() {
 
     return (
         <>
-            <Button type="button" onClick={handleOpen}>
+            <Button  className="pb-5"
+            type="button" onClick={handleOpen}>
                 + Thêm bài viết
             </Button>
 
             {isOpen && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/100 p-4 backdrop-blur-sm"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
                     onClick={(event) => {
                         if (event.target === event.currentTarget) {
                             handleClose();

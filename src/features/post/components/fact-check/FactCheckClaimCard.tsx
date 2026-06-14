@@ -23,7 +23,7 @@ export default function FactCheckClaimCard({
     return (
         <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4">
             <div className="flex items-start justify-between gap-3">
-                <p className="break-words text-sm font-medium">
+                <p className="text-sm font-medium">
                     {claim.claimText}
                 </p>
 
@@ -31,7 +31,7 @@ export default function FactCheckClaimCard({
             </div>
 
             {claim.explanation && (
-                <p className="whitespace-pre-wrap break-words text-sm text-foreground-muted">
+                <p className="whitespace-pre-wrap text-sm text-foreground-muted">
                     {claim.explanation}
                 </p>
             )}

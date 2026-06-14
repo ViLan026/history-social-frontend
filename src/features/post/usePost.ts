@@ -56,7 +56,12 @@ export const useOpenPostDetail = () => {
             staleTime: options?.forceRefresh ? 0 : 1000 * 60 * 5,
         });
 
-        openPostDetail(post);
+        openPostDetail({
+            ...post,
+            hasFactCheck: options?.refreshFactCheck
+                ? true
+                : post.hasFactCheck,
+        });
     };
 };
 

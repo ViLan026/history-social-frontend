@@ -42,7 +42,7 @@ export default function OnThisDayCard({
         <div className="flex-1 min-w-0">
           <h4
             className={`text-sm md:text-base font-normal leading-relaxed text-foreground-muted whitespace-pre-line ${
-              compact ? "line-clamp-2" : "line-clamp-3"
+              compact ? "line-clamp-2" : ""
             }`}
           >
             {event.description}

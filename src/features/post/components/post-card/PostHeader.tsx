@@ -63,11 +63,7 @@ export default function PostHeader({
                 <div className="flex shrink-0 items-center gap-2">
                     {showOwnerActions && <PostOwnerStatusActions post={post} />}
 
-                    <ReportMenuButton
-                        targetId={post.postId}
-                        targetType="POST"
-                        showLabel
-                    />
+                    {!showOwnerActions && <ReportMenuButton targetId={post.postId} targetType="POST" showLabel/>}
                 </div>
             </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { buildSourceBookUrl } from "./sourceBookLinks";
 
 function hasNonEmptyFootnotes(footnotes: unknown) {
     if (footnotes === undefined || footnotes === null) return false;
@@ -21,10 +22,10 @@ function isEvidenceObject(value: unknown): value is {
     return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function formatScore(score?: number) {
-    if (typeof score !== "number") return null;
-    return score.toFixed(3);
-}
+// function formatScore(score?: number) {
+//     if (typeof score !== "number") return null;
+//     return score.toFixed(3);
+// }
 
 function renderEvidenceItem(item: unknown, index: number) {
     if (typeof item === "string") {
@@ -33,7 +34,7 @@ function renderEvidenceItem(item: unknown, index: number) {
                 <p className="mb-2 text-xs font-semibold text-foreground-muted">
                     Bằng chứng {index + 1}
                 </p>
-                <p className="whitespace-pre-wrap break-words text-foreground-muted">
+                <p className="whitespace-pre-wrap  text-foreground-muted">
                     {item}
                 </p>
             </div>
@@ -41,7 +42,10 @@ function renderEvidenceItem(item: unknown, index: number) {
     }
 
     if (isEvidenceObject(item)) {
-        const score = formatScore(item.score);
+        // const score = formatScore(item.score);
+        const pages = item.pages ?? [];
+        const firstPage = pages.length > 0 ? pages[0] : undefined;
+        const url = buildSourceBookUrl(item.book_name, firstPage);
 
         return (
             <div className="space-y-3 rounded-xl border border-border bg-card p-4">
@@ -50,27 +54,35 @@ function renderEvidenceItem(item: unknown, index: number) {
                         Bằng chứng {index + 1}
                     </span>
 
-                    {item.book_name && (
-                        <span className="rounded-full border border-border px-2 py-0.5">
-                            {item.book_name}
-                        </span>
-                    )}
+                    {item.book_name &&
+                        (url ? (
+                            <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full border border-border px-2 py-0.5 text-primary hover:underline"
+                            >
+                                {item.book_name}
+                                {pages.length > 0 &&
+                                    ` - Trang ${pages.join(", ")}`}
+                            </a>
+                        ) : (
+                            <span className="rounded-full border border-border px-2 py-0.5">
+                                {item.book_name}
+                                {pages.length > 0 &&
+                                    ` - Trang ${pages.join(", ")}`}
+                            </span>
+                        ))}
 
-                    {item.pages && item.pages.length > 0 && (
-                        <span className="rounded-full border border-border px-2 py-0.5">
-                            Trang {item.pages.join(", ")}
-                        </span>
-                    )}
-
-                    {score && (
+                    {/* {score && (
                         <span className="rounded-full border border-border px-2 py-0.5">
                             Score {score}
                         </span>
-                    )}
+                    )} */}
                 </div>
 
                 {item.text && (
-                    <p className="whitespace-pre-wrap break-words text-sm text-foreground-muted">
+                    <p className="whitespace-pre-wrap  text-sm text-foreground-muted">
                         {item.text}
                     </p>
                 )}
@@ -96,7 +108,11 @@ function renderEvidenceItem(item: unknown, index: number) {
     );
 }
 
-export default function FactCheckEvidence({ evidence }: { evidence?: unknown }) {
+export default function FactCheckEvidence({
+    evidence
+}: {
+    evidence?: unknown;
+}) {
     const [isOpen, setIsOpen] = useState(false);
 
     if (evidence === undefined || evidence === null) return null;
