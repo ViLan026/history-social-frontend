@@ -14,7 +14,7 @@ export const SOURCE_BOOK_LINKS: Record<string, string> = {
         "https://cvdvn.net/wp-content/uploads/2018/03/viet-nam-su-luoc-tran-trong-kim1.pdf",
 
     "Vương Triều Trần (1226-1400)":
-        "https://sachdientu.nxbhanoi.com.vn/ebook-free/10256/0",
+        "https://sachdientu.nxbhanoi.com.vn/ebook-free/10256/0/1",
 };
 
 export function buildSourceBookUrl(bookName?: string, page?: number | string) {
