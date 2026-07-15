@@ -99,6 +99,7 @@ export const useCreateComment = () => {
         content: variables.content,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        isVisible: true,
       };
 
       commentQueries.forEach((query) => {

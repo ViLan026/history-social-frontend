@@ -158,7 +158,7 @@ export default function AdminReportDrawer() {
                                 <p className="text-foreground-muted mb-1">
                                     Mô tả từ người báo cáo
                                 </p>
-                                <p className="whitespace-pre-wrap break-words">
+                                <p className="whitespace-pre-wrap ">
                                     {report.reasonText}
                                 </p>
                             </div>
@@ -204,12 +204,12 @@ export default function AdminReportDrawer() {
                             </div>
 
                             {targetPreview.title && (
-                                <h4 className="font-semibold text-lg text-foreground break-words">
+                                <h4 className="font-semibold text-lg text-foreground ">
                                     {targetPreview.title}
                                 </h4>
                             )}
 
-                            <p className="text-foreground text-sm whitespace-pre-wrap break-words">
+                            <p className="text-foreground text-sm whitespace-pre-wrap ">
                                 {targetPreview.content}
                             </p>
                         </div>
@@ -239,7 +239,7 @@ export default function AdminReportDrawer() {
                                                 className="p-4 rounded-xl border border-border bg-muted/20 space-y-3"
                                             >
                                                 <div className="flex items-start justify-between gap-3">
-                                                    <p className="font-medium text-sm break-words">
+                                                    <p className="font-medium text-sm ">
                                                         {claim.claimText}
                                                     </p>
 
@@ -251,7 +251,7 @@ export default function AdminReportDrawer() {
                                                 </div>
 
                                                 {claim.explanation && (
-                                                    <p className="text-sm text-foreground-muted whitespace-pre-wrap break-words">
+                                                    <p className="text-sm text-foreground-muted whitespace-pre-wrap ">
                                                         {claim.explanation}
                                                     </p>
                                                 )}
@@ -312,6 +312,7 @@ export default function AdminReportDrawer() {
                     <ReportActionButtons
                         reportId={report.id}
                         targetType={report.targetType}
+                        currentStatus={report.status}
                     />
                 </div>
             </div>
