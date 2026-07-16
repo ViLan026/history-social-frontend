@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // nếu là trang chủ thì được vào mà không cần đăng nhập
-  if (pathname === "/" || pathname === "/on-this-day") {
+  if (pathname === "/" || pathname === "/onthisday") {
     console.log("Accessing home page, allowing without auth");
     // await new Promise(() => {}); 
     return NextResponse.next();

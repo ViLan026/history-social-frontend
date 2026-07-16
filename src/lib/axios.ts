@@ -1,73 +1,94 @@
-// lib/axios.ts
-import axios from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/features/auth/auth.store";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+if (!apiUrl) {
+  throw new Error("NEXT_PUBLIC_API_URL is not configured.");
+}
+
 export const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: apiUrl,
   headers: {
-    // "Content-Type": "application/json",
     "X-Tunnel-Skip-AntiPhishing-Page": "true",
   },
   withCredentials: true,
 });
 
 const refreshClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: apiUrl,
   withCredentials: true,
 });
 
+type RetryableRequestConfig = InternalAxiosRequestConfig & {
+  _retry?: boolean;
+};
+
+let refreshPromise: Promise<void> | null = null;
 let isRefreshing = false;
+
 let failedQueue: {
   resolve: () => void;
   reject: (error: unknown) => void;
 }[] = [];
 
+export const refreshAccessToken = (): Promise<void> => {
+  if (!refreshPromise) {
+    refreshPromise = refreshClient
+      .post("/auth/refresh", {})
+      .then(() => undefined)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+};
+
 const processQueue = (error: unknown = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) prom.reject(error);
-    else prom.resolve();
+  failedQueue.forEach((item) => {
+    if (error) item.reject(error);
+    else item.resolve();
   });
 
   failedQueue = [];
 };
 
+const isPublicPath = (pathname: string) =>
+  pathname === "/" ||
+  pathname === "/login" ||
+  pathname === "/register" ||
+  pathname === "/on-this-day" ||
+  pathname.startsWith("/posts/");
+
 const redirectToLogin = () => {
   useAuthStore.getState().logout();
 
-  if (typeof window !== "undefined") {
-    const currentPath = window.location.pathname;
+  if (typeof window === "undefined") return;
 
-    const publicPaths = ["/", "/onthisday/today", "/login", "/register", "/posts", "/comment", "/follows/suggestions"];
-
-    // Nếu đường dẫn hiện tại nằm trong danh sách công khai thì KHÔNG redirect
-    if (!publicPaths.includes(currentPath)) {
-      window.location.href = "/login";
-    }
-
+  if (!isPublicPath(window.location.pathname)) {
+    window.location.href = "/login";
   }
 };
 
-// nhận toàn bộ response từ backend, nếu có lỗi 401 (Unauthorized) thì sẽ tự động refresh token và retry request đó. 
-// Nếu refresh token cũng thất bại, sẽ tự động logout và chuyển hướng về trang login.
 axiosInstance.interceptors.response.use(
-  (response) => { console.log("Received response:", response.config); return response; },
-
-  async (error) => {
-    const originalRequest = error.config;
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryableRequestConfig | undefined;
 
     if (!originalRequest) {
       return Promise.reject(error);
     }
 
-
     const status = error.response?.status;
+    const requestUrl = originalRequest.url ?? "";
 
     const isAuthRequest =
-      originalRequest.url?.includes("/auth/login") ||
-      originalRequest.url?.includes("/auth/register") ||
-      originalRequest.url?.includes("/auth/refresh");
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/register") ||
+      requestUrl.includes("/auth/refresh");
 
-    if (status !== 401 && status !== 403 ||  isAuthRequest) {
+    if ((status !== 401 && status !== 403) || isAuthRequest) {
       return Promise.reject(error);
     }
 
@@ -75,30 +96,27 @@ axiosInstance.interceptors.response.use(
       redirectToLogin();
       return Promise.reject(error);
     }
-// nếu đang refesh token thì các api khác gọi bị lỗi đều sẽ được đẩy vào hàng đợi failedQueue, sau khi refresh token thành công thì sẽ tự động retry tất cả các request trong hàng đợi này.
-  if (isRefreshing) {
-    return new Promise((resolve, reject) => {
-      failedQueue.push({
-        resolve: () => resolve(axiosInstance(originalRequest)),
-        reject: (err) => reject(err),
+
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({
+          resolve: () => resolve(axiosInstance(originalRequest)),
+          reject,
+        });
       });
-    });
-  }
+    }
 
     originalRequest._retry = true;
     isRefreshing = true;
 
-
-
     try {
-      await refreshClient.post("/auth/refresh", {});
-
-      processQueue(null);
+      await refreshAccessToken();
+      useAuthStore.getState().setAuth(true);
+      processQueue();
 
       return axiosInstance(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError);
-
       redirectToLogin();
 
       return Promise.reject(refreshError);
