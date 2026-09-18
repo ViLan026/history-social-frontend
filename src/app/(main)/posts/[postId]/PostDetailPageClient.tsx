@@ -7,7 +7,7 @@ import Navigation from "@/components/layout/Navigation";
 import SuggestedUsers from "@/features/follow/components/SuggestedUsers";
 import PostCard from "@/features/post/components/post-card/PostCard";
 import PostListSkeleton from "@/features/post/components/PostListSkeleton";
-import {CommentSection} from "@/features/comment/components/CommentSection";
+import { CommentSection } from "@/features/comment/components/CommentSection";
 import { usePost } from "@/features/post/usePost";
 import ScrollToComment from "@/features/comment/components/ScrollToComment";
 
@@ -18,7 +18,7 @@ interface PostDetailPageClientProps {
 
 export default function PostDetailPageClient({
     postId,
-    commentId,
+    commentId
 }: PostDetailPageClientProps) {
     const { data: post, isLoading, isError } = usePost(postId);
 
@@ -56,9 +56,7 @@ export default function PostDetailPageClient({
                             <CommentSection postId={postId} />
                         </section>
 
-                        {commentId && (
-                            <ScrollToComment commentId={commentId} />
-                        )}
+                        {commentId && <ScrollToComment commentId={commentId} />}
                     </>
                 )}
             </div>
