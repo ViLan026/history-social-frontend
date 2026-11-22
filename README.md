@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# History Social — Frontend
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+History Social is a social networking platform designed for people who are interested in history and historical research. Users can share historical knowledge through posts, interact with other users' content, follow people with similar interests, and explore historical events.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This repository contains the frontend application built with Next.js. It provides the user interface and communicates with the backend through REST APIs.
+
+The project aims to:
+
+- Create an interactive platform for sharing historical knowledge.
+- Provide a user-friendly interface for creating and managing posts.
+- Support social interactions between users.
+- Allow users to discover and explore historical content.
+- Build a modular and maintainable frontend architecture that can be extended over time.
+
+## Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Styling:** Tailwind CSS
+- **Server State Management:** TanStack React Query
+- **Client State Management:** Zustand
+
+## Frontend Architecture
+
+The project follows a **Feature-Based Architecture**. The application is organized into separate feature modules based on business domains, while shared components and application infrastructure are maintained independently.
+
+This structure helps keep feature-related logic organized and makes the codebase easier to develop, maintain, and extend.
+
+```text
+src/
+├── app
+│   ├── (admin)
+│   ├── (auth)
+│   └── (main)
+├── components
+├── constants
+├── features
+│   ├── auth
+│   ├── bookmark
+│   ├── comment
+│   ├── dashboard
+│   ├── follow
+│   ├── notification
+│   ├── onthisday
+│   ├── post
+│   ├── reaction
+│   ├── report
+│   ├── role
+│   └── user
+├── lib
+├── providers
+├── styles
+├── types
+└── proxy.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Core
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The `src` directory contains shared application infrastructure and cross-cutting concerns:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **app:** Defines application routes and page layouts using the Next.js App Router.
+- **components:** Contains reusable UI and layout components shared across features.
+- **constants:** Stores shared application constants.
+- **lib:** Provides shared utilities and application-level configurations.
+- **providers:** Contains application-level providers.
+- **styles:** Contains global and shared styles.
+- **types:** Defines shared TypeScript types.
+- **proxy.ts:** Handles request and route-related logic.
 
-## Learn More
+### Module Structure
 
-To learn more about Next.js, take a look at the following resources:
+Each feature module is organized around a specific business domain. A feature may contain its own components, API services, state management, types, and custom hooks.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The main feature modules include:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **auth:** Handles user authentication.
+- **post:** Manages post-related functionality.
+- **comment:** Handles comments and discussions.
+- **bookmark:** Manages saved posts.
+- **follow:** Handles user-following functionality.
+- **reaction:** Manages reactions to content.
+- **notification:** Handles user notifications.
+- **onthisday:** Provides historical events associated with the current date.
+- **user:** Manages user profiles and user-related functionality.
+- **report:** Handles content reporting.
+- **dashboard:** Provides dashboard-related functionality.
+- **role:** Manages role-related functionality.
 
-## Deploy on Vercel
+## Related Repositories
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Backend:** [https://github.com/ViLan026/history_social_backend](https://github.com/ViLan026/history_social_backend)
